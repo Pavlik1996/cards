@@ -1,0 +1,21 @@
+.spanBlock {
+    /*margin-bottom: 24px;*/
+    /*margin-left: 20px;*/
+}
+
+.span {
+    color: #0080FF;
+    width: 63px;
+    height: 20px;
+
+}
+
+.input {
+    display: flex;
+    width: 276px;
+    height: 36px;
+}
+
+.pen {
+    margin-right: 20px;
+}
