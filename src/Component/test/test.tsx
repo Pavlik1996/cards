@@ -7,8 +7,8 @@ import SuperSelect from "../../SuperComponents/c5-SuperSelect/SuperSelect";
 import SuperRadio from "../../SuperComponents/c6-SuperRadio/SuperRadio";
 import SuperRange from "../../SuperComponents/c7-SuperRange/SuperRange";
 import SuperDebouncedInput from "../../SuperComponents/c8-SuperDebouncedInput/SuperDebouncedInput";
-import SuperPagination from "../../SuperComponents/c9-SuperPagination/SuperPagination";
 import SuperSort from "../../SuperComponents/c10-SuperSort/SuperSort";
+import SuperPagination from "../../SuperComponents/c9-SuperPagination/SuperPagination";
 
 export const Test = () => {
     return (
@@ -21,7 +21,7 @@ export const Test = () => {
             <SuperRadio/>
             <SuperRange/>
             <SuperDebouncedInput/>
-            <SuperPagination itemsCountForPage={5} page={1} onChange={() => {}} totalCount={1} id={''}/>
+            <SuperPagination itemsCountForPage={1} onChange={() => {}} page={1} id={'1'} totalCount={100} isLoading={false}/>
             <SuperSort onChange={() => {}} sort={'1'} id={''} value={''}/>
         </>
     );
