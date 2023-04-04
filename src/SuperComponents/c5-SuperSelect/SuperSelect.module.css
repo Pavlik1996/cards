@@ -1,15 +1,22 @@
 .select {
-
+    width: 180px;
+    height: 24px;
+    background: #FFFFFF;
+    border-radius: 2px;
+    display: inline-block;
+    box-shadow: 0 0 2px rgb(204, 204, 204);
+    transition: all .5s ease;
+    position: relative;
+    font-size: 14px;
+    color: #474747;
+    text-align: left;
 }
 
 .select:focus {
-
-
+    display: block;
+    transition: all .3s ease-in-out;
 }
 
-
 .option:hover {
-
-
-
+    box-shadow: 0 0 4px rgb(204, 204, 204);
 }

@@ -1,11 +1,30 @@
 .pagination {
     display: flex;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    color: #0D0B0C;
+}
+.container {
+    opacity: 50%;
 }
 
 .text1 {
-
+    display: flex;
+    align-items: center;
+    text-transform: capitalize;
+    margin-left: 24px;
+    margin-right: 10px;
 }
 
 .text2 {
-
+    display: flex;
+    align-items: center;
+    margin-left: 6px;
+}
+.sel {
+    width: 40px;
+    height: 25px;
 }

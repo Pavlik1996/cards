@@ -1,9 +1,10 @@
 import React from 'react'
+import SuperSelect from '../c5-SuperSelect/SuperSelect'
 import {Pagination} from '@mui/material'
 import s from './SuperPagination.module.css'
-import SuperSelect from "../c5-SuperSelect/SuperSelect";
 
 export type SuperPaginationPropsType = {
+    isLoading: boolean
     id?: string
     page: number
     itemsCountForPage: number
@@ -12,16 +13,24 @@ export type SuperPaginationPropsType = {
 }
 
 const SuperPagination: React.FC<SuperPaginationPropsType> = (
-    {
+    { isLoading,
         page, itemsCountForPage, totalCount, onChange, id = 'hw15',
     }
 ) => {
-    // const lastPage = 10 // пишет студент
-    const lastPage = Math.ceil(totalCount / itemsCountForPage) // решение
+    // const lastPage = 10 // пишет студент // вычислить количество страниц
+    const lastPage = Math.ceil(totalCount/itemsCountForPage) // пишет студент // вычислить количество страниц
 
     const onChangeCallback = (event: any, page: number) => {
-        onChange(page, itemsCountForPage) // пишет студент
+        // пишет студент
+        onChange(page, itemsCountForPage)
     }
+
+    const onChangeSelect = (event: any) => {
+        // пишет студент
+        onChange(page, event.currentTarget.value)
+    }
+
+
 
     return (
         <div className={s.pagination}>
@@ -30,14 +39,16 @@ const SuperPagination: React.FC<SuperPaginationPropsType> = (
                 sx={{
                     // стили для Pagination // пишет студент
                 }}
+                disabled={isLoading}
+                color={"primary"}
+                shape={"rounded"}
                 page={page}
                 count={lastPage}
                 onChange={onChangeCallback}
                 hideNextButton
                 hidePrevButton
             />
-
-            <span className={s.text1}>
+            <span className={isLoading ? s.container + " "+ s.text1: s.text1}>
                 показать
             </span>
 
@@ -49,11 +60,12 @@ const SuperPagination: React.FC<SuperPaginationPropsType> = (
                     {id: 7, value: 7},
                     {id: 10, value: 10},
                 ]}
-
-                onChange={e => onChange(page, Number(e.currentTarget.value))}
+                onChange={onChangeSelect}
+                disabled={isLoading}
+                className={s.sel}
             />
 
-            <span className={s.text2}>
+            <span className={isLoading ? s.container + " " + s.text2 : s.text2}>
                 строк в таблице
             </span>
         </div>
