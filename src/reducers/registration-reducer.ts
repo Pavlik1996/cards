@@ -1,15 +1,14 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {}
 
 type initialStateType = typeof initialState
 
 const slice = createSlice({
-    name: 'registration',
-    initialState,
-    reducers: {}
+  name: 'registration',
+  initialState,
+  reducers: {},
 })
-
 
 export const registrationReducer = slice.reducer
 export const registrationActions = slice.actions

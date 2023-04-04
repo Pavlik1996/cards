@@ -1,9 +1,5 @@
-import React from 'react';
+import React from 'react'
 
 export const NewPass = () => {
-    return (
-        <div>
-            NewPass
-        </div>
-    );
-};
+  return <div>NewPass</div>
+}
