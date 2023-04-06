@@ -1,36 +1,37 @@
 .label {
+    cursor: pointer;
+
     display: flex;
     align-items: center;
-
-    cursor: pointer;
 }
 
 /*input[type="checkbox"] - no*/
 
 .checkbox {
-    appearance: none;
+    cursor: pointer;
     /*Свойство appearance изменяет внешний вид элемента интерфейса, при сохранении его функции.
-       Если задать значение none, то чекбокс пропадет, но по нему, тем не менее,
-       можно щелкать и состояние чекбокса будет меняться*/
+         Если задать значение none, то чекбокс пропадет, но по нему, тем не менее,
+         можно щелкать и состояние чекбокса будет меняться*/
 
     width: 18px;
     height: 18px;
-
-    background-repeat: no-repeat;
-    background-position: center center;
+    margin-right: 8px;
 
     /* background-size: 90% 90%; */
     vertical-align: middle;
-    margin-right: 8px;
-    border-radius: 3px;
+
+    background-repeat: no-repeat;
+    background-position: center center;
     border: 2px solid #06c;
-    cursor: pointer;
+    border-radius: 3px;
+
+    appearance: none;
 }
 
 .checkbox:checked {
-    appearance: none;
-
     background-image: url('checked.svg');
+
+    appearance: none;
     /*background: #99ff99;*/
 }
 

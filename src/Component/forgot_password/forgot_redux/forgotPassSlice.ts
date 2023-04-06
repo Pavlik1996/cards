@@ -6,6 +6,7 @@ const initialState = {
   isForgot: false,
   enterPassword: false,
   progress: false,
+  error: null as string | null,
 }
 
 //slice

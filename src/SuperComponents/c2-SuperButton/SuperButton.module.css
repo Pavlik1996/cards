@@ -1,95 +1,101 @@
 .button {
+    top: 1465px;
+    left: 574px;
+
     display: flex;
     flex-direction: row;
+    gap: 10px;
+    align-items: center;
     justify-content: center;
+
     width: 132px;
     height: 30px;
-    left: 574px;
-    top: 1465px;
-    align-items: center;
     padding: 5px 24px;
-    gap: 10px;
+
     border: none;
 }
 
 .disabled {
     font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 600;
     font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
     line-height: 20px;
-    color: #002E5C;
-    background: #004D99;
+    color: #002e5c;
+
     opacity: 0.5;
+    background: #004d99;
+    border-color: #004d99;
     border-radius: 3px;
-    border-color: #004D99;
 }
 
 .secondary {
     font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 600;
     font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
     line-height: 20px;
-    color: #0066CC;
+    color: #0066cc;
+
     background-color: white;
+    border: 1px solid #0066cc;
     border-radius: 3px;
-    border: 1px solid #0066CC;
 }
 
 .default {
     font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 600;
     font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
     line-height: 20px;
-    background: #0066CC;
-    color: #FFFFFF;
+    color: #ffffff;
+
+    background: #0066cc;
+    border-color: #0066cc;
     border-radius: 3px;
-    border-color: #0066CC;
 }
 
 .red {
     font-family: 'Montserrat', sans-serif;
-    font-style: normal;
-    font-weight: 600;
     font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
     line-height: 20px;
-    color: #FFFFFF;
-    background: #CC1439;
+    color: #ffffff;
+
+    background: #cc1439;
+    border-color: #cc1439;
     border-radius: 3px;
-    border-color: #CC1439;
 }
 
 .default:hover {
-    background: #0080FF;
+    background: #0080ff;
 }
 
 .red:hover {
-    background: #FF1A47;
+    background: #ff1a47;
 }
 
 .secondary:hover {
-    background: #E5F0FA;
-    border: 1px solid #0066CC;
+    background: #e5f0fa;
+    border: 1px solid #0066cc;
 }
 
-
 .default:active {
-    background: #0059B3;
+    background: #0059b3;
 }
 
 .secondary:active {
-    background: #C9E5FF;
-    border: 1px solid #0066CC;
+    background: #c9e5ff;
+    border: 1px solid #0066cc;
     border-radius: 3px;
 }
 
 .red:active {
-    background: #B31232;
+    background: #b31232;
 }
 
 .button:disabled {
-    background: #004D99;
     opacity: 0.5;
+    background: #004d99;
 }

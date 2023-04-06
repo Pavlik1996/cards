@@ -1,20 +1,26 @@
 .select {
+    position: relative;
+
+    display: inline-block;
+
     width: 180px;
     height: 24px;
-    background: #FFFFFF;
-    border-radius: 2px;
-    display: inline-block;
-    box-shadow: 0 0 2px rgb(204, 204, 204);
-    transition: all .5s ease;
-    position: relative;
+
     font-size: 14px;
     color: #474747;
     text-align: left;
+
+    background: #ffffff;
+    border-radius: 2px;
+    box-shadow: 0 0 2px rgb(204, 204, 204);
+
+    transition: all 0.5s ease;
 }
 
 .select:focus {
     display: block;
-    transition: all .3s ease-in-out;
+
+    transition: all 0.3s ease-in-out;
 }
 
 .option:hover {
