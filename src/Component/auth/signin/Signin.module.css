@@ -1,0 +1,41 @@
+.rememberMeWrapper {
+    display: flex;
+
+    width: 100%;
+}
+
+.forgotPasswordWrapper {
+    display: flex;
+    justify-content: flex-end;
+
+    width: 100%;
+}
+
+.passwordsWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+}
+
+.linkFPWD {
+    cursor: pointer;
+
+    margin: 0 0 69px 0;
+}
+
+.linkFPWD:hover {
+    font-weight: bold;
+}
+
+.linkSUP {
+    cursor: pointer;
+
+    color: #366EFF;
+    text-decoration: underline;
+}
+
+.linkSUP:hover {
+    font-weight: bold;
+}

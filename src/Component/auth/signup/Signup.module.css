@@ -1,0 +1,18 @@
+.passwordsWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+}
+
+.link {
+    cursor: pointer;
+
+    color: #366EFF;
+    text-decoration: underline;
+}
+
+.link:hover {
+    font-weight: bold;
+}
