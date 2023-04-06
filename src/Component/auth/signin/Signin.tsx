@@ -34,7 +34,7 @@ export const Signin = () => {
     dispatch(signin(data))
   }
 
-  const onClickFPWDHandler = () => navigate('/passrecovery')
+  const onClickFPWDHandler = () => navigate('/forgotpassword')
   const onClickSUPHandler = () => navigate('/signup')
 
   if (authIsSignin) {
