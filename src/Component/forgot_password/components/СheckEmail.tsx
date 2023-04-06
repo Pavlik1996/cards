@@ -1,15 +1,22 @@
 import React from 'react'
 
 import { Button } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Navigate, useNavigate } from 'react-router-dom'
 
-import style from './checkemail.module.css'
-import { ReactComponent as Email } from './images/emailicon.svg'
+import { RootStateType } from '../../../app/store'
+import { ReactComponent as Email } from '../images/emailicon.svg'
+import style from '../styles/checkemail.module.css'
 
 export const CheckEmail = () => {
+  const isForgot = useSelector<RootStateType, boolean>(state => state.forgotPassword.isForgot)
   let navigate = useNavigate()
   const routeChange = () => {
     navigate('/login')
+  }
+
+  if (!isForgot) {
+    return <Navigate to={'/forgotpassword'} />
   }
 
   return (

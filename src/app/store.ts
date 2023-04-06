@@ -1,13 +1,12 @@
-import { AnyAction, configureStore, ThunkAction, ThunkDispatch } from '@reduxjs/toolkit'
+import { AnyAction, configureStore, ThunkDispatch } from '@reduxjs/toolkit'
+import { useDispatch } from 'react-redux'
 import { combineReducers } from 'redux'
 
-import { forgotReducer } from '../Component/forgot_password/forgotPassSlice'
+import { forgotReducer } from '../Component/forgot_password/forgot_redux/forgotPassSlice'
 import { loginReducer } from '../reducers/login-reducer'
 import { newPassReducer } from '../reducers/newPass-reducer'
 import { profileReducer } from '../reducers/profile-reducer'
 import { registrationReducer } from '../reducers/registration-reducer'
-
-import { useDispatch } from 'react-redux'
 
 const rootReducers = combineReducers({
   login: loginReducer,

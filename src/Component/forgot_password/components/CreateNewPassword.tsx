@@ -1,17 +1,23 @@
 import React, { useState } from 'react'
 
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Button, FormControl, FormGroup, IconButton, InputAdornment } from '@mui/material'
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  FormGroup,
+  IconButton,
+  InputAdornment,
+} from '@mui/material'
 import Input from '@mui/material/Input'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { Navigate, useParams } from 'react-router-dom'
 
-import { RootStateType, useAppDispatch } from '../../app/store'
-
-import style from './createnewpassword.module.css'
-import { newPasswordDataType } from './forgotApi'
-import { enterNewPassword } from './forgotPassSlice'
+import { RootStateType, useAppDispatch } from '../../../app/store'
+import { newPasswordDataType } from '../forgot_api/forgotApi'
+import { enterNewPassword } from '../forgot_redux/forgotPassSlice'
+import style from '../styles/createnewpassword.module.css'
 
 type FormDataType = {
   password: string
@@ -21,6 +27,8 @@ export const CreateNewPassword = () => {
   const enterPassword = useSelector<RootStateType, boolean>(
     state => state.forgotPassword.enterPassword
   )
+  const progress = useSelector<RootStateType, boolean>(state => state.forgotPassword.progress)
+
   const dispatch = useAppDispatch()
   const param = useParams<{ id: string }>()
 
@@ -53,6 +61,14 @@ export const CreateNewPassword = () => {
 
   if (enterPassword) {
     return <Navigate to={'/login'} />
+  }
+
+  if (progress) {
+    return (
+      <div className={style.wrapper}>
+        <CircularProgress />
+      </div>
+    )
   }
 
   return (

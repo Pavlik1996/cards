@@ -1,15 +1,14 @@
 import React from 'react'
 
-import { Button, FormControl, FormGroup, TextField } from '@mui/material'
+import { Button, CircularProgress, FormControl, FormGroup, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { Navigate, NavLink } from 'react-router-dom'
 
-import { RootStateType, useAppDispatch } from '../../app/store'
-
-import style from './forgot.module.css'
-import { forgotDataType } from './forgotApi'
-import { forgotPassword } from './forgotPassSlice'
+import { RootStateType, useAppDispatch } from '../../../app/store'
+import { forgotDataType } from '../forgot_api/forgotApi'
+import { forgotPassword } from '../forgot_redux/forgotPassSlice'
+import style from '../styles/forgot.module.css'
 
 export type FormDataType = {
   email: string
@@ -17,6 +16,7 @@ export type FormDataType = {
 
 export const ForgotPassword = () => {
   const isForgot = useSelector<RootStateType, boolean>(state => state.forgotPassword.isForgot)
+  const progress = useSelector<RootStateType, boolean>(state => state.forgotPassword.progress)
   const dispatch = useAppDispatch()
 
   const { register, handleSubmit, reset } = useForm<any>({
@@ -44,6 +44,14 @@ export const ForgotPassword = () => {
 
   if (isForgot) {
     return <Navigate to={'/checkemail'} />
+  }
+
+  if (progress) {
+    return (
+      <div className={style.wrapper}>
+        <CircularProgress />
+      </div>
+    )
   }
 
   return (
