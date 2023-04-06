@@ -19,7 +19,12 @@ export const ForgotPassword = () => {
   const progress = useSelector<RootStateType, boolean>(state => state.forgotPassword.progress)
   const dispatch = useAppDispatch()
 
-  const { register, handleSubmit, reset } = useForm<any>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormDataType>({
     mode: 'onChange',
     defaultValues: {
       email: '',
@@ -67,6 +72,11 @@ export const ForgotPassword = () => {
                 variant="standard"
                 placeholder={'Email'}
               />
+              <div className={style.errorMessage}>
+                {errors?.email && (
+                  <p style={{ color: 'red' }}>{errors?.email.message || 'some error'}</p>
+                )}
+              </div>
               <p className={style.infoText}>
                 Enter your email address and we will send you further instructions
               </p>

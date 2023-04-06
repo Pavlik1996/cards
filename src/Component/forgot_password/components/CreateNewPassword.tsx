@@ -40,7 +40,12 @@ export const CreateNewPassword = () => {
     event.preventDefault()
   }
 
-  const { register, handleSubmit, reset } = useForm<any>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormDataType>({
     mode: 'onChange',
     defaultValues: {
       password: '',
@@ -94,7 +99,11 @@ export const CreateNewPassword = () => {
                   </InputAdornment>
                 }
               />
-
+              <div className={style.errorMessage}>
+                {errors?.password && (
+                  <p style={{ color: 'red' }}>{errors?.password.message || 'some error'}</p>
+                )}
+              </div>
               <p className={style.infoText}>
                 Create new password and we will send you further instructions to email
               </p>
