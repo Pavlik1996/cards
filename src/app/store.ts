@@ -3,15 +3,15 @@ import { useDispatch } from 'react-redux'
 import { combineReducers } from 'redux'
 
 import { authSlice } from '../Component/auth/auth-slice'
+import { forgotReducer } from '../Component/forgot_password/forgot_redux/forgotPassSlice'
 import { newPassReducer } from '../reducers/newPass-reducer'
-import { passRecoveryReducer } from '../reducers/pass-recovery-reducer'
 import { profileReducer } from '../reducers/profile-reducer'
 import { registrationReducer } from '../reducers/registration-reducer'
 
 const rootReducers = combineReducers({
   auth: authSlice,
   newPass: newPassReducer,
-  passRecovery: passRecoveryReducer,
+  forgotPassword: forgotReducer,
   profile: profileReducer,
   registration: registrationReducer,
 })
