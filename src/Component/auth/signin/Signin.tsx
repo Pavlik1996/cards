@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import { Box, Checkbox, Paper, TextField } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { Box, Checkbox, IconButton, InputAdornment, Paper, TextField } from '@mui/material'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
@@ -91,17 +91,23 @@ export const Signin = () => {
               name="password"
               control={control}
               render={({ field }) => (
-                <span className={style.passwordsWrapper}>
-                  <TextField
-                    fullWidth
-                    label="Password"
-                    type={passwordShown ? 'text' : 'password'}
-                    variant="standard"
-                    {...field}
-                    style={{ margin: '12px 0 24px 0' }}
-                  />
-                  <VisibilityIcon onClick={togglePassword} />
-                </span>
+                <TextField
+                  fullWidth
+                  label="Password"
+                  type={passwordShown ? 'text' : 'password'}
+                  variant="standard"
+                  {...field}
+                  style={{ margin: '12px 0 24px 0' }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={togglePassword}>
+                          {passwordShown ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
               )}
             />
             <div className={style.rememberMeWrapper}>

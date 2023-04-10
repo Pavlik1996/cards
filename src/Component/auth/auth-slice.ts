@@ -1,4 +1,5 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
+import { AxiosError } from 'axios'
 
 import { authAPI, SigninParamsType, SignupParamsType } from './auth-api'
 
@@ -42,8 +43,12 @@ export const signin = (data: SigninParamsType) => (dispatch: Dispatch) => {
       dispatch(authActions.setIsSignup({ isSignup: true }))
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
     })
-    .catch(error => {
-      dispatch(authActions.setError({ error: error.message }))
+    .catch((error: AxiosError<ErrorCustomType>) => {
+      if (error.response) {
+        dispatch(authActions.setError({ error: error.response.data.error }))
+      } else {
+        dispatch(authActions.setError({ error: error.message }))
+      }
       dispatch(authActions.setAuthStatus({ authStatus: 'failed' }))
     })
 }
@@ -56,8 +61,12 @@ export const signup = (data: SignupParamsType) => (dispatch: Dispatch) => {
       dispatch(authActions.setIsSignup({ isSignup: true }))
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
     })
-    .catch(error => {
-      dispatch(authActions.setError({ error: error.message }))
+    .catch((error: AxiosError<ErrorCustomType>) => {
+      if (error.response) {
+        dispatch(authActions.setError({ error: error.response.data.error }))
+      } else {
+        dispatch(authActions.setError({ error: error.message }))
+      }
       dispatch(authActions.setAuthStatus({ authStatus: 'failed' }))
     })
 }
@@ -70,10 +79,17 @@ export const initialized = () => (dispatch: Dispatch) => {
       dispatch(authActions.setIsSignup({ isSignup: true }))
       dispatch(authActions.setIsInitialized({ isInitialized: true }))
     })
-    .catch(error => {
-      dispatch(authActions.setError({ error: error.response.data['error'] }))
+    .catch((error: AxiosError<ErrorCustomType>) => {
+      if (error.response) {
+        dispatch(authActions.setError({ error: error.response.data.error }))
+      } else {
+        dispatch(authActions.setError({ error: error.message }))
+      }
       dispatch(authActions.setIsInitialized({ isInitialized: true }))
     })
 }
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+type ErrorCustomType = {
+  error: string
+}
