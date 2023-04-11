@@ -11,7 +11,7 @@ import * as yup from 'yup'
 import { useAppDispatch } from '../../../app/store'
 import SuperButton from '../../../SuperComponents/c2-SuperButton/SuperButton'
 import { selectAuthIsSignup } from '../auth-selector'
-import { signup } from '../auth-slice'
+import { authThunks } from '../auth-slice'
 
 import style from './Signup.module.css'
 
@@ -49,7 +49,7 @@ export const Signup = () => {
   })
   const onSubmit = (data: any) => {
     console.log(data)
-    dispatch(signup(data))
+    dispatch(authThunks.signup(data))
     reset()
   }
 

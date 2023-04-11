@@ -10,7 +10,7 @@ import { useAppDispatch } from '../../../app/store'
 import SuperButton from '../../../SuperComponents/c2-SuperButton/SuperButton'
 import { SigninParamsType } from '../auth-api'
 import { selectAuthIsSignin } from '../auth-selector'
-import { signin } from '../auth-slice'
+import { authThunks } from '../auth-slice'
 
 import style from './Signin.module.css'
 
@@ -31,7 +31,7 @@ export const Signin = () => {
     },
   })
   const onSubmit: SubmitHandler<SigninParamsType> = data => {
-    dispatch(signin(data))
+    dispatch(authThunks.signin(data))
   }
 
   const onClickFPWDHandler = () => navigate('/forgotpassword')
