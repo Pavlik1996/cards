@@ -1,6 +1,8 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 import { AxiosError } from 'axios'
 
+import { ErrorCustomType, handleAxiosError } from '../../utils/handleAxiosError'
+
 import { authAPI, SigninParamsType, SignupParamsType } from './auth-api'
 
 const slice = createSlice({
@@ -44,12 +46,7 @@ export const signin = (data: SigninParamsType) => (dispatch: Dispatch) => {
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
     })
     .catch((error: AxiosError<ErrorCustomType>) => {
-      if (error.response) {
-        dispatch(authActions.setError({ error: error.response.data.error }))
-      } else {
-        dispatch(authActions.setError({ error: error.message }))
-      }
-      dispatch(authActions.setAuthStatus({ authStatus: 'failed' }))
+      handleAxiosError(dispatch, error)
     })
 }
 
@@ -62,12 +59,7 @@ export const signup = (data: SignupParamsType) => (dispatch: Dispatch) => {
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
     })
     .catch((error: AxiosError<ErrorCustomType>) => {
-      if (error.response) {
-        dispatch(authActions.setError({ error: error.response.data.error }))
-      } else {
-        dispatch(authActions.setError({ error: error.message }))
-      }
-      dispatch(authActions.setAuthStatus({ authStatus: 'failed' }))
+      handleAxiosError(dispatch, error)
     })
 }
 
@@ -80,16 +72,9 @@ export const initialized = () => (dispatch: Dispatch) => {
       dispatch(authActions.setIsInitialized({ isInitialized: true }))
     })
     .catch((error: AxiosError<ErrorCustomType>) => {
-      if (error.response) {
-        dispatch(authActions.setError({ error: error.response.data.error }))
-      } else {
-        dispatch(authActions.setError({ error: error.message }))
-      }
+      handleAxiosError(dispatch, error)
       dispatch(authActions.setIsInitialized({ isInitialized: true }))
     })
 }
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
-type ErrorCustomType = {
-  error: string
-}
