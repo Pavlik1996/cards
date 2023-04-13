@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { Error } from '../Component/404/Error'
-import { initialized } from '../Component/auth/auth-slice'
+import { authThunks } from '../Component/auth/auth-slice'
 import { Signin } from '../Component/auth/signin/Signin'
 import { Signup } from '../Component/auth/signup/Signup'
 import { ErrorSnackbar } from '../Component/ErrorSnackbar/ErrorSnackBar'
@@ -27,7 +27,7 @@ export function App() {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(initialized())
+    dispatch(authThunks.initialized())
   }, [])
 
   if (!authIsInitialized) {

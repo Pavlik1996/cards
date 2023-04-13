@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
 import { yupResolver } from '@hookform/resolvers/yup'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import { Box, Paper, TextField } from '@mui/material'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import { Box, IconButton, InputAdornment, Paper, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
@@ -11,7 +11,7 @@ import * as yup from 'yup'
 import { useAppDispatch } from '../../../app/store'
 import SuperButton from '../../../SuperComponents/c2-SuperButton/SuperButton'
 import { selectAuthIsSignup } from '../auth-selector'
-import { signup } from '../auth-slice'
+import { authThunks } from '../auth-slice'
 
 import style from './Signup.module.css'
 
@@ -49,7 +49,7 @@ export const Signup = () => {
   })
   const onSubmit = (data: any) => {
     console.log(data)
-    dispatch(signup(data))
+    dispatch(authThunks.signup(data))
     reset()
   }
 
@@ -103,29 +103,41 @@ export const Signup = () => {
               style={{ margin: '24px 0 12px 0' }}
             />
             <div>{errors.email?.message}</div>
-            <span className={style.passwordsWrapper}>
-              <TextField
-                {...register('password')}
-                type={firstPasswordShown ? 'text' : 'password'}
-                label="Password"
-                fullWidth
-                variant="standard"
-                style={{ margin: '12px 0 24px 0' }}
-              />
-              <VisibilityIcon onClick={toggleFirstPassword} />
-            </span>
+            <TextField
+              {...register('password')}
+              label="Password"
+              fullWidth
+              variant="standard"
+              style={{ margin: '24px 0 12px 0' }}
+              type={firstPasswordShown ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleFirstPassword}>
+                      {firstPasswordShown ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
             <div>{errors.password?.message}</div>
-            <span className={style.passwordsWrapper}>
-              <TextField
-                {...register('confirmPassword')}
-                type={secondPasswordShown ? 'text' : 'password'}
-                label="Confirm password"
-                fullWidth
-                variant="standard"
-                style={{ margin: '12px 0 24px 0' }}
-              />
-              <VisibilityIcon onClick={toggleSecondPassword} />
-            </span>
+            <TextField
+              {...register('confirmPassword')}
+              label="Confirm password"
+              fullWidth
+              variant="standard"
+              style={{ margin: '12px 0 24px 0' }}
+              type={secondPasswordShown ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={toggleSecondPassword}>
+                      {secondPasswordShown ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
             <div>{errors.confirmPassword?.message}</div>
             <SuperButton type="submit" style={{ width: '100%', margin: '36px 0 0 0' }}>
               Sign Up
