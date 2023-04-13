@@ -1,18 +1,24 @@
 import React from 'react'
 
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, CircularProgress, FormControl, FormGroup, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { Navigate, NavLink } from 'react-router-dom'
+import * as yup from 'yup'
 
 import { RootStateType, useAppDispatch } from '../../../app/store'
 import { forgotDataType } from '../forgot_api/forgotApi'
-import { forgotPassword } from '../forgot_redux/forgotPassSlice'
+import { forgotThunks } from '../forgot_redux/forgotPassSlice'
 import style from '../styles/forgot.module.css'
 
-export type FormDataType = {
-  email: string
-}
+const schema = yup
+  .object({
+    email: yup.string().email().required('Required'),
+  })
+  .required()
+
+type FormDataType = yup.InferType<typeof schema>
 
 export const ForgotPassword = () => {
   const isForgot = useSelector<RootStateType, boolean>(state => state.forgotPassword.isForgot)
@@ -25,6 +31,7 @@ export const ForgotPassword = () => {
     reset,
     formState: { errors },
   } = useForm<FormDataType>({
+    resolver: yupResolver(schema),
     mode: 'onChange',
     defaultValues: {
       email: '',
@@ -43,7 +50,7 @@ export const ForgotPassword = () => {
         '</div>',
     }
 
-    dispatch(forgotPassword(obj))
+    dispatch(forgotThunks.forgotPassword(obj))
     reset()
   }
 
@@ -72,11 +79,7 @@ export const ForgotPassword = () => {
                 variant="standard"
                 placeholder={'Email'}
               />
-              <div className={style.errorMessage}>
-                {errors?.email && (
-                  <p style={{ color: 'red' }}>{errors?.email.message || 'some error'}</p>
-                )}
-              </div>
+              <div className={style.errorMessage}>{errors.email?.message}</div>
               <p className={style.infoText}>
                 Enter your email address and we will send you further instructions
               </p>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 
+import { yupResolver } from '@hookform/resolvers/yup'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
 import {
   Button,
@@ -13,15 +14,20 @@ import Input from '@mui/material/Input'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { Navigate, useParams } from 'react-router-dom'
+import * as yup from 'yup'
 
 import { RootStateType, useAppDispatch } from '../../../app/store'
 import { newPasswordDataType } from '../forgot_api/forgotApi'
-import { enterNewPassword } from '../forgot_redux/forgotPassSlice'
+import { forgotThunks } from '../forgot_redux/forgotPassSlice'
 import style from '../styles/createnewpassword.module.css'
 
-type FormDataType = {
-  password: string
-}
+const schema = yup
+  .object({
+    password: yup.string().min(8, 'Min 8 symbols').max(32, 'Max 32 symbols').required('Required'),
+  })
+  .required()
+
+type FormData = yup.InferType<typeof schema>
 
 export const CreateNewPassword = () => {
   const enterPassword = useSelector<RootStateType, boolean>(
@@ -45,27 +51,25 @@ export const CreateNewPassword = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<FormDataType>({
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
     mode: 'onChange',
-    defaultValues: {
-      password: '',
-    },
   })
 
-  const onSubmit = (data: FormDataType) => {
+  const onSubmit = (data: FormData) => {
     if (param.id) {
-      const obj: newPasswordDataType = {
+      const dataObj: newPasswordDataType = {
         password: data.password,
         resetPasswordToken: param.id,
       }
 
-      dispatch(enterNewPassword(obj))
+      dispatch(forgotThunks.enterNewPassword(dataObj))
       reset()
     }
   }
 
   if (enterPassword) {
-    return <Navigate to={'/login'} />
+    return <Navigate to={'/signin'} />
   }
 
   if (progress) {
@@ -99,11 +103,7 @@ export const CreateNewPassword = () => {
                   </InputAdornment>
                 }
               />
-              <div className={style.errorMessage}>
-                {errors?.password && (
-                  <p style={{ color: 'red' }}>{errors?.password.message || 'some error'}</p>
-                )}
-              </div>
+              <div className={style.errorMessage}>{errors.password?.message}</div>
               <p className={style.infoText}>
                 Create new password and we will send you further instructions to email
               </p>
