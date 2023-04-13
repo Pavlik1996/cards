@@ -29,6 +29,9 @@
 
 .errorMessage {
   height: 25px;
+  margin-top: 10px;
+
+  color: red;
 }
 
 .infoText {

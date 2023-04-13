@@ -18,12 +18,8 @@ import * as yup from 'yup'
 
 import { RootStateType, useAppDispatch } from '../../../app/store'
 import { newPasswordDataType } from '../forgot_api/forgotApi'
-import { enterNewPassword } from '../forgot_redux/forgotPassSlice'
+import { forgotThunks } from '../forgot_redux/forgotPassSlice'
 import style from '../styles/createnewpassword.module.css'
-
-// type FormDataType = {
-//   password: string
-// }
 
 const schema = yup
   .object({
@@ -57,22 +53,23 @@ export const CreateNewPassword = () => {
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
+    mode: 'onChange',
   })
 
   const onSubmit = (data: FormData) => {
     if (param.id) {
-      const obj: newPasswordDataType = {
+      const dataObj: newPasswordDataType = {
         password: data.password,
         resetPasswordToken: param.id,
       }
 
-      dispatch(enterNewPassword(obj))
+      dispatch(forgotThunks.enterNewPassword(dataObj))
       reset()
     }
   }
 
   if (enterPassword) {
-    return <Navigate to={'/login'} />
+    return <Navigate to={'/signin'} />
   }
 
   if (progress) {
