@@ -1,7 +1,7 @@
 import { Dispatch } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 
-import { authActions } from '../Component/auth/auth-slice'
+import { authActions } from '../../Component/auth/auth-slice'
 
 export const handleAxiosError = (dispatch: Dispatch, e: unknown) => {
   const err = e as Error | AxiosError<{ error: string }>

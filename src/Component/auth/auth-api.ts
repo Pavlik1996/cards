@@ -14,7 +14,7 @@ export const authAPI = {
   },
 }
 
-export type ResponseType = {
+type ResponseType = {
   _id: string
   email: string
   rememberMe: boolean

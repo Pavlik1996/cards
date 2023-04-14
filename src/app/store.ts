@@ -4,16 +4,18 @@ import { combineReducers } from 'redux'
 
 import { authSlice } from '../Component/auth/auth-slice'
 import { forgotReducer } from '../Component/forgot_password/forgot_redux/forgotPassSlice'
-import { newPassReducer } from '../reducers/newPass-reducer'
+import { packsSlice } from '../Component/packs/packs-slice'
 import { profileReducer } from '../reducers/profile-reducer'
-import { registrationReducer } from '../reducers/registration-reducer'
+
+// eslint-disable-next-line import/namespace
+import { appSlice } from './app-slice'
 
 const rootReducers = combineReducers({
+  app: appSlice,
   auth: authSlice,
-  newPass: newPassReducer,
   forgotPassword: forgotReducer,
   profile: profileReducer,
-  registration: registrationReducer,
+  packs: packsSlice,
 })
 
 export const store = configureStore({

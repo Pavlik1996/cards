@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { createAppAsyncThunk } from '../../utils/create-app-async-thunk'
-import { handleAxiosError } from '../../utils/handle-axios-error'
+import { RequestStatusType } from '../../common/types/types'
+import { createAuthAsyncThunk } from '../../common/utils/create-auth-async-thunk'
+import { handleAxiosError } from '../../common/utils/handle-axios-error'
 
 import { authAPI, SigninParamsType, SignupParamsType } from './auth-api'
 
-const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
+const signin = createAuthAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
   'auth/signin',
   async (data: SigninParamsType, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
@@ -14,6 +15,7 @@ const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
       dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
       const res = await authAPI.signin(data)
 
+      dispatch(authActions.setUserId({ user_id: res._id }))
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
 
       return { isSignin: true }
@@ -24,7 +26,7 @@ const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
     }
   }
 )
-const signup = createAppAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
+const signup = createAuthAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
   'auth/signup',
   async (data: SignupParamsType, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
@@ -43,7 +45,7 @@ const signup = createAppAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
     }
   }
 )
-const initialized = createAppAsyncThunk<
+const initialized = createAuthAsyncThunk<
   { isInitialized: boolean; isSignin?: boolean; isSignup?: boolean },
   undefined
 >('auth/initialized', async (args, thunkAPI) => {
@@ -51,6 +53,8 @@ const initialized = createAppAsyncThunk<
 
   try {
     const res = await authAPI.me()
+
+    dispatch(authActions.setUserId({ user_id: res._id }))
 
     return { isSignin: true, isSignup: true, isInitialized: true }
   } catch (e) {
@@ -68,6 +72,7 @@ const slice = createSlice({
     isInitialized: false as boolean | undefined,
     error: null as string | null,
     authStatus: 'idle' as RequestStatusType,
+    user_id: '',
   },
   reducers: {
     setError: (state, action: PayloadAction<{ error: string | null }>) => {
@@ -75,6 +80,9 @@ const slice = createSlice({
     },
     setAuthStatus: (state, action: PayloadAction<{ authStatus: RequestStatusType }>) => {
       state.authStatus = action.payload.authStatus
+    },
+    setUserId: (state, action: PayloadAction<{ user_id: string }>) => {
+      state.user_id = action.payload.user_id
     },
   },
   extraReducers: builder => {
@@ -100,4 +108,4 @@ export const authSlice = slice.reducer
 export const authActions = slice.actions
 export const authThunks = { signin, signup, initialized }
 
-export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'
+// export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'

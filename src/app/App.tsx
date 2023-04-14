@@ -13,9 +13,8 @@ import { ErrorSnackbar } from '../Component/ErrorSnackbar/ErrorSnackBar'
 import { CreateNewPassword } from '../Component/forgot_password/components/CreateNewPassword'
 import { ForgotPassword } from '../Component/forgot_password/components/ForgotPassword'
 import { CheckEmail } from '../Component/forgot_password/components/СheckEmail'
-import { PassRecovery } from '../Component/passwordRecovery/passRecovery'
+import { Packs } from '../Component/packs/packs/Packs'
 import { Profile } from '../Component/Profile/Profile'
-import { Registration } from '../Component/Registration/Registration'
 import { Test } from '../Component/test/test'
 
 import { selectAuthIsInitialized, selectAuthStatus } from './app-selectors'
@@ -48,14 +47,13 @@ export function App() {
       <ErrorSnackbar />
       <Routes>
         <Route path={'/'} element={<Profile />} />
-        <Route path={'/registration'} element={<Registration />} />
         <Route path={'/profile'} element={<Profile />} />
         <Route path={'/set-new-password/:id'} element={<CreateNewPassword />} />
         <Route path={'/forgotpassword'} element={<ForgotPassword />} />
         <Route path={'/checkemail'} element={<CheckEmail />} />
         <Route path={'/signin'} element={<Signin />} />
         <Route path={'/signup'} element={<Signup />} />
-        <Route path={'/passrecovery'} element={<PassRecovery />} />
+        <Route path={'/packs'} element={<Packs />} />
         <Route path={'/test'} element={<Test />} />
         <Route path={'/404'} element={<Error />} />
         <Route path={'*'} element={<Navigate to={'/404'} />} />
