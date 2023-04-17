@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { combineReducers } from 'redux'
 
 import { authSlice } from '../Component/auth/auth-slice'
+import { cardsReducer } from '../Component/cards/CardsSlice'
 import { forgotReducer } from '../Component/forgot_password/forgot_redux/forgotPassSlice'
 import { newPassReducer } from '../reducers/newPass-reducer'
 import { profileReducer } from '../reducers/profile-reducer'
@@ -14,6 +15,7 @@ const rootReducers = combineReducers({
   forgotPassword: forgotReducer,
   profile: profileReducer,
   registration: registrationReducer,
+  cards: cardsReducer,
 })
 
 export const store = configureStore({

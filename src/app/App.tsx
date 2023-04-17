@@ -9,6 +9,7 @@ import { Error } from '../Component/404/Error'
 import { authThunks } from '../Component/auth/auth-slice'
 import { Signin } from '../Component/auth/signin/Signin'
 import { Signup } from '../Component/auth/signup/Signup'
+import { CardsList } from '../Component/cards/CardsList'
 import { ErrorSnackbar } from '../Component/ErrorSnackbar/ErrorSnackBar'
 import { CreateNewPassword } from '../Component/forgot_password/components/CreateNewPassword'
 import { ForgotPassword } from '../Component/forgot_password/components/ForgotPassword'
@@ -56,6 +57,7 @@ export function App() {
         <Route path={'/signin'} element={<Signin />} />
         <Route path={'/signup'} element={<Signup />} />
         <Route path={'/passrecovery'} element={<PassRecovery />} />
+        <Route path={'/cards'} element={<CardsList />} />
         <Route path={'/test'} element={<Test />} />
         <Route path={'/404'} element={<Error />} />
         <Route path={'*'} element={<Navigate to={'/404'} />} />
