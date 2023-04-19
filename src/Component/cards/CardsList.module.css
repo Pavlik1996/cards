@@ -1,19 +1,22 @@
 .wrapper {
     width: 1008px;
     margin: 0 auto;
+
+    font-family: 'Montserrat', sans-serif;
 }
 
 .back {
-    width: 170px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    width: 170px;
 }
 
 .packButton {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 }
 
 .back:hover {
@@ -24,9 +27,16 @@
     width: 100%;
 }
 
+.tableHead {
+    width: 100%;
+
+    background-color: #efefef;
+}
+
 .btn {
     width: 184px;
     height: 36px;
+
     font-family: 'Montserrat', serif !important;
     font-size: 17px !important;
     font-weight: 500 !important;
