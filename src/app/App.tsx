@@ -57,7 +57,7 @@ export function App() {
         <Route path={'/signin'} element={<Signin />} />
         <Route path={'/signup'} element={<Signup />} />
         <Route path={'/passrecovery'} element={<PassRecovery />} />
-        <Route path={'/cards'} element={<CardsList />} />
+        <Route path={'/tablecards'} element={<CardsList />} />
         <Route path={'/test'} element={<Test />} />
         <Route path={'/404'} element={<Error />} />
         <Route path={'*'} element={<Navigate to={'/404'} />} />
