@@ -13,7 +13,28 @@ import SuperButton from '../../../SuperComponents/c2-SuperButton/SuperButton'
 import { selectAuthIsSignup } from '../auth-selector'
 import { authThunks } from '../auth-slice'
 
-import style from './Signup.module.css'
+import s from './Signup.module.css'
+
+const style = {
+  wrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    '& > :not(style)': {
+      m: 1,
+      width: 347,
+      height: 557,
+    },
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: ' 0 33px 35px 33px',
+  },
+  email: { margin: '24px 0 12px 0' },
+  password: { margin: '12px 0 12px 0' },
+  confPass: { margin: '12px 0 24px 0' },
+}
 
 const schema = yup
   .object({
@@ -31,7 +52,6 @@ type FormData = yup.InferType<typeof schema>
 export const Signup = () => {
   const authIsSignup = useSelector(selectAuthIsSignup)
   const dispatch = useAppDispatch()
-
   const navigate = useNavigate()
 
   const [firstPasswordShown, setFirstPasswordShown] = useState(false)
@@ -63,92 +83,63 @@ export const Signup = () => {
   }
 
   return (
-    <div>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          '& > :not(style)': {
-            m: 1,
-            width: 347,
-            height: 557,
-          },
-        }}
-      >
-        <Paper
-          elevation={3}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            padding: ' 0 33px 35px 33px',
-          }}
-        >
-          <h1>Sign Up</h1>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              marginTop: '16px',
-              marginBottom: '31px',
+    <Box sx={style.wrapper}>
+      <Paper elevation={3} sx={style.container}>
+        <h1>Sign Up</h1>
+        <form onSubmit={handleSubmit(onSubmit)} className={s.formWrapper}>
+          <TextField
+            {...register('email')}
+            label="Email"
+            fullWidth
+            variant="standard"
+            sx={style.email}
+          />
+          <div>{errors.email?.message}</div>
+          <TextField
+            {...register('password')}
+            label="Password"
+            fullWidth
+            variant="standard"
+            sx={style.password}
+            type={firstPasswordShown ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={toggleFirstPassword}>
+                    {firstPasswordShown ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
-          >
-            <TextField
-              {...register('email')}
-              label="Email"
-              fullWidth
-              variant="standard"
-              style={{ margin: '24px 0 12px 0' }}
-            />
-            <div>{errors.email?.message}</div>
-            <TextField
-              {...register('password')}
-              label="Password"
-              fullWidth
-              variant="standard"
-              style={{ margin: '24px 0 12px 0' }}
-              type={firstPasswordShown ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={toggleFirstPassword}>
-                      {firstPasswordShown ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <div>{errors.password?.message}</div>
-            <TextField
-              {...register('confirmPassword')}
-              label="Confirm password"
-              fullWidth
-              variant="standard"
-              style={{ margin: '12px 0 24px 0' }}
-              type={secondPasswordShown ? 'text' : 'password'}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={toggleSecondPassword}>
-                      {secondPasswordShown ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <div>{errors.confirmPassword?.message}</div>
-            <SuperButton type="submit" style={{ width: '100%', margin: '36px 0 0 0' }}>
-              Sign Up
-            </SuperButton>
-          </form>
-          <div style={{ margin: '0 0 11px 0' }}>Already have an account?</div>
-          <div onClick={onClickHandler} className={style.link}>
-            Sign In
-          </div>
-        </Paper>
-      </Box>
-    </div>
+          />
+          <div>{errors.password?.message}</div>
+          <TextField
+            {...register('confirmPassword')}
+            label="Confirm password"
+            fullWidth
+            variant="standard"
+            sx={style.confPass}
+            type={secondPasswordShown ? 'text' : 'password'}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={toggleSecondPassword}>
+                    {secondPasswordShown ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <div>{errors.confirmPassword?.message}</div>
+          <SuperButton type="submit" style={{ width: '100%', marginTop: '36px' }}>
+            Sign Up
+          </SuperButton>
+        </form>
+        <div>Already have an account?</div>
+        <div onClick={onClickHandler} className={s.link}>
+          Sign In
+        </div>
+      </Paper>
+    </Box>
   )
 }

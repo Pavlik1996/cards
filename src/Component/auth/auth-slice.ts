@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { RequestStatusType } from '../../common/types/types'
-import { createAuthAsyncThunk } from '../../common/utils/create-auth-async-thunk'
+import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
 import { handleAxiosError } from '../../common/utils/handle-axios-error'
 
 import { authAPI, SigninParamsType, SignupParamsType } from './auth-api'
 
-const signin = createAuthAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
+const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
   'auth/signin',
   async (data: SigninParamsType, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
@@ -26,7 +26,7 @@ const signin = createAuthAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
     }
   }
 )
-const signup = createAuthAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
+const signup = createAppAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
   'auth/signup',
   async (data: SignupParamsType, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
@@ -45,24 +45,25 @@ const signup = createAuthAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
     }
   }
 )
-const initialized = createAuthAsyncThunk<
-  { isInitialized: boolean; isSignin?: boolean; isSignup?: boolean },
-  undefined
->('auth/initialized', async (args, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI
+const initialized = createAppAsyncThunk<void, undefined>(
+  'auth/initialized',
+  async (_, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI
 
-  try {
-    const res = await authAPI.me()
+    try {
+      const res = await authAPI.me()
 
-    dispatch(authActions.setUserId({ user_id: res._id }))
+      dispatch(authActions.setUserId({ user_id: res._id }))
+      dispatch(authActions.setSignIn({ isSignin: true }))
+    } catch (e) {
+      handleAxiosError(dispatch, e)
 
-    return { isSignin: true, isSignup: true, isInitialized: true }
-  } catch (e) {
-    handleAxiosError(dispatch, e)
-
-    return rejectWithValue({ isInitialized: true })
+      return rejectWithValue(null)
+    } finally {
+      dispatch(authActions.setIsInitialized({ isInitialized: true }))
+    }
   }
-})
+)
 
 const slice = createSlice({
   name: 'auth',
@@ -75,6 +76,12 @@ const slice = createSlice({
     user_id: '',
   },
   reducers: {
+    setIsInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
+      state.isInitialized = action.payload.isInitialized
+    },
+    setSignIn: (state, action: PayloadAction<{ isSignin: boolean }>) => {
+      state.isSignin = action.payload.isSignin
+    },
     setError: (state, action: PayloadAction<{ error: string | null }>) => {
       state.error = action.payload.error
     },
@@ -93,19 +100,9 @@ const slice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         state.isSignup = action.payload.isSignup
       })
-      .addCase(initialized.fulfilled, (state, action) => {
-        state = { ...state, ...action.payload }
-
-        return state
-      })
-      .addCase(initialized.rejected, (state, action) => {
-        state.isInitialized = action.payload?.isInitialized
-      })
   },
 })
 
 export const authSlice = slice.reducer
 export const authActions = slice.actions
 export const authThunks = { signin, signup, initialized }
-
-// export type RequestStatusType = 'idle' | 'loading' | 'succeeded' | 'failed'

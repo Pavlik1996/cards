@@ -4,26 +4,37 @@ import { RequestStatusType } from '../../common/types/types'
 import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
 
 import { packsApi } from './packs-api'
+import { AddPackDataType, CardPacksType, UpdateParamsType } from './packs-types'
 
-const fetchPacks = createAppAsyncThunk<{ cardPacks: CardPacksType[] }, ParamsType>(
+const fetchPacks = createAppAsyncThunk<CardPacksType[], void>(
   'packs/fetchPacks',
-  async (params, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
+  async (_, thunkAPI) => {
+    const { dispatch, rejectWithValue, getState } = thunkAPI
+    const { page, pageCount, min, max, sortPacks, user_id, packName, block } = getState().packs
 
     try {
       dispatch(packsActions.setPacksStatus({ packsStatus: 'loading' }))
-      const res = await packsApi.fetchPacks(params)
+      const res = await packsApi.fetchPacks({
+        page,
+        pageCount,
+        min,
+        max,
+        sortPacks,
+        user_id,
+        packName,
+        block,
+      })
+
       const cardPacks = res.cardPacks
 
       dispatch(
         packsActions.setCardPacksTotalCount({ cardPacksTotalCount: res.cardPacksTotalCount })
       )
+      dispatch(packsActions.setMinCardsCount({ minCardsCount: res.minCardsCount }))
+      dispatch(packsActions.setMaxCardsCount({ maxCardsCount: res.maxCardsCount }))
       dispatch(packsActions.setPacksStatus({ packsStatus: 'succeeded' }))
 
-      // console.log(res.cardPacks)
-      // console.log(res)
-
-      return { cardPacks }
+      return cardPacks
     } catch (e) {
       console.log(e)
 
@@ -37,13 +48,45 @@ const deletePack = createAppAsyncThunk<void, string>('packs/deletePack', async (
   try {
     const res = await packsApi.deletePack(id)
 
-    dispatch(packsThunks.fetchPacks({}))
+    dispatch(packsThunks.fetchPacks())
   } catch (e) {
     console.log(e)
 
     return rejectWithValue(null)
   }
 })
+const addPack = createAppAsyncThunk<void, AddPackDataType>(
+  'pack/addPack',
+  async (newPackData, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI
+
+    try {
+      const res = await packsApi.addPack(newPackData)
+
+      dispatch(packsThunks.fetchPacks())
+    } catch (e) {
+      console.log(e)
+
+      return rejectWithValue(null)
+    }
+  }
+)
+const updatePack = createAppAsyncThunk<void, UpdateParamsType>(
+  'pack/updatePack',
+  async (arg, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI
+
+    try {
+      const res = await packsApi.updatePack(arg)
+
+      dispatch(packsThunks.fetchPacks())
+    } catch (e) {
+      console.log(e)
+
+      return rejectWithValue(null)
+    }
+  }
+)
 
 const slice = createSlice({
   name: 'packs',
@@ -54,16 +97,34 @@ const slice = createSlice({
     cardPacksTotalCount: 0,
     maxCardsCount: 0,
     minCardsCount: 0,
+    min: 0,
+    max: 0,
     page: 1,
     pageCount: 5,
-    user_id: '642ea45ad9c78e1c8615f2a9',
+    user_id: '',
+    sortPacks: '',
+    packName: '',
+    block: false,
   },
   reducers: {
-    // deletePack: (state, action: PayloadAction<string>) => {
-    //   const index = state.cardPacks.findIndex(el => el._id === action.payload)
-    //
-    //   if (index !== -1) state.cardPacks.splice(index, 1)
-    // },
+    setSortPacks: (state, action: PayloadAction<{ sortPacks: string }>) => {
+      state.sortPacks = action.payload.sortPacks
+    },
+    setMax: (state, action: PayloadAction<{ max: number }>) => {
+      state.max = action.payload.max
+    },
+    setMin: (state, action: PayloadAction<{ min: number }>) => {
+      state.min = action.payload.min
+    },
+    setUserId: (state, action: PayloadAction<{ user_id: string }>) => {
+      state.user_id = action.payload.user_id
+    },
+    setPackName: (state, action: PayloadAction<{ packName: string }>) => {
+      state.packName = action.payload.packName
+    },
+    setCardPacksTotalCount: (state, action: PayloadAction<{ cardPacksTotalCount: number }>) => {
+      state.cardPacksTotalCount = action.payload.cardPacksTotalCount
+    },
     setPageCount: (state, action: PayloadAction<{ pageCount: number }>) => {
       state.pageCount = action.payload.pageCount
     },
@@ -76,9 +137,6 @@ const slice = createSlice({
     setMaxCardsCount: (state, action: PayloadAction<{ maxCardsCount: number }>) => {
       state.maxCardsCount = action.payload.maxCardsCount
     },
-    setCardPacksTotalCount: (state, action: PayloadAction<{ cardPacksTotalCount: number }>) => {
-      state.cardPacksTotalCount = action.payload.cardPacksTotalCount
-    },
     setPacksStatus: (state, action: PayloadAction<{ packsStatus: RequestStatusType }>) => {
       state.packsStatus = action.payload.packsStatus
     },
@@ -88,38 +146,11 @@ const slice = createSlice({
   },
   extraReducers: builder => {
     builder.addCase(fetchPacks.fulfilled, (state, action) => {
-      state.cardPacks = action.payload.cardPacks
+      state.cardPacks = action.payload
     })
   },
 })
 
 export const packsSlice = slice.reducer
 export const packsActions = slice.actions
-export const packsThunks = { fetchPacks, deletePack }
-
-export type CardPacksType = {
-  _id: string
-  user_id: string
-  user_name: string
-  private: boolean
-  name: string
-  path: string
-  grade: number
-  shots: number
-  cardsCount: number
-  type: string
-  rating: number
-  created: string
-  updated: string
-  more_id: string
-  __v: number
-}
-
-export type ParamsType = {
-  cardPacksTotalCount?: number
-  maxCardsCount?: number
-  minCardsCount?: number
-  page?: number
-  pageCount?: number
-}
-// type ParamsType = Partial<_ParamsType>
+export const packsThunks = { fetchPacks, deletePack, addPack, updatePack }

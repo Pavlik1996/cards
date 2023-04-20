@@ -1,21 +1,23 @@
 import { instance } from '../../app/api'
 
-import { ParamsType } from './packs-slice'
+import {
+  FetchParamsType,
+  AddPackDataType,
+  FetchResponseType,
+  UpdateParamsType,
+} from './packs-types'
 
 export const packsApi = {
-  fetchPacks(params: ParamsType) {
-    return instance.get<any>('cards/pack', { params: params }).then(res => res.data)
+  fetchPacks(params: FetchParamsType) {
+    return instance.get<FetchResponseType>('cards/pack', { params: params }).then(res => res.data)
   },
-  addPack(data: any) {
+  addPack(data: AddPackDataType) {
     return instance.post<any>('cards/pack', data)
   },
   deletePack(id: string) {
     return instance.delete<any>('cards/pack', { params: { id: id } })
   },
-  updatePack(data: any) {
+  updatePack(data: UpdateParamsType) {
     return instance.put<any>('cards/pack', data)
   },
 }
-
-type ResponseType = {}
-// packName, min, max, sortPacks, page, pageCount, user_id, block

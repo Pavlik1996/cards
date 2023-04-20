@@ -1,18 +1,28 @@
-.passwordsWrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-  width: 100%;
+    margin: 16px 0 31px 0;
+}
+
+.passwordsWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
 }
 
 .link {
-  cursor: pointer;
+    cursor: pointer;
 
-  color: #366eff;
-  text-decoration: underline;
+    margin-top: 11px;
+
+    color: #366eff;
+    text-decoration: underline;
 }
 
 .link:hover {
-  font-weight: bold;
+    font-weight: bold;
 }
