@@ -7,7 +7,7 @@ import SuperSelect from '../c5-SuperSelect/SuperSelect'
 import s from './SuperPagination.module.css'
 
 export type SuperPaginationPropsType = {
-  isLoading: boolean
+  isLoading?: boolean
   id?: string
   page: number
   itemsCountForPage: number
@@ -54,7 +54,7 @@ const SuperPagination: React.FC<SuperPaginationPropsType> = ({
         hideNextButton
         hidePrevButton
       />
-      <span className={isLoading ? s.container + ' ' + s.text1 : s.text1}>показать</span>
+      <span className={isLoading ? s.container + ' ' + s.text1 : s.text1}>Show</span>
 
       <SuperSelect
         id={id + '-pagination-select'}
@@ -69,7 +69,7 @@ const SuperPagination: React.FC<SuperPaginationPropsType> = ({
         className={s.sel}
       />
 
-      <span className={isLoading ? s.container + ' ' + s.text2 : s.text2}>строк в таблице</span>
+      <span className={isLoading ? s.container + ' ' + s.text2 : s.text2}>Cards per Page</span>
     </div>
   )
 }
