@@ -15,6 +15,7 @@ import {
   TextField,
 } from '@mui/material'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import { RootStateType, useAppDispatch } from '../../app/store'
 import useDebounce from '../../hooks/useDebounce'
@@ -33,8 +34,8 @@ export const CardsList = () => {
   const searchParam = useDebounce<string>(value)
 
   const cards = useSelector<RootStateType, ResponseGetCardsType>(state => state.cards)
-
-  const cardsPack_id = '64399f410e0a7c04985eef42'
+  const cardsPack_id = useSelector<RootStateType, string>(state => state.packs.packId)
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const onChangePagination = (newPage: number, newCount: number) => {
@@ -64,7 +65,13 @@ export const CardsList = () => {
     <div className={style.wrapper}>
       <div className={style.back}>
         <KeyboardBackspaceIcon />
-        <span>Back to Packs List</span>
+        <span
+          onClick={() => {
+            navigate('/packs')
+          }}
+        >
+          Back to Packs List
+        </span>
       </div>
       <div className={style.packButton}>
         <h2>Friends Pack</h2>

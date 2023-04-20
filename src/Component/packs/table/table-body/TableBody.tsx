@@ -5,14 +5,16 @@ import SchoolIcon from '@mui/icons-material/School'
 import TableBody from '@mui/material/TableBody/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
+import { useNavigate } from 'react-router-dom'
 
 import { useAppDispatch } from '../../../../app/store'
 import { UpdatePackModal } from '../../modals/UpdatePackModal'
-import { packsThunks } from '../../packs-slice'
+import { packsActions, packsThunks } from '../../packs-slice'
 import { CardPacksType } from '../../packs-types'
 
 export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks, user_id }) => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   return (
     <TableBody>
@@ -22,7 +24,14 @@ export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks
 
         return (
           <TableRow key={el._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
-            <TableCell component="th" scope="row">
+            <TableCell
+              component="th"
+              scope="row"
+              onClick={() => {
+                dispatch(packsActions.setPackId({ packId: el._id }))
+                navigate('/tablecards')
+              }}
+            >
               {el.name}
             </TableCell>
             <TableCell>{el.cardsCount}</TableCell>

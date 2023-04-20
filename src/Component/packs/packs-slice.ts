@@ -105,8 +105,12 @@ const slice = createSlice({
     sortPacks: '',
     packName: '',
     block: false,
+    packId: '',
   },
   reducers: {
+    setPackId: (state, action: PayloadAction<{ packId: string }>) => {
+      state.packId = action.payload.packId
+    },
     setSortPacks: (state, action: PayloadAction<{ sortPacks: string }>) => {
       state.sortPacks = action.payload.sortPacks
     },
