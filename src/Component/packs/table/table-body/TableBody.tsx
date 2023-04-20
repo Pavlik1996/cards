@@ -40,11 +40,15 @@ export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks
             <TableCell>
               {user_id === el.user_id ? (
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  <SchoolIcon
-                    onClick={() => {
-                      alert('start studing')
-                    }}
-                  />
+                  {el.cardsCount === 0 ? (
+                    <SchoolIcon sx={{ opacity: '0.5' }} />
+                  ) : (
+                    <SchoolIcon
+                      onClick={() => {
+                        alert('start studing')
+                      }}
+                    />
+                  )}
                   <UpdatePackModal id={el._id} />
                   <DeleteOutlineIcon
                     onClick={() => {
