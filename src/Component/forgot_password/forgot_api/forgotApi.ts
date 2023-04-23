@@ -1,4 +1,4 @@
-import { instance } from '../../../app/api'
+import { instance } from '../../../api/api'
 
 export const forgotApi = {
   forgot(data: forgotDataType) {

@@ -2,9 +2,7 @@ import { ChangeEvent, useEffect, useState } from 'react'
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
-import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import {
-  Button,
   Paper,
   Table,
   TableBody,
@@ -15,16 +13,18 @@ import {
   TextField,
 } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 import { RootStateType, useAppDispatch } from '../../app/store'
-import useDebounce from '../../hooks/useDebounce'
+import { useDebounce } from '../../common/utils/hooks/useDebounce'
 import SuperPagination from '../../SuperComponents/c9-SuperPagination/SuperPagination'
 
+import { BackButton } from './BackButton/BackButton'
+import { ButtonAddNewCard } from './ButtonAddNewCard/ButtonAddNewCard'
 import { Card } from './Card'
-import { ResponseGetCardsType } from './cardsApi/cardsApi'
+import { selectorCardsAll } from './cards-selector'
 import style from './CardsList.module.css'
 import { cardsThunks } from './CardsSlice'
+import { sortEnums } from './enums/cards-enums'
 
 export const CardsList = () => {
   const [page, setPage] = useState(1)
@@ -33,18 +33,13 @@ export const CardsList = () => {
   const [sort, setSort] = useState(false)
   const searchParam = useDebounce<string>(value)
 
-  const cards = useSelector<RootStateType, ResponseGetCardsType>(state => state.cards)
+  const cards = useSelector(selectorCardsAll)
   const cardsPack_id = useSelector<RootStateType, string>(state => state.packs.packId)
-  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const onChangePagination = (newPage: number, newCount: number) => {
     setPage(newPage)
     setPageCount(newCount)
-  }
-
-  const onClickAddCardHandler = () => {
-    dispatch(cardsThunks.addNewCard({ cardsPack_id, sort: !sort ? 0 : 1 }))
   }
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -53,7 +48,13 @@ export const CardsList = () => {
 
   useEffect(() => {
     dispatch(
-      cardsThunks.fetchCards({ cardsPack_id, page, pageCount, searchParam, sort: !sort ? 0 : 1 })
+      cardsThunks.fetchCards({
+        cardsPack_id,
+        page,
+        pageCount,
+        searchParam,
+        sort: sort ? sortEnums.down : sortEnums.up,
+      })
     )
   }, [page, pageCount, searchParam, sort])
 
@@ -63,22 +64,8 @@ export const CardsList = () => {
 
   return (
     <div className={style.wrapper}>
-      <div className={style.back}>
-        <KeyboardBackspaceIcon />
-        <span
-          onClick={() => {
-            navigate('/packs')
-          }}
-        >
-          Back to Packs List
-        </span>
-      </div>
-      <div className={style.packButton}>
-        <h2>Friends Pack</h2>
-        <Button variant={'contained'} className={style.btn} onClick={onClickAddCardHandler}>
-          Add New Card
-        </Button>
-      </div>
+      <BackButton dispatch={dispatch} />
+      <ButtonAddNewCard cardsPack_id={cardsPack_id} dispatch={dispatch} sort={sort} />
       <div style={{ textAlign: 'start' }}>Search</div>
       <TextField sx={{ width: '100%' }} value={value} onChange={handleChange} />
       <div className={style.container}>
@@ -112,18 +99,20 @@ export const CardsList = () => {
                   page={page}
                   pageCount={pageCount}
                   sort={!sort ? 0 : 1}
+                  dispatch={dispatch}
+                  cardsPack_id={cardsPack_id}
                 />
               ))}
             </TableBody>
           </Table>
         </TableContainer>
+        <SuperPagination
+          page={page}
+          onChange={onChangePagination}
+          totalCount={cards.cardsTotalCount}
+          itemsCountForPage={pageCount}
+        />
       </div>
-      <SuperPagination
-        page={page}
-        onChange={onChangePagination}
-        totalCount={cards.cardsTotalCount}
-        itemsCountForPage={pageCount}
-      />
     </div>
   )
 }

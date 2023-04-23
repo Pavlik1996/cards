@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import './App.css'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, LinearProgress } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
@@ -18,11 +18,11 @@ import { Packs } from '../Component/packs/Packs'
 import { Profile } from '../Component/Profile/Profile'
 import { Test } from '../Component/test/test'
 
-import { selectAuthIsInitialized, selectAuthStatus } from './app-selectors'
+import { selectAppStatus, selectAuthIsInitialized } from './app-selectors'
 import { useAppDispatch } from './store'
 
 export function App() {
-  const authStatus = useSelector(selectAuthStatus)
+  const appStatus = useSelector(selectAppStatus)
   const authIsInitialized = useSelector(selectAuthIsInitialized)
   const dispatch = useAppDispatch()
 
@@ -40,11 +40,7 @@ export function App() {
 
   return (
     <div className="App">
-      {authStatus === 'loading' && (
-        <div style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
-          <CircularProgress />
-        </div>
-      )}
+      <div className={'App-status'}>{appStatus === 'loading' && <LinearProgress />}</div>
       <ErrorSnackbar />
       <Routes>
         <Route path={'/'} element={<Profile />} />

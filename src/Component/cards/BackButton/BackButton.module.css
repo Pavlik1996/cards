@@ -1,0 +1,11 @@
+.back {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 170px;
+}
+
+.back:hover {
+    cursor: pointer;
+}

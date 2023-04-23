@@ -1,5 +1,4 @@
-import { instance } from '../../../app/api'
-const card = { cardsPack_id: '64399f410e0a7c04985eef42' }
+import { instance } from '../../../api/api'
 
 export const cardsApi = {
   getCards(
@@ -15,7 +14,7 @@ export const cardsApi = {
       }&cardsPack_id=${cardsPack_id}&page=${page}&pageCount=${pageCount}&sortCards=${sort}grade`
     )
   },
-  addCard() {
+  addCard(card: { cardsPack_id: string }) {
     return instance.post<ResponseAddCardType>('cards/card', { card })
   },
   deleteCard(id: string) {

@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
+import { appActions } from '../../app/app-slice'
 import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
+import { handleAxiosError } from '../../common/utils/handle-axios-error'
 
-import { cardsApi, CardType, ResponseGetCardsType } from './cardsApi/cardsApi'
+import { cardsApi, CardType, ResponseGetCardsType, updateCardType } from './cardsApi/cardsApi'
 
 const fetchCards = createAppAsyncThunk<
   ResponseGetCardsType,
@@ -11,6 +13,7 @@ const fetchCards = createAppAsyncThunk<
   const { dispatch, rejectWithValue } = thunkAPI
 
   try {
+    dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
     const cards = await cardsApi.getCards(
       arg.sort,
       arg.cardsPack_id,
@@ -19,8 +22,12 @@ const fetchCards = createAppAsyncThunk<
       arg.searchParam
     )
 
+    dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
+
     return cards.data
   } catch (e) {
+    handleAxiosError(dispatch, e)
+
     return rejectWithValue(null)
   }
 })
@@ -30,9 +37,12 @@ const addNewCard = createAppAsyncThunk(
   async (arg: { cardsPack_id: string; sort: number }, thunkAPI) => {
     const { dispatch, rejectWithValue, getState } = thunkAPI
     const { page, pageCount } = getState().cards
+    const { packId } = getState().packs
 
     try {
-      const res = await cardsApi.addCard()
+      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
+
+      const res = await cardsApi.addCard({ cardsPack_id: packId })
 
       dispatch(
         cardsThunks.fetchCards({
@@ -42,9 +52,12 @@ const addNewCard = createAppAsyncThunk(
           pageCount: pageCount,
         })
       )
+      dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
 
       return res.data.newCard
     } catch (e) {
+      handleAxiosError(dispatch, e)
+
       return rejectWithValue(null)
     }
   }
@@ -56,6 +69,8 @@ const deleteCard = createAppAsyncThunk(
     const { dispatch, rejectWithValue, getState } = thunkAPI
 
     try {
+      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
+
       const res = await cardsApi.deleteCard(data.card._id)
 
       dispatch(
@@ -66,18 +81,16 @@ const deleteCard = createAppAsyncThunk(
           pageCount: data.pageCount,
         })
       )
+      dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
 
       return res.data.deletedCard
     } catch (e) {
+      handleAxiosError(dispatch, e)
+
       return rejectWithValue(null)
     }
   }
 )
-
-export type updateCardType = {
-  id: string
-  question: string
-}
 
 const updateCard = createAppAsyncThunk(
   'cards/updateCard',
@@ -85,10 +98,16 @@ const updateCard = createAppAsyncThunk(
     const { dispatch, rejectWithValue } = thunkAPI
 
     try {
+      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
+
       const res = await cardsApi.updateCard(data.id, data.question)
+
+      dispatch(appActions.setAppStatus({ appStatus: 'failed' }))
 
       return res.data.updatedCard
     } catch (e) {
+      handleAxiosError(dispatch, e)
+
       return rejectWithValue(null)
     }
   }
@@ -99,10 +118,14 @@ const initialState: ResponseGetCardsType = {} as ResponseGetCardsType
 const slice = createSlice({
   name: 'cards',
   initialState,
-  reducers: {},
+  reducers: {
+    resetSlice: () => {
+      return {} as ResponseGetCardsType
+    },
+  },
   extraReducers: builder => {
     builder
-      .addCase(fetchCards.fulfilled, (state, action) => {
+      .addCase(fetchCards.fulfilled, (_, action) => {
         return action.payload
       })
       .addCase(deleteCard.fulfilled, (state, action) => {

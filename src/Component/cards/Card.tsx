@@ -3,9 +3,11 @@ import { useState } from 'react'
 import { Delete } from '@mui/icons-material'
 import Edit from '@mui/icons-material/Edit'
 import { TableRow, TableCell, Rating, IconButton } from '@mui/material'
+import { useSelector } from 'react-redux'
 
-import { useAppDispatch } from '../../app/store'
+import { AppDispatch } from '../../app/store'
 import { EditableSpan } from '../../SuperComponents/EditableSpan/EditableSpan'
+import { selectAuthUserId } from '../auth/auth-selector'
 
 import { CardType } from './cardsApi/cardsApi'
 import { cardsThunks } from './CardsSlice'
@@ -15,23 +17,17 @@ type PropsType = {
   page: number
   pageCount: number
   sort: number
+  dispatch: AppDispatch
+  cardsPack_id: string
 }
 
 export const Card: React.FC<PropsType> = props => {
   let [editMode, setEditMode] = useState(false)
-  const card = props.card
-
-  const dispatch = useAppDispatch()
+  const { card, page, pageCount, sort, dispatch } = props
+  const userId = useSelector(selectAuthUserId)
 
   const onClickDeleteHandler = () => {
-    dispatch(
-      cardsThunks.deleteCard({
-        card,
-        page: props.page,
-        pageCount: props.pageCount,
-        sort: props.sort,
-      })
-    )
+    dispatch(cardsThunks.deleteCard({ card, page, pageCount, sort }))
   }
 
   const onClickEditHandler = () => {
@@ -58,10 +54,10 @@ export const Card: React.FC<PropsType> = props => {
       </TableCell>
       <TableCell>
         <div>
-          <IconButton onClick={onClickDeleteHandler} disabled={editMode}>
+          <IconButton onClick={onClickDeleteHandler} disabled={card.user_id !== userId}>
             <Delete />
           </IconButton>
-          <IconButton onClick={onClickEditHandler} disabled={editMode}>
+          <IconButton onClick={onClickEditHandler} disabled={card.user_id !== userId}>
             <Edit />
           </IconButton>
         </div>
