@@ -14,7 +14,7 @@ export const cardsApi = {
       }&cardsPack_id=${cardsPack_id}&page=${page}&pageCount=${pageCount}&sortCards=${sort}grade`
     )
   },
-  addCard(card: { cardsPack_id: string }) {
+  addCard(card: PutCardType) {
     return instance.post<ResponseAddCardType>('cards/card', { card })
   },
   deleteCard(id: string) {
@@ -68,4 +68,10 @@ type ResponseUpdateCardType = {
 export type updateCardType = {
   id: string
   question: string
+}
+
+export type PutCardType = {
+  cardsPack_id: string
+  question: string
+  answer: string
 }

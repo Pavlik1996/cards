@@ -34,7 +34,7 @@ const fetchCards = createAppAsyncThunk<
 
 const addNewCard = createAppAsyncThunk(
   'cards/addnewcard',
-  async (arg: { cardsPack_id: string; sort: number }, thunkAPI) => {
+  async (arg: { sort: number; answer: string; question: string }, thunkAPI) => {
     const { dispatch, rejectWithValue, getState } = thunkAPI
     const { page, pageCount } = getState().cards
     const { packId } = getState().packs
@@ -42,12 +42,16 @@ const addNewCard = createAppAsyncThunk(
     try {
       dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
 
-      const res = await cardsApi.addCard({ cardsPack_id: packId })
+      const res = await cardsApi.addCard({
+        cardsPack_id: packId,
+        answer: arg.answer,
+        question: arg.question,
+      })
 
       dispatch(
         cardsThunks.fetchCards({
           sort: arg.sort,
-          cardsPack_id: arg.cardsPack_id,
+          cardsPack_id: packId,
           page: page,
           pageCount: pageCount,
         })

@@ -1,0 +1,51 @@
+.packButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btnSave {
+  width: 127px;
+  height: 36px;
+
+  font-family: 'Montserrat', serif !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+
+  border-radius: 35px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important
+}
+
+.btnCancel {
+  width: 127px;
+  height: 36px;
+
+  font-family: 'Montserrat', serif !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+
+  border-radius: 35px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
