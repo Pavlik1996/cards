@@ -13,18 +13,19 @@ import {
   TextField,
 } from '@mui/material'
 import { useSelector } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 
 import { RootStateType, useAppDispatch } from '../../app/store'
 import { useDebounce } from '../../common/utils/hooks/useDebounce'
 import SuperPagination from '../../SuperComponents/c9-SuperPagination/SuperPagination'
 
 import { BackButton } from './BackButton/BackButton'
-import { ButtonAddNewCard } from './ButtonAddNewCard/ButtonAddNewCard'
 import { Card } from './Card'
 import { selectorCardsAll } from './cards-selector'
 import style from './CardsList.module.css'
 import { cardsThunks } from './CardsSlice'
 import { sortEnums } from './enums/cards-enums'
+import { ButtonAddNewCard } from './modalsCards/ButtonAddNewCard/ButtonAddNewCard'
 
 export const CardsList = () => {
   const [page, setPage] = useState(1)
@@ -32,6 +33,7 @@ export const CardsList = () => {
   const [value, setValue] = useState('')
   const [sort, setSort] = useState(false)
   const searchParam = useDebounce<string>(value)
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const cards = useSelector(selectorCardsAll)
   const cardsPack_id = useSelector<RootStateType, string>(state => state.packs.packId)
@@ -47,13 +49,15 @@ export const CardsList = () => {
   }
 
   useEffect(() => {
+    const params = Object.fromEntries(searchParams)
+
     dispatch(
       cardsThunks.fetchCards({
         cardsPack_id,
         page,
         pageCount,
         searchParam,
-        sort: sort ? sortEnums.down : sortEnums.up,
+        sort: sort ? sortEnums.up : sortEnums.down,
       })
     )
   }, [page, pageCount, searchParam, sort])
@@ -65,7 +69,7 @@ export const CardsList = () => {
   return (
     <div className={style.wrapper}>
       <BackButton dispatch={dispatch} />
-      <ButtonAddNewCard cardsPack_id={cardsPack_id} dispatch={dispatch} sort={sort} />
+      <ButtonAddNewCard dispatch={dispatch} sort={sort} />
       <div style={{ textAlign: 'start' }}>Search</div>
       <TextField sx={{ width: '100%' }} value={value} onChange={handleChange} />
       <div className={style.container}>
@@ -88,7 +92,9 @@ export const CardsList = () => {
                 <TableCell align="left">
                   <b>Grade</b>
                 </TableCell>
-                <TableCell />
+                <TableCell>
+                  <b>Actions</b>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

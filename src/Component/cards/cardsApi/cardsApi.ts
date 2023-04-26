@@ -14,14 +14,16 @@ export const cardsApi = {
       }&cardsPack_id=${cardsPack_id}&page=${page}&pageCount=${pageCount}&sortCards=${sort}grade`
     )
   },
-  addCard(card: { cardsPack_id: string }) {
+  addCard(card: PutCardType) {
     return instance.post<ResponseAddCardType>('cards/card', { card })
   },
   deleteCard(id: string) {
     return instance.delete<ResponseDeleteCardType>(`cards/card?id=${id}`)
   },
-  updateCard(id: string, question: string) {
-    return instance.put<ResponseUpdateCardType>('cards/card', { card: { _id: id, question } })
+  updateCard(id: string, question: string, answer: string) {
+    return instance.put<ResponseUpdateCardType>('cards/card', {
+      card: { _id: id, question, answer },
+    })
   },
 }
 
@@ -68,4 +70,11 @@ type ResponseUpdateCardType = {
 export type updateCardType = {
   id: string
   question: string
+  answer: string
+}
+
+export type PutCardType = {
+  cardsPack_id: string
+  question: string
+  answer: string
 }

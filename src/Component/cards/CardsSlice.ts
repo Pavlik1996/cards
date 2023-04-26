@@ -34,7 +34,7 @@ const fetchCards = createAppAsyncThunk<
 
 const addNewCard = createAppAsyncThunk(
   'cards/addnewcard',
-  async (arg: { cardsPack_id: string; sort: number }, thunkAPI) => {
+  async (arg: { sort: number; answer: string; question: string }, thunkAPI) => {
     const { dispatch, rejectWithValue, getState } = thunkAPI
     const { page, pageCount } = getState().cards
     const { packId } = getState().packs
@@ -42,19 +42,21 @@ const addNewCard = createAppAsyncThunk(
     try {
       dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
 
-      const res = await cardsApi.addCard({ cardsPack_id: packId })
+      await cardsApi.addCard({
+        cardsPack_id: packId,
+        answer: arg.answer,
+        question: arg.question,
+      })
 
       dispatch(
         cardsThunks.fetchCards({
           sort: arg.sort,
-          cardsPack_id: arg.cardsPack_id,
+          cardsPack_id: packId,
           page: page,
           pageCount: pageCount,
         })
       )
       dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
-
-      return res.data.newCard
     } catch (e) {
       handleAxiosError(dispatch, e)
 
@@ -66,12 +68,12 @@ const addNewCard = createAppAsyncThunk(
 const deleteCard = createAppAsyncThunk(
   'cards/deleteCard',
   async (data: { card: CardType; page: number; pageCount: number; sort: number }, thunkAPI) => {
-    const { dispatch, rejectWithValue, getState } = thunkAPI
+    const { dispatch, rejectWithValue } = thunkAPI
 
     try {
       dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
 
-      const res = await cardsApi.deleteCard(data.card._id)
+      await cardsApi.deleteCard(data.card._id)
 
       dispatch(
         cardsThunks.fetchCards({
@@ -82,8 +84,6 @@ const deleteCard = createAppAsyncThunk(
         })
       )
       dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
-
-      return res.data.deletedCard
     } catch (e) {
       handleAxiosError(dispatch, e)
 
@@ -100,7 +100,7 @@ const updateCard = createAppAsyncThunk(
     try {
       dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
 
-      const res = await cardsApi.updateCard(data.id, data.question)
+      const res = await cardsApi.updateCard(data.id, data.question, data.answer)
 
       dispatch(appActions.setAppStatus({ appStatus: 'failed' }))
 
@@ -128,19 +128,12 @@ const slice = createSlice({
       .addCase(fetchCards.fulfilled, (_, action) => {
         return action.payload
       })
-      .addCase(deleteCard.fulfilled, (state, action) => {
-        const index = state.cards.findIndex(el => el._id === action.payload._id)
-
-        state.cards.splice(index, 1)
-      })
-      .addCase(addNewCard.fulfilled, (state, action) => {
-        state.cards.unshift(action.payload)
-      })
       .addCase(updateCard.fulfilled, (state, action) => {
         const card = state.cards.find(el => el._id === action.payload._id)
 
         if (card) {
           card.question = action.payload.question
+          card.answer = action.payload.answer
         }
       })
   },
