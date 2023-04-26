@@ -2,14 +2,18 @@ import React, { useState } from 'react'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Box, IconButton, InputAdornment, Paper, TextField } from '@mui/material'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import Paper from '@mui/material/Paper'
+import TextField from '@mui/material/TextField'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 
-import { useAppDispatch } from '../../../app/store'
-import SuperButton from '../../../SuperComponents/c2-SuperButton/SuperButton'
+import { useActions } from '../../../common/utils/hooks/useActions'
 import { selectAuthIsSignup } from '../auth-selector'
 import { authThunks } from '../auth-slice'
 
@@ -51,30 +55,27 @@ type FormData = yup.InferType<typeof schema>
 
 export const Signup = () => {
   const authIsSignup = useSelector(selectAuthIsSignup)
-  const dispatch = useAppDispatch()
+  const { signup } = useActions(authThunks)
   const navigate = useNavigate()
 
   const [firstPasswordShown, setFirstPasswordShown] = useState(false)
-  const toggleFirstPassword = () => setFirstPasswordShown(!firstPasswordShown)
   const [secondPasswordShown, setSecondPasswordShown] = useState(false)
+
+  const toggleFirstPassword = () => setFirstPasswordShown(!firstPasswordShown)
   const toggleSecondPassword = () => setSecondPasswordShown(!secondPasswordShown)
 
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
   })
   const onSubmit = (data: any) => {
-    console.log(data)
-    dispatch(authThunks.signup(data))
-    reset()
+    signup(data)
   }
 
-  const onClickHandler = () => {
-    console.log('click')
+  const redirectToSigninHandler = () => {
     navigate('/signin')
   }
 
@@ -131,12 +132,12 @@ export const Signup = () => {
             }}
           />
           <div>{errors.confirmPassword?.message}</div>
-          <SuperButton type="submit" style={{ width: '100%', marginTop: '36px' }}>
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 5 }}>
             Sign Up
-          </SuperButton>
+          </Button>
         </form>
         <div>Already have an account?</div>
-        <div onClick={onClickHandler} className={s.link}>
+        <div onClick={redirectToSigninHandler} className={s.link}>
           Sign In
         </div>
       </Paper>

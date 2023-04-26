@@ -1,20 +1,38 @@
 import React from 'react'
 
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline'
 import SchoolIcon from '@mui/icons-material/School'
-import TableBody from '@mui/material/TableBody/TableBody'
+import IconButton from '@mui/material/IconButton'
+import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import { useNavigate } from 'react-router-dom'
 
-import { useAppDispatch } from '../../../../app/store'
-import { UpdatePackModal } from '../../modals/UpdatePackModal'
-import { packsActions, packsThunks } from '../../packs-slice'
+import { useActions } from '../../../../common/utils/hooks/useActions'
+import { DeletePackModal } from '../../modals/delete-modal/DeletePackModal'
+import { EditPackModal } from '../../modals/edit-modal/EditPackModal'
+import { packsActions } from '../../packs-slice'
 import { CardPacksType } from '../../packs-types'
 
+import s from './TableBody.module.css'
+
+const style = {
+  tableRow: {
+    '&:last-child td, &:last-child th': { border: 0 },
+  },
+}
+
 export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks, user_id }) => {
-  const dispatch = useAppDispatch()
+  const { setPackId } = useActions(packsActions)
+
   const navigate = useNavigate()
+
+  const redirectToCardsHandler = (packId: string) => {
+    setPackId({ packId })
+    navigate('/tablecards')
+  }
+  const onClick = () => {
+    alert('start studying')
+  }
 
   return (
     <TableBody>
@@ -23,13 +41,13 @@ export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks
         const formatedDate = new Intl.DateTimeFormat(['ru']).format(data)
 
         return (
-          <TableRow key={el._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }} hover>
+          <TableRow key={el._id} sx={style.tableRow} hover>
             <TableCell
+              className={s.nameCell}
               component="th"
               scope="row"
               onClick={() => {
-                dispatch(packsActions.setPackId({ packId: el._id }))
-                navigate('/tablecards')
+                redirectToCardsHandler(el._id)
               }}
             >
               {el.name}
@@ -39,29 +57,21 @@ export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks
             <TableCell>{el.user_name}</TableCell>
             <TableCell>
               {user_id === el.user_id ? (
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                  {el.cardsCount === 0 ? (
-                    <SchoolIcon sx={{ opacity: '0.5' }} />
-                  ) : (
-                    <SchoolIcon
-                      onClick={() => {
-                        alert('start studing')
-                      }}
-                    />
-                  )}
-                  <UpdatePackModal id={el._id} />
-                  <DeleteOutlineIcon
-                    onClick={() => {
-                      dispatch(packsThunks.deletePack(el._id))
-                    }}
-                  />
+                <div className={s.btnsWrapper}>
+                  <IconButton onClick={onClick} color="primary" disabled={el.cardsCount === 0}>
+                    <SchoolIcon />
+                  </IconButton>
+                  <IconButton color="primary">
+                    <EditPackModal id={el._id} prevName={el.name} />
+                  </IconButton>
+                  <IconButton color="primary">
+                    <DeletePackModal id={el._id} prevName={el.name} />
+                  </IconButton>
                 </div>
               ) : (
-                <SchoolIcon
-                  onClick={() => {
-                    alert('start studying')
-                  }}
-                />
+                <IconButton onClick={onClick} color="primary" disabled={el.cardsCount === 0}>
+                  <SchoolIcon />
+                </IconButton>
               )}
             </TableCell>
           </TableRow>

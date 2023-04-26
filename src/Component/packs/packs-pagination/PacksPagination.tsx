@@ -1,48 +1,68 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { MenuItem, SelectChangeEvent } from '@mui/material'
+import MenuItem from '@mui/material/MenuItem'
 import Pagination from '@mui/material/Pagination/Pagination'
-import Select from '@mui/material/Select/Select'
-
-import { useAppDispatch } from '../../../app/store'
-import { packsActions } from '../packs-slice'
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { useSearchParams } from 'react-router-dom'
 
 import s from './PacksPagination.module.css'
 
 export const PacksPagination: React.FC<PaginationPropsType> = ({
-  appStatus,
-  page,
-  pageCount,
+  pageCountState,
   cardPacksTotalCount,
 }) => {
-  const dispatch = useAppDispatch()
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const [pageCount, setPageCount] = useState<number>(
+    Number(searchParams.get('pageCount')) || pageCountState //5
+  )
+
+  const [page, setPage] = useState<number>(Number(searchParams.get('page')) || 1)
+
   const lastPage = Math.ceil(cardPacksTotalCount / pageCount)
 
-  const [pageCountValue, setPageCountValue] = useState<number>(pageCount)
-  const [pageValue, setPageValue] = useState<number>(page)
+  const changePageLHandler = (event: ChangeEvent<unknown>, page: number) => {
+    const params: { page?: string } = {}
 
-  const onChangePagination = (event: ChangeEvent<unknown>, page: number) => {
-    setPageValue(page)
+    if (page !== 1) {
+      params.page = String(page)
+    } else {
+      searchParams.delete('page')
+      setSearchParams(searchParams)
+    }
+
+    setPage(page)
+
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      ...params,
+    })
   }
-  const onChangePageValue = (event: SelectChangeEvent<number>) => {
-    setPageCountValue(+event.target.value)
+  const changePageCountHandler = (event: SelectChangeEvent<number>) => {
+    const params: { pageCount?: string } = {}
+
+    params.pageCount = String(event.target.value)
+    setPageCount(+event.target.value)
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      ...params,
+    })
   }
 
   useEffect(() => {
-    dispatch(packsActions.setPage({ page: pageValue }))
-    dispatch(packsActions.setPageCount({ pageCount: pageCountValue }))
-  }, [pageValue, pageCountValue])
+    setPage(Number(searchParams.get('page')) || 1)
+  }, [searchParams])
 
   return (
     <div className={s.paginationWrapper}>
-      <Pagination shape="rounded" page={pageValue} count={lastPage} onChange={onChangePagination} />
+      <Pagination shape="rounded" page={page} count={lastPage} onChange={changePageLHandler} />
       <span>Show</span>
       <Select
         className={s.select}
         size="small"
-        value={pageCountValue}
-        onChange={onChangePageValue}
+        value={pageCount}
+        onChange={changePageCountHandler}
         IconComponent={KeyboardArrowDownIcon}
       >
         <MenuItem value={5}>5</MenuItem>
@@ -57,8 +77,6 @@ export const PacksPagination: React.FC<PaginationPropsType> = ({
 }
 
 type PaginationPropsType = {
-  appStatus?: boolean
-  page: number //какая страница кликнута, номер страницы
-  pageCount: number //сколько итемсов на странице будет
+  pageCountState: any //сколько итемсов на странице будет
   cardPacksTotalCount: number //сколько всего паков на бэке
 }

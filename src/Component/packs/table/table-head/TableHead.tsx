@@ -8,9 +8,15 @@ import { SortArrow } from '../../sort/SortArrow'
 
 import { tableHeadData } from './TableHeadData'
 
+const style = {
+  wrapper: {
+    background: '#EFEFEF',
+  },
+}
+
 export const TableHeadComponent: React.FC<TableHeadComponentType> = ({ sort }) => {
   return (
-    <TableHead sx={{ background: '#EFEFEF' }}>
+    <TableHead sx={style.wrapper}>
       <TableRow>
         {tableHeadData.map(el => {
           return (
@@ -28,4 +34,4 @@ export const TableHeadComponent: React.FC<TableHeadComponentType> = ({ sort }) =
   )
 }
 
-type TableHeadComponentType = { sort: string }
+type TableHeadComponentType = { sort: string | undefined }
