@@ -6,14 +6,6 @@
     margin: 16px 0 31px 0;
 }
 
-.passwordsWrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    width: 100%;
-}
-
 .link {
     cursor: pointer;
 

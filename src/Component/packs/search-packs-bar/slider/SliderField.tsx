@@ -1,60 +1,102 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
-import { Slider } from '@mui/material'
-import { useSelector } from 'react-redux'
+import Slider from '@mui/material/Slider'
+import { useSearchParams } from 'react-router-dom'
 
-import { RootStateType, useAppDispatch } from '../../../../app/store'
 import { useDebounce } from '../../../../common/utils/hooks/useDebounce'
-import { packsActions } from '../../packs-slice'
 import s from '../SearchPacksBar.module.css'
 
 import { SliderInput } from './SliderInput'
 
 export const SliderField: React.FC<SliderFieldPropsType> = ({ min, max }) => {
-  const dispatch = useAppDispatch()
-  const minVR = useSelector<RootStateType, number>(state => state.packs.minCardsCount)
-  const maxVR = useSelector<RootStateType, number>(state => state.packs.maxCardsCount)
-  const [values, setValues] = useState<number[]>([min, max])
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const [values, setValues] = useState<number[]>([
+    Number(searchParams.get('min')) || min,
+    Number(searchParams.get('max')) || max,
+  ])
+
+  const [isDebounced, setIsDebounced] = useState(true)
+
   const debouncedValues = useDebounce<number[]>(values)
 
-  const onChange = (event: Event, value: number[] | number) => {
+  const changeSliderValuesHandler = (event: Event, value: number[] | number) => {
     setValues(value as number[])
+    setIsDebounced(false)
   }
 
-  useEffect(() => {
-    dispatch(packsActions.setMin({ min: minVR }))
-    dispatch(packsActions.setMax({ max: maxVR }))
-  }, [maxVR])
+  const onChangeCommittedHandle = useCallback((): void => {
+    const params: { min?: string; max?: string } = {}
+
+    if (values[0] !== min) params.min = values[0].toString()
+    else searchParams.delete('min')
+
+    if (values[1] !== max) params.max = values[1].toString()
+    else searchParams.delete('max')
+
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      ...params,
+    })
+  }, [max, min, searchParams, setSearchParams, values])
 
   useEffect(() => {
-    setValues([min, max])
-  }, [min, max])
+    if (isDebounced) {
+      const params: { min?: string; max?: string } = {}
+
+      if (debouncedValues[0] !== min) {
+        params.min = debouncedValues[0].toString()
+      } else searchParams.delete('min')
+      if (debouncedValues[1] !== max) {
+        params.max = debouncedValues[1].toString()
+      } else searchParams.delete('max')
+
+      setSearchParams({
+        ...Object.fromEntries(searchParams),
+        ...params,
+      })
+    }
+  }, [debouncedValues, searchParams, setSearchParams])
 
   useEffect(() => {
-    dispatch(packsActions.setMin({ min: debouncedValues[0] }))
-    dispatch(packsActions.setMax({ max: debouncedValues[1] }))
-  }, [debouncedValues])
+    setValues([Number(searchParams.get('min')) || min, Number(searchParams.get('max')) || max])
+  }, [min, max, searchParams])
 
   return (
     <div className={s.sliderWrapper}>
       <h4>Number of cards</h4>
       <div className={s.sliderItems}>
-        <SliderInput activeThumb={0} value={values} setValue={setValues} min={minVR} max={maxVR} />
+        <SliderInput
+          activeThumb={0}
+          value={values}
+          setValue={setValues}
+          min={min}
+          max={max}
+          setIsDebounced={setIsDebounced}
+        />
         <Slider
           value={values}
-          onChange={onChange}
+          onChange={changeSliderValuesHandler}
+          onChangeCommitted={onChangeCommittedHandle}
           disableSwap
-          min={minVR}
-          max={maxVR}
+          min={min}
+          max={max}
           className={s.slider}
         />
-        <SliderInput activeThumb={1} value={values} setValue={setValues} min={minVR} max={maxVR} />
+        <SliderInput
+          activeThumb={1}
+          value={values}
+          setValue={setValues}
+          min={min}
+          max={max}
+          setIsDebounced={setIsDebounced}
+        />
       </div>
     </div>
   )
 }
 
 type SliderFieldPropsType = {
-  min: number
-  max: number
+  min: any
+  max: any
 }

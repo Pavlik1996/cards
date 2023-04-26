@@ -8,8 +8,10 @@ export const SliderInput: React.FC<SliderInputType> = ({
   setValue,
   min,
   max,
+  setIsDebounced,
 }) => {
   const changeInputValue = (activeThumb: number) => (e: ChangeEvent<HTMLInputElement>) => {
+    setIsDebounced(true)
     let currentValue = e.currentTarget.valueAsNumber
 
     if (currentValue < min) currentValue = min
@@ -23,7 +25,7 @@ export const SliderInput: React.FC<SliderInputType> = ({
     <input
       type="number"
       className={s.sliderInput}
-      value={value[activeThumb].toFixed()}
+      value={Number(value[activeThumb]).toFixed()}
       onChange={changeInputValue(activeThumb)}
     />
   )
@@ -35,4 +37,5 @@ type SliderInputType = {
   setValue: (numbers: number[]) => void
   min: number
   max: number
+  setIsDebounced: (isDebounce: boolean) => void
 }

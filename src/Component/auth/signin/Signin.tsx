@@ -1,13 +1,18 @@
 import React, { useState } from 'react'
 
 import { Visibility, VisibilityOff } from '@mui/icons-material'
-import { Box, Checkbox, IconButton, InputAdornment, Paper, TextField } from '@mui/material'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import Paper from '@mui/material/Paper'
+import TextField from '@mui/material/TextField'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
 
-import { useAppDispatch } from '../../../app/store'
-import SuperButton from '../../../SuperComponents/c2-SuperButton/SuperButton'
+import { useActions } from '../../../common/utils/hooks/useActions'
 import { SigninParamsType } from '../auth-api'
 import { selectAuthIsSignin } from '../auth-selector'
 import { authThunks } from '../auth-slice'
@@ -36,10 +41,13 @@ const style = {
 
 export const Signin = () => {
   const authIsSignin = useSelector(selectAuthIsSignin)
-  const dispatch = useAppDispatch()
+
+  const { signin } = useActions(authThunks)
+
   const navigate = useNavigate()
 
   const [passwordShown, setPasswordShown] = useState(false)
+
   const togglePassword = () => setPasswordShown(!passwordShown)
 
   const { control, handleSubmit } = useForm({
@@ -50,11 +58,11 @@ export const Signin = () => {
     },
   })
   const onSubmit: SubmitHandler<SigninParamsType> = data => {
-    dispatch(authThunks.signin(data))
+    signin(data)
   }
 
-  const onClickFPWDHandler = () => navigate('/forgotpassword')
-  const onClickSUPHandler = () => navigate('/signup')
+  const redirectToForgotPwdHandler = () => navigate('/forgotpassword')
+  const redirectToSignupHandler = () => navigate('/signup')
 
   if (authIsSignin) {
     return <Navigate to={'/profile'} />
@@ -108,16 +116,16 @@ export const Signin = () => {
             />
           </div>
           <div className={s.forgotPasswordWrapper}>
-            <div className={s.linkFPWD} onClick={onClickFPWDHandler}>
+            <div className={s.linkFPWD} onClick={redirectToForgotPwdHandler}>
               Forgot Password?
             </div>
           </div>
-          <SuperButton type="submit" style={{ width: '100%' }}>
+          <Button type="submit" variant="contained" fullWidth>
             Sign In
-          </SuperButton>
+          </Button>
         </form>
         <div>{`Haven't got an account?`}</div>
-        <div onClick={onClickSUPHandler} className={s.linkSUP}>
+        <div onClick={redirectToSignupHandler} className={s.linkSUP}>
           Sign Up
         </div>
       </Paper>

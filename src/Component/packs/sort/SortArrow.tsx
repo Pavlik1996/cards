@@ -2,13 +2,11 @@ import React from 'react'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-
-import { useAppDispatch } from '../../../app/store'
-import { packsActions } from '../packs-slice'
+import { useSearchParams } from 'react-router-dom'
 
 import s from './SortArrow.module.css'
 
-const pureChange = (sort: string, down: string, up: string) => {
+const pureChange = (sort: string | undefined, down: string, up: string) => {
   if (sort === '') {
     return down
   } else if (sort === down) {
@@ -21,13 +19,26 @@ const pureChange = (sort: string, down: string, up: string) => {
 }
 
 export const SortArrow: React.FC<SortArrowType> = ({ value, sort, title }) => {
-  const dispatch = useAppDispatch()
+  const [searchParams, setSearchParams] = useSearchParams()
   const up = '0' + value
   const down = '1' + value
+
   const onChangeSort = (newSort: string) => {
-    dispatch(packsActions.setSortPacks({ sortPacks: newSort }))
+    const params: { sortPacks?: string } = {}
+
+    if (newSort === '') {
+      searchParams.delete('sortPacks')
+      setSearchParams(searchParams)
+    } else {
+      params.sortPacks = newSort
+    }
+
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      ...params,
+    })
   }
-  const onClickHandler = () => {
+  const changeSortHandler = () => {
     onChangeSort(pureChange(sort, down, up))
   }
   let icon
@@ -41,11 +52,11 @@ export const SortArrow: React.FC<SortArrowType> = ({ value, sort, title }) => {
   }
 
   return (
-    <div onClick={onClickHandler} className={s.wrapper}>
+    <div onClick={changeSortHandler} className={s.wrapper}>
       {title}
       {icon}
     </div>
   )
 }
 
-type SortArrowType = { value: string; sort: string; title: string }
+type SortArrowType = { value: string; sort: string | undefined; title: string }

@@ -10,7 +10,8 @@ const fetchPacks = createAppAsyncThunk<CardPacksType[], void>(
   'packs/fetchPacks',
   async (_, thunkAPI) => {
     const { dispatch, rejectWithValue, getState } = thunkAPI
-    const { page, pageCount, min, max, sortPacks, user_id, packName, block } = getState().packs
+    const { page, pageCount, min, max, sortPacks, user_id, packName, block } =
+      getState().packsSearchParams
 
     try {
       dispatch(packsActions.setPacksStatus({ packsStatus: 'loading' }))
@@ -97,43 +98,14 @@ const slice = createSlice({
     cardPacksTotalCount: 0,
     maxCardsCount: 0,
     minCardsCount: 0,
-    min: 0,
-    max: 0,
-    page: 1,
-    pageCount: 5,
-    user_id: '',
-    sortPacks: '',
-    packName: '',
-    block: false,
     packId: '',
   },
   reducers: {
     setPackId: (state, action: PayloadAction<{ packId: string }>) => {
       state.packId = action.payload.packId
     },
-    setSortPacks: (state, action: PayloadAction<{ sortPacks: string }>) => {
-      state.sortPacks = action.payload.sortPacks
-    },
-    setMax: (state, action: PayloadAction<{ max: number }>) => {
-      state.max = action.payload.max
-    },
-    setMin: (state, action: PayloadAction<{ min: number }>) => {
-      state.min = action.payload.min
-    },
-    setUserId: (state, action: PayloadAction<{ user_id: string }>) => {
-      state.user_id = action.payload.user_id
-    },
-    setPackName: (state, action: PayloadAction<{ packName: string }>) => {
-      state.packName = action.payload.packName
-    },
     setCardPacksTotalCount: (state, action: PayloadAction<{ cardPacksTotalCount: number }>) => {
       state.cardPacksTotalCount = action.payload.cardPacksTotalCount
-    },
-    setPageCount: (state, action: PayloadAction<{ pageCount: number }>) => {
-      state.pageCount = action.payload.pageCount
-    },
-    setPage: (state, action: PayloadAction<{ page: number }>) => {
-      state.page = action.payload.page
     },
     setMinCardsCount: (state, action: PayloadAction<{ minCardsCount: number }>) => {
       state.minCardsCount = action.payload.minCardsCount

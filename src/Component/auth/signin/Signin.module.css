@@ -23,14 +23,6 @@
     width: 100%;
 }
 
-.passwordsWrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    width: 100%;
-}
-
 .linkFPWD {
     cursor: pointer;
 

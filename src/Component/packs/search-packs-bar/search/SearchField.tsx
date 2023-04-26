@@ -2,24 +2,40 @@ import React, { useEffect, useState } from 'react'
 
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
-import { debounce, InputAdornment, TextField } from '@mui/material'
+import InputAdornment from '@mui/material/InputAdornment'
+import TextField from '@mui/material/TextField'
+import { useSearchParams } from 'react-router-dom'
 
-import { useAppDispatch } from '../../../../app/store'
 import { useDebounce } from '../../../../common/utils/hooks/useDebounce'
-import { packsActions } from '../../packs-slice'
 import s from '../SearchPacksBar.module.css'
 
 export const SearchField = () => {
-  const dispatch = useAppDispatch()
-  const [value, setValue] = useState('')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [value, setValue] = useState(searchParams.get('packName') || '')
   const debouncedValue = useDebounce(value)
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changeSearchFieldHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value)
+  }
+  const clearSearchFieldHandler = () => {
+    setValue('')
   }
 
   useEffect(() => {
-    dispatch(packsActions.setPackName({ packName: debouncedValue }))
+    const params: { packName?: string } = {}
+
+    if (debouncedValue !== '') {
+      ;['page'].forEach(el => searchParams.delete(el))
+      params.packName = debouncedValue
+      setSearchParams(searchParams)
+    } else {
+      searchParams.delete('packName')
+    }
+
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      ...params,
+    })
   }, [debouncedValue])
 
   return (
@@ -30,7 +46,7 @@ export const SearchField = () => {
         size="small"
         value={value}
         variant="outlined"
-        onChange={handleChange}
+        onChange={changeSearchFieldHandler}
         fullWidth
         InputProps={{
           startAdornment: (
@@ -40,7 +56,7 @@ export const SearchField = () => {
           ),
           endAdornment: (
             <InputAdornment position="end">
-              <ClearIcon onClick={() => setValue('')} />
+              <ClearIcon onClick={clearSearchFieldHandler} />
             </InputAdornment>
           ),
         }}
@@ -48,27 +64,3 @@ export const SearchField = () => {
     </div>
   )
 }
-
-// export const SearchField = () => {
-//   const dispatch = useAppDispatch()
-//   const search = (value: string) => {
-//     dispatch(packsActions.setPackName({ packName: value }))
-//   }
-//   const onDebouncedSearch = debounce(search, 3500)
-//   const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     const newValue = event.currentTarget.value
-//
-//     onDebouncedSearch(newValue)
-//   }
-//
-//   return (
-//     <div>
-//       <TextField
-//         onChange={changeInputHandler}
-//         id="outlined-basic"
-//         label="Outlined"
-//         variant="outlined"
-//       />
-//     </div>
-//   )
-// }

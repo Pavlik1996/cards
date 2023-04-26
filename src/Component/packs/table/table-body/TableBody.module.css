@@ -1,0 +1,7 @@
+.nameCell {
+    cursor: pointer;
+}
+.btnsWrapper {
+    display: flex;
+    flex-direction: row;
+}
