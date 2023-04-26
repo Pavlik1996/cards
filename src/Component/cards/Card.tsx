@@ -1,16 +1,12 @@
-import { useState } from 'react'
-
-import { Delete } from '@mui/icons-material'
-import Edit from '@mui/icons-material/Edit'
-import { TableRow, TableCell, Rating, IconButton } from '@mui/material'
+import { TableRow, TableCell, Rating } from '@mui/material'
 import { useSelector } from 'react-redux'
 
 import { AppDispatch } from '../../app/store'
-import { EditableSpan } from '../../SuperComponents/EditableSpan/EditableSpan'
 import { selectAuthUserId } from '../auth/auth-selector'
 
 import { CardType } from './cardsApi/cardsApi'
-import { cardsThunks } from './CardsSlice'
+import { ButtonDeleteCard } from './modalsCards/ButtonDeleteCard/ButtonDeleteCard'
+import { ButtonEditCard } from './modalsCards/ButtonEditCard/ButtonEditCard'
 
 type PropsType = {
   card: CardType
@@ -21,31 +17,16 @@ type PropsType = {
   cardsPack_id: string
 }
 
-export const Card: React.FC<PropsType> = props => {
-  let [editMode, setEditMode] = useState(false)
-  const { card, page, pageCount, sort, dispatch } = props
+export const Card: React.FC<PropsType> = ({ card, page, pageCount, sort, dispatch }) => {
   const userId = useSelector(selectAuthUserId)
 
-  const onClickDeleteHandler = () => {
-    dispatch(cardsThunks.deleteCard({ card, page, pageCount, sort }))
-  }
-
-  const onClickEditHandler = () => {
-    setEditMode(!editMode)
-  }
-
-  const data = new Date(props.card.updated)
+  const data = new Date(card.updated)
   const formattedDate = new Intl.DateTimeFormat(['ru']).format(data)
 
   return (
     <TableRow key={card._id}>
       <TableCell component="th" scope="row">
-        <EditableSpan
-          editMode={editMode}
-          setEditMode={setEditMode}
-          value={card.question}
-          id={card._id}
-        />
+        {card.question}
       </TableCell>
       <TableCell align="left">{card.answer}</TableCell>
       <TableCell align="left">{formattedDate}</TableCell>
@@ -53,14 +34,23 @@ export const Card: React.FC<PropsType> = props => {
         <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
       </TableCell>
       <TableCell>
-        <div>
-          <IconButton onClick={onClickDeleteHandler} disabled={card.user_id !== userId}>
-            <Delete />
-          </IconButton>
-          <IconButton onClick={onClickEditHandler} disabled={card.user_id !== userId}>
-            <Edit />
-          </IconButton>
-        </div>
+        {card.user_id === userId && (
+          <div style={{ display: 'flex' }}>
+            <ButtonDeleteCard
+              card={card}
+              dispatch={dispatch}
+              page={page}
+              pageCount={pageCount}
+              sort={sort}
+            />
+            <ButtonEditCard
+              dispatch={dispatch}
+              id={card._id}
+              answer={card.answer}
+              question={card.question}
+            />
+          </div>
+        )}
       </TableCell>
     </TableRow>
   )

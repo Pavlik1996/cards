@@ -1,16 +1,21 @@
 import * as React from 'react'
 
+import { Delete, Edit } from '@mui/icons-material'
+import { IconButton } from '@mui/material'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
 
 type PropsType = {
   children: React.ReactNode
-  variant: 'text' | 'outlined' | 'contained' | undefined
+  variant?: 'text' | 'outlined' | 'contained' | undefined
+  btn: 'btn' | 'delete' | 'edit'
   name: string
-  className: string
+  className?: any
   style: any
-  clouse: boolean
+  open: boolean
+  handleOpen: (value: boolean) => void
+  handleClose: (value: boolean) => void
 }
 
 export const BasicModal: React.FC<PropsType> = ({
@@ -19,17 +24,36 @@ export const BasicModal: React.FC<PropsType> = ({
   name,
   className,
   style,
-  clouse,
+  handleClose,
+  handleOpen,
+  open,
+  btn,
 }) => {
-  const [open, setOpen] = React.useState(false)
-  const handleOpen = () => setOpen(true)
-  const handleClose = () => setOpen(false)
+  const showButton = () => {
+    if (btn === 'btn') {
+      return (
+        <Button onClick={() => handleOpen(true)} variant={variant} className={className}>
+          {name}
+        </Button>
+      )
+    } else if (btn === 'delete') {
+      return (
+        <IconButton onClick={() => handleOpen(true)}>
+          <Delete />
+        </IconButton>
+      )
+    } else if (btn === 'edit') {
+      return (
+        <IconButton onClick={() => handleOpen(true)}>
+          <Edit />
+        </IconButton>
+      )
+    }
+  }
 
   return (
     <div>
-      <Button onClick={handleOpen} variant={variant} className={className}>
-        {name}
-      </Button>
+      {showButton()}
       <Modal
         open={open}
         onClose={handleClose}

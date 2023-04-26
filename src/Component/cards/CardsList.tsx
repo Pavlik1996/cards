@@ -13,6 +13,7 @@ import {
   TextField,
 } from '@mui/material'
 import { useSelector } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 
 import { RootStateType, useAppDispatch } from '../../app/store'
 import { useDebounce } from '../../common/utils/hooks/useDebounce'
@@ -32,6 +33,7 @@ export const CardsList = () => {
   const [value, setValue] = useState('')
   const [sort, setSort] = useState(false)
   const searchParam = useDebounce<string>(value)
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const cards = useSelector(selectorCardsAll)
   const cardsPack_id = useSelector<RootStateType, string>(state => state.packs.packId)
@@ -47,6 +49,8 @@ export const CardsList = () => {
   }
 
   useEffect(() => {
+    const params = Object.fromEntries(searchParams)
+
     dispatch(
       cardsThunks.fetchCards({
         cardsPack_id,

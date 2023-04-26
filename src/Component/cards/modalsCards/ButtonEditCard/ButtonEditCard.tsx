@@ -1,20 +1,14 @@
 import { ChangeEvent, useState } from 'react'
-import * as React from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
+import Edit from '@mui/icons-material/Edit'
 import { Button, Select, TextField } from '@mui/material'
 
 import { AppDispatch } from '../../../../app/store'
 import { cardsThunks } from '../../CardsSlice'
-import { sortEnums } from '../../enums/cards-enums'
 import { BasicModal } from '../BasicModal'
 
-import style from './ButtonAddNewCard.module.css'
-
-type PropsType = {
-  dispatch: AppDispatch
-  sort: boolean
-}
+import style from './ButtonEditCard.module.css'
 
 const styleObj = {
   position: 'absolute' as 'absolute',
@@ -28,22 +22,24 @@ const styleObj = {
   borderRadius: 3,
 }
 
-export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
-  const [valueQ, setValueQ] = useState('')
-  const [valueA, setValueA] = useState('')
+type PropsType = {
+  answer: string
+  question: string
+  dispatch: AppDispatch
+  id: string
+}
+
+export const ButtonEditCard: React.FC<PropsType> = ({ dispatch, id, answer, question }) => {
+  const [valueQ, setValueQ] = useState(question)
+  const [valueA, setValueA] = useState(answer)
 
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const onClickAddCardHandler = () => {
-    dispatch(
-      cardsThunks.addNewCard({
-        sort: !sort ? sortEnums.down : sortEnums.up,
-        answer: valueA,
-        question: valueQ,
-      })
-    )
+  const onClickHandler = () => {
+    dispatch(cardsThunks.updateCard({ answer: valueA, id, question: valueQ }))
+
     handleClose()
     setValueA('')
     setValueQ('')
@@ -58,21 +54,20 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
   }
 
   return (
-    <div className={style.packButton}>
-      <h2>Friends Pack</h2>
+    <div>
       <BasicModal
         variant={'contained'}
-        name={'Add New Card'}
-        className={style.btn}
+        name={''}
+        className={''}
         style={styleObj}
         handleClose={handleClose}
         handleOpen={handleOpen}
         open={open}
-        btn={'btn'}
+        btn={'edit'}
       >
         <div className={style.body}>
           <h2 className={style.modalHeader}>
-            Add new card
+            Edit card
             <CloseIcon onClick={handleClose} className={style.closeIcon} />
           </h2>
           <hr />
@@ -97,8 +92,8 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
             <Button variant={'outlined'} className={style.btnCancel} onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant={'contained'} className={style.btnSave} onClick={onClickAddCardHandler}>
-              AddCard
+            <Button variant={'contained'} className={style.btnSave} onClick={onClickHandler}>
+              Save
             </Button>
           </div>
         </div>
