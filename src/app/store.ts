@@ -7,6 +7,7 @@ import { cardsReducer } from '../Component/cards/CardsSlice'
 import { forgotReducer } from '../Component/forgot_password/forgot_redux/forgotPassSlice'
 import { packsSearchParamsSlice } from '../Component/packs/packs-search-params-slice'
 import { packsSlice } from '../Component/packs/packs-slice'
+import { profileReducer } from '../Component/Profile/profile-slice'
 
 import { appSlice } from './app-slice'
 
@@ -17,6 +18,7 @@ const rootReducers = combineReducers({
   packs: packsSlice,
   packsSearchParams: packsSearchParamsSlice,
   cards: cardsReducer,
+  profile: profileReducer,
 })
 
 export const store = configureStore({

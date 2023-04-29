@@ -1,9 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 
 import { RequestStatusType } from '../../common/types/types'
 import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
 import { handleAxiosError } from '../../common/utils/handle-axios-error'
-
 import { profileActions, UserType } from '../Profile/profile-slice'
 
 import { authAPI, SigninParamsType, SignupParamsType } from './auth-api'
@@ -67,20 +66,19 @@ const initialized = createAppAsyncThunk<void, undefined>(
   }
 )
 
-
 export const makeLogout = () => (dispatch: Dispatch) => {
   dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
   authAPI
-      .logout()
-      .then(res => {
-        dispatch(authActions.setIsSignin({ isSignin: false }))
-        dispatch(profileActions.setUser({} as UserType))
-        dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
-      })
-      .catch(error => {
-        dispatch(authActions.setError({ error: error.data.info }))
-        dispatch(authActions.setAuthStatus({ authStatus: 'failed' }))
-      })
+    .logout()
+    .then(res => {
+      dispatch(authActions.setSignIn({ isSignin: false }))
+      dispatch(profileActions.setUser({} as UserType))
+      dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
+    })
+    .catch(error => {
+      dispatch(authActions.setError({ error: error.data.info }))
+      dispatch(authActions.setAuthStatus({ authStatus: 'failed' }))
+    })
 }
 
 const slice = createSlice({
@@ -121,7 +119,6 @@ const slice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         state.isSignup = action.payload.isSignup
       })
-
   },
 })
 

@@ -3,7 +3,7 @@ import { UserType } from '../Profile/profile-slice'
 
 export const authAPI = {
   signin(data: SigninParamsType) {
-    return instance.post<ResponseType & UserType>('auth/login', data)
+    return instance.post<ResponseType & UserType>('auth/login', data).then(res => res.data)
   },
   signup(data: SignupParamsType) {
     return instance
