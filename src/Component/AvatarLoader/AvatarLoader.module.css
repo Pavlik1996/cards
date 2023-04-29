@@ -1,0 +1,12 @@
+.cameraIcon {
+    width: 17px;
+    height: 17px;
+}
+
+.cameraIconLabel {
+    cursor: pointer;
+}
+
+.cameraIconLabel :hover {
+    opacity: 0.2;
+}

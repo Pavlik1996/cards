@@ -1,101 +1,64 @@
-import React, { DetailedHTMLProps, InputHTMLAttributes, HTMLAttributes, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 
-import SuperInputText from '../c1-SuperInputText/SuperInputText'
+import { FieldValues } from 'react-hook-form'
 
-import editIcon from './editIcon.svg'
+import { useAppDispatch } from '../../app/store'
+import pen from '../../assets/pen.svg'
+import submit from '../../assets/submit.svg'
+import { formHandler } from '../../utils/formHandler'
+
 import s from './SuperEditableSpan.module.css'
 
-// тип пропсов обычного инпута
-type DefaultInputPropsType = DetailedHTMLProps<
-  InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
->
-// тип пропсов обычного спана
-type DefaultSpanPropsType = DetailedHTMLProps<HTMLAttributes<HTMLSpanElement>, HTMLSpanElement>
-
-// здесь мы говорим что у нашего инпута будут такие же пропсы как у обычного инпута, кроме type
-// (чтоб не писать value: string, onChange: ...; они уже все описаны в DefaultInputPropsType)
-type SuperEditableSpanType = Omit<DefaultInputPropsType, 'type'> & {
-  // и + ещё пропсы которых нет в стандартном инпуте
-  onChangeText?: (value: string) => void
-  onEnter?: () => void
-  error?: string
-
-  spanProps?: DefaultSpanPropsType & { defaultText?: string } // пропсы для спана
+type EditableSpanType = {
+  value: string
+  onChange?: (newValue: string) => void
+  callback?: (newValue: string) => void
 }
 
-const SuperEditableSpan: React.FC<SuperEditableSpanType> = ({
-  autoFocus,
-  onBlur,
-  onEnter,
-  spanProps,
+const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', onChange, callback }) => {
+  const dispatch = useAppDispatch()
 
-  ...restProps // все остальные пропсы попадут в объект restProps
-}) => {
-  const [editMode, setEditMode] = useState<boolean>(false)
-  const { children, onDoubleClick, className, defaultText, ...restSpanProps } = spanProps || {}
-
-  // const onEnterCallback = () => {
-  //     // выключить editMode при нажатии Enter // делают студенты
-  //
-  //         onEnter?.()
-  // }
-
-  const onEnterCallback = () => {
-    // выключить editMode при нажатии Enter // делают студенты
-    setEditMode(!editMode)
-    onEnter?.()
+  const [isEditMode, setEditMode] = useState(false)
+  const [userName, setUserName] = useState(value)
+  const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
+    setUserName(e.currentTarget.value)
+  }
+  const { errorName, register, reset, isValid, handleSubmit } = formHandler('name')
+  const onSubmit = (data: FieldValues) => {
+    if (callback) {
+      callback(userName)
+    }
+    setEditMode(false)
   }
 
-  // const onBlurCallback = (e: React.FocusEvent<HTMLInputElement>) => {
-  //     // выключить editMode при нажатии за пределами инпута // делают студенты
-  //
-  //     onBlur?.(e)
-  // }
-
-  const onBlurCallback = (e: React.FocusEvent<HTMLInputElement>) => {
-    // выключить editMode при нажатии за пределами инпута // делают студенты
-    setEditMode(!editMode)
-    onBlur?.(e)
-  }
-
-  // const onDoubleClickCallBack = (
-  //     e: React.MouseEvent<HTMLSpanElement, MouseEvent>
-  // ) => {
-  //     // включить editMode при двойном клике // делают студенты
-  //
-  //     onDoubleClick?.(e)
-  // }
-
-  const onDoubleClickCallBack = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
-    // включить editMode при двойном клике // делают студенты
-    setEditMode(!editMode)
-    onDoubleClick?.(e)
-  }
-
-  const spanClassName = s.span + (className ? ' ' + className : '')
-
-  return (
-    <>
-      {editMode ? (
-        <SuperInputText
-          autoFocus={autoFocus || true}
-          onBlur={onBlurCallback}
-          onEnter={onEnterCallback}
-          className={s.input}
-          {...restProps} // отдаём инпуту остальные пропсы если они есть (value например там внутри)
-        />
-      ) : (
-        <div className={s.spanBlock}>
-          <img src={editIcon} className={s.pen} alt={'edit'} />
-          <span onDoubleClick={onDoubleClickCallBack} className={spanClassName} {...restSpanProps}>
-            {/*если нет захардкодженного текста для спана, то значение инпута*/}
-
-            {children || restProps.value || defaultText}
-          </span>
-        </div>
-      )}
-    </>
+  return isEditMode ? (
+    <div className={s.inputWrapper}>
+      <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
+        <label className={s.labelInput}>
+          Nickname
+          <input
+            {...register('name')}
+            value={userName}
+            onChange={onChangeName}
+            className={errorName ? `${s.input} ${s.errorInput}` : s.input}
+          />
+          <button disabled={!isValid} type={'submit'} className={s.confirmName}>
+            <img className={s.updateIcon} src={submit} alt="submit icon" />
+          </button>
+        </label>
+      </form>
+      {errorName && <div className={s.errorName}>{errorName}</div>}
+    </div>
+  ) : (
+    <div className={s.userNameContainer}>
+      <h3 className={s.userName}>{value}</h3>
+      <img
+        onClick={() => setEditMode(true)}
+        className={s.iconPen}
+        src={pen}
+        alt="icon pen for redaction name"
+      />
+    </div>
   )
 }
 

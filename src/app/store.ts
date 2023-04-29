@@ -1,5 +1,5 @@
 import { AnyAction, configureStore, ThunkDispatch } from '@reduxjs/toolkit'
-import { useDispatch } from 'react-redux'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import { combineReducers } from 'redux'
 
 import { authSlice } from '../Component/auth/auth-slice'
@@ -27,5 +27,8 @@ export type RootStateType = ReturnType<typeof rootReducers>
 
 export type AppDispatch = ThunkDispatch<RootStateType, unknown, AnyAction>
 export const useAppDispatch = () => useDispatch<AppDispatch>()
+
+export const useAppSelector: TypedUseSelectorHook<RootStateType> = useSelector
+
 // @ts-ignore
 window.store = store

@@ -1,28 +1,75 @@
-.spanBlock {
+.userNameContainer {
     display: flex;
-    flex-direction: row;
-    gap: 14px;
+    gap: 8px;
+    align-items: center;
+
+    margin-bottom: 14px;
 }
 
-.span {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 16px;
+.userName {
+    font-size: 20px;
     font-weight: 500;
-    font-style: normal;
-    line-height: 20px;
-    color: #0080ff;
+    line-height: 24px;
+    color: inherit;
 }
 
-.input {
-    box-sizing: border-box;
+.iconPen {
+    cursor: pointer;
 
-    border: 1px solid #d1d1d1;
-    border-radius: 5px;
+    align-self: center;
+
+    width: 16px;
+    height: 16px;
+
+    transition: all 0.2s ease-in-out;
 }
 
-input:focus {
-    outline: none;
+.iconPen :hover {
+    transform: translateY(-1px);
 }
 
-.pen {
+.iconPen :active {
+    transform: translateY(1px);
+}
+
+.inputWrapper {
+    /*@include input;*/
+
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-content: center;
+
+    margin-bottom: 14px;
+}
+.errorName {
+    color: #b31232;
+}
+.confirmName {
+    /*@include flexCenter;*/
+
+    cursor: pointer;
+
+    position: absolute;
+    top: 70%;
+    right: 2%;
+    transform: translateY(-50%);
+
+    width: 24px;
+    height: 24px;
+
+    background-color: #fff;
+    border: none;
+    border-radius: 50%;
+
+    transition: all 0.2s ease-in-out;
+}
+.confirmName :disabled {
+    opacity: 0.5;
+}
+.updateIcon {
+    width: 25px;
+    height: 24px;
 }
