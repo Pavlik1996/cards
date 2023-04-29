@@ -1,8 +1,9 @@
 import { instance } from '../../app/api'
+import { UserType } from '../Profile/profile-slice'
 
 export const authAPI = {
   signin(data: SigninParamsType) {
-    return instance.post<ResponseType>('auth/login', data).then(res => res.data)
+    return instance.post<ResponseType & UserType>('auth/login', data)
   },
   signup(data: SignupParamsType) {
     return instance
@@ -11,6 +12,15 @@ export const authAPI = {
   },
   me() {
     return instance.post<ResponseType>('auth/me', {}).then(res => res.data)
+  },
+  logout() {
+    return instance.delete<{ info: string }>('auth/me').then(res => res.data)
+  },
+  updateName(name: string) {
+    return instance.put<UpdateUserType>('auth/me', { name })
+  },
+  updateAvatar(avatar: string) {
+    return instance.put<UpdateUserType>('auth/me', { avatar })
   },
 }
 
@@ -36,4 +46,9 @@ export type SigninParamsType = {
 export type SignupParamsType = {
   email: string
   password: string
+}
+export type UpdateUserType = {
+  token: string
+  tokenDeathTime: number
+  updatedUser: UserType
 }

@@ -1,6 +1,16 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 
+import { profileActions, UserType } from '../Profile/profile-slice'
+
 import { authAPI, SigninParamsType, SignupParamsType } from './auth-api'
+
+type InitialStateType = {
+  isSignin: boolean
+  isSignup: boolean
+  isInitialized: boolean
+  error: string | null
+  authStatus: RequestStatusType
+}
 
 const slice = createSlice({
   name: 'auth',
@@ -9,8 +19,8 @@ const slice = createSlice({
     isSignup: false,
     isInitialized: false,
     error: null as string | null,
-    authStatus: 'idle' as RequestStatusType,
-  },
+    authStatus: 'idle' /*as RequestStatusType*/,
+  } as InitialStateType,
   reducers: {
     setIsSignin: (state, action: PayloadAction<{ isSignin: boolean }>) => {
       state.isSignin = action.payload.isSignin
@@ -27,6 +37,9 @@ const slice = createSlice({
     setAuthStatus: (state, action: PayloadAction<{ authStatus: RequestStatusType }>) => {
       state.authStatus = action.payload.authStatus
     },
+    setLogout: (state, action: PayloadAction<{ isSignin: boolean }>) => {
+      state.isSignin = action.payload.isSignin
+    },
   },
 })
 
@@ -41,6 +54,7 @@ export const signin = (data: SigninParamsType) => (dispatch: Dispatch) => {
       dispatch(authActions.setIsSignin({ isSignin: true }))
       dispatch(authActions.setIsSignup({ isSignup: true }))
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
+      // dispatch(authActions.setUser({ user: res.data }))
     })
     .catch(error => {
       dispatch(authActions.setError({ error: error.message }))
@@ -73,6 +87,21 @@ export const initialized = () => (dispatch: Dispatch) => {
     .catch(error => {
       dispatch(authActions.setError({ error: error.response.data['error'] }))
       dispatch(authActions.setIsInitialized({ isInitialized: true }))
+    })
+}
+
+export const makeLogout = () => (dispatch: Dispatch) => {
+  dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
+  authAPI
+    .logout()
+    .then(res => {
+      dispatch(authActions.setIsSignin({ isSignin: false }))
+      dispatch(profileActions.setUser({} as UserType))
+      dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
+    })
+    .catch(error => {
+      dispatch(authActions.setError({ error: error.data.info }))
+      dispatch(authActions.setAuthStatus({ authStatus: 'failed' }))
     })
 }
 

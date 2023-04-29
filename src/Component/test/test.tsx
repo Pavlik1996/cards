@@ -4,7 +4,7 @@ import SuperInputText from '../../SuperComponents/c1-SuperInputText/SuperInputTe
 import SuperSort from '../../SuperComponents/c10-SuperSort/SuperSort'
 import SuperButton from '../../SuperComponents/c2-SuperButton/SuperButton'
 import SuperCheckbox from '../../SuperComponents/c3-SuperCheckbox/SuperCheckbox'
-import SuperEditableSpan from '../../SuperComponents/c4-SuperEditableSpan/SuperEditableSpan'
+import SuperEditableSpan from '../../SuperComponents/c4-SuperEditableSpan/SuperEditableSpan' //../../SuperComponents/c4-SuperEditableSpan1/SuperEditableSpan
 import SuperSelect from '../../SuperComponents/c5-SuperSelect/SuperSelect'
 import SuperRadio from '../../SuperComponents/c6-SuperRadio/SuperRadio'
 import SuperRange from '../../SuperComponents/c7-SuperRange/SuperRange'
@@ -17,7 +17,7 @@ export const Test = () => {
       <SuperInputText />
       <SuperButton />
       <SuperCheckbox />
-      <SuperEditableSpan />
+      <SuperEditableSpan value={''} />
       <SuperSelect />
       <SuperRadio />
       <SuperRange />
