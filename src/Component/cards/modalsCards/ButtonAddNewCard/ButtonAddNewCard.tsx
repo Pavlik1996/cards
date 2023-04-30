@@ -59,7 +59,7 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
 
   return (
     <div className={style.packButton}>
-      <h2>Friends Pack</h2>
+      <h2>My Pack</h2>
       <BasicModal
         variant={'contained'}
         name={'Add New Card'}

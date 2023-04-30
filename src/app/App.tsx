@@ -14,6 +14,7 @@ import { ErrorSnackbar } from '../Component/error-snackbar/ErrorSnackBar'
 import { CreateNewPassword } from '../Component/forgot_password/components/CreateNewPassword'
 import { ForgotPassword } from '../Component/forgot_password/components/ForgotPassword'
 import { CheckEmail } from '../Component/forgot_password/components/СheckEmail'
+import { LearnList } from '../Component/Learn/LearnList'
 import { Packs } from '../Component/packs/Packs'
 import { Profile } from '../Component/Profile/Profile'
 import { Test } from '../Component/test/test'
@@ -54,6 +55,7 @@ export function App() {
         <Route path={'/tablecards'} element={<CardsList />} />
         <Route path={'/test'} element={<Test />} />
         <Route path={'/404'} element={<Error />} />
+        <Route path={'/learn'} element={<LearnList />} />
         <Route path={'*'} element={<Navigate to={'/404'} />} />
       </Routes>
     </div>

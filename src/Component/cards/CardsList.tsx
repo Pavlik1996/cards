@@ -18,13 +18,15 @@ import { useSearchParams } from 'react-router-dom'
 import { RootStateType, useAppDispatch } from '../../app/store'
 import { useDebounce } from '../../common/utils/hooks/useDebounce'
 import SuperPagination from '../../SuperComponents/c9-SuperPagination/SuperPagination'
+import { selectAuthUserId } from '../auth/auth-selector'
 
 import { BackButton } from './BackButton/BackButton'
 import { Card } from './Card'
-import { selectorCardsAll } from './cards-selector'
+import { selectorCardsAll, selectorPackUserId } from './cards-selector'
 import style from './CardsList.module.css'
 import { cardsThunks } from './CardsSlice'
 import { sortEnums } from './enums/cards-enums'
+import { LearnButton } from './LearnButton/LearnButton'
 import { ButtonAddNewCard } from './modalsCards/ButtonAddNewCard/ButtonAddNewCard'
 
 export const CardsList = () => {
@@ -34,6 +36,8 @@ export const CardsList = () => {
   const [sort, setSort] = useState(false)
   const searchParam = useDebounce<string>(value)
   const [searchParams, setSearchParams] = useSearchParams()
+  const userId = useSelector(selectAuthUserId)
+  const packUserId = useSelector(selectorPackUserId)
 
   const cards = useSelector(selectorCardsAll)
   const cardsPack_id = useSelector<RootStateType, string>(state => state.packs.packId)
@@ -69,7 +73,13 @@ export const CardsList = () => {
   return (
     <div className={style.wrapper}>
       <BackButton dispatch={dispatch} />
-      <ButtonAddNewCard dispatch={dispatch} sort={sort} />
+      <div>
+        {userId === packUserId ? (
+          <ButtonAddNewCard dispatch={dispatch} sort={sort} />
+        ) : (
+          <LearnButton cardsPack_id={cardsPack_id} dispatch={dispatch} />
+        )}
+      </div>
       <div style={{ textAlign: 'start' }}>Search</div>
       <TextField sx={{ width: '100%' }} value={value} onChange={handleChange} />
       <div className={style.container}>

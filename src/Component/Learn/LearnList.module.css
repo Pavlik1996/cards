@@ -1,0 +1,53 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  height: 100vh;
+  margin: 0;
+
+  font-family: 'Montserrat', sans-serif;
+}
+
+.paper {
+  width: 439px;
+  height: 204px;
+}
+
+.paperQ {
+  height: 492px;
+}
+
+.question {
+  margin-top: 30px;
+}
+
+.shots {
+  margin-top: 13px;
+}
+
+.grades {
+  margin-left: 25px;
+}
+
+.button {
+  margin-top: 35px;
+}
+
+.answer {
+  margin-top: 35px;
+}
+
+.btn {
+  width: 90%;
+  height: 36px;
+
+  font-family: 'Montserrat', serif !important;
+  font-size: 17px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+
+  border-radius: 35px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+}
