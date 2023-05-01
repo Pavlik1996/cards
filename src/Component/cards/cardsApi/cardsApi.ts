@@ -2,10 +2,10 @@ import { instance } from '../../../api/api'
 
 export const cardsApi = {
   getCards(
-    sort: number,
-    cardsPack_id: string,
-    page: number,
-    pageCount: number,
+    cardsPack_id?: string,
+    sort?: number,
+    page?: number,
+    pageCount?: number,
     searchParam?: string
   ) {
     return instance.get<ResponseGetCardsType>(
@@ -47,6 +47,7 @@ export type ResponseGetCardsType = {
   page: number
   pageCount: number
   packUserId: string
+  packName: string
 }
 
 type ResponseAddCardType = {
@@ -61,7 +62,7 @@ type ResponseDeleteCardType = {
   tokenDeathTime: number
 }
 
-type ResponseUpdateCardType = {
+export type ResponseUpdateCardType = {
   updatedCard: CardType
   token: string
   tokenDeathTime: number

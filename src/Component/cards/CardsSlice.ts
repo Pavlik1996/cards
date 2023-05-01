@@ -8,15 +8,21 @@ import { cardsApi, CardType, ResponseGetCardsType, updateCardType } from './card
 
 const fetchCards = createAppAsyncThunk<
   ResponseGetCardsType,
-  { cardsPack_id: string; page: number; pageCount: number; searchParam?: string; sort: number }
+  {
+    cardsPack_id: string | undefined
+    page?: number
+    pageCount?: number
+    searchParam?: string
+    sort?: number
+  }
 >('cards/setCards', async (arg, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI
 
   try {
     dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
     const cards = await cardsApi.getCards(
-      arg.sort,
       arg.cardsPack_id,
+      arg.sort,
       arg.page,
       arg.pageCount,
       arg.searchParam

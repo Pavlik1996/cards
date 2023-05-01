@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { TableRow, TableCell, Rating } from '@mui/material'
 import { useSelector } from 'react-redux'
 
@@ -14,7 +16,7 @@ type PropsType = {
   pageCount: number
   sort: number
   dispatch: AppDispatch
-  cardsPack_id: string
+  cardsPack_id: string | undefined
 }
 
 export const Card: React.FC<PropsType> = ({ card, page, pageCount, sort, dispatch }) => {

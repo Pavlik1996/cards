@@ -28,7 +28,7 @@ export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks
 
   const redirectToCardsHandler = (packId: string) => {
     setPackId({ packId })
-    navigate('/tablecards')
+    navigate(`/tablecards/${packId}`)
   }
   const onClick = () => {
     alert('start studying')

@@ -1,7 +1,6 @@
 import { ChangeEvent, useState } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
-import Edit from '@mui/icons-material/Edit'
 import { Button, Select, TextField } from '@mui/material'
 
 import { AppDispatch } from '../../../../app/store'
