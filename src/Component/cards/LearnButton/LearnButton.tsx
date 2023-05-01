@@ -7,7 +7,7 @@ import { cardsThunks } from '../CardsSlice'
 import s from './LearnButton.module.css'
 
 type PropsType = {
-  cardsPack_id: string
+  cardsPack_id: string | undefined
   dispatch: AppDispatch
 }
 

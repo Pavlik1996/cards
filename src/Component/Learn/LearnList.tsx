@@ -3,25 +3,32 @@ import { useEffect, useState } from 'react'
 import { Button, FormControlLabel, Paper, Radio, RadioGroup } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
 import { useAppDispatch } from '../../app/store'
-import { selectorCardsPack_id } from '../cards/cards-selector'
 import { CardType } from '../cards/cardsApi/cardsApi'
 
 import { getCardFunction } from './getCardFunction'
-import { selectorCards } from './learn-selectors'
+import { selectorCards, selectorNameCard } from './learn-selectors'
 import s from './LearnList.module.css'
 import { learnThunks } from './LearnSlice'
 
-const rate = ['Did not knot', 'Forgot', 'A lot of thought', 'Confused', 'Knew the answer']
+const rate = [
+  'Я не знал',
+  'Забыл',
+  'Предположение',
+  'Когда-то знал, но сейчас уже забыл',
+  'Я знал!',
+]
 
 type FormDataType = {
   selectRate: string
 }
 
 export const LearnList = () => {
-  const cardsPack_id = useSelector(selectorCardsPack_id)
+  const params = useParams<{ id: string }>()
   const cards = useSelector(selectorCards)
+  const packName = useSelector(selectorNameCard)
   const [card, setCard] = useState<CardType>()
   const [showAnswer, setShowAnswer] = useState(false)
   const dispatch = useAppDispatch()
@@ -39,12 +46,17 @@ export const LearnList = () => {
   const onSubmit = (data: FormDataType) => {
     setCard(getCardFunction(cards.cards))
     setShowAnswer(!showAnswer)
-    dispatch(learnThunks.updateCardForLearn({ _id: card?._id, grade: +data.selectRate }))
+    dispatch(
+      learnThunks.updateCardForLearn({
+        _id: card?._id ? card?._id : null,
+        grade: +data.selectRate,
+      })
+    )
     reset()
   }
 
   useEffect(() => {
-    dispatch(learnThunks.fetchCardsForLearn({ cardsPack_id })).then(res => {
+    dispatch(learnThunks.fetchCardsForLearn({ cardsPack_id: params.id })).then(res => {
       if (res.payload) {
         setCard(getCardFunction(res.payload.cards))
       }
@@ -53,9 +65,11 @@ export const LearnList = () => {
 
   return (
     <div className={s.wrapper}>
-      PackName:
+      <h2>PackName: {packName}</h2>
       <Paper elevation={6} className={!showAnswer ? s.paper : s.paper + ' ' + s.paperQ}>
-        <div className={s.question}>Question: {card?.question}</div>
+        <div className={s.question}>
+          <b>Question: </b> {card?.question}
+        </div>
         <div className={s.shots}>Количество попыток ответов на вопрос: {card?.shots}</div>
         {!showAnswer ? (
           <div>
@@ -67,20 +81,29 @@ export const LearnList = () => {
           </div>
         ) : (
           <div>
-            <div className={s.answer}>Answer: {card?.answer}</div>
+            <div className={s.answer}>
+              <b>Answer: </b> {card?.answer}
+            </div>
             <div>
               <form onSubmit={handleSubmit(onSubmit)}>
-                <Controller
-                  control={control}
-                  name="selectRate"
-                  render={({ field }) => (
-                    <RadioGroup {...field}>
-                      {rate.map((el, id) => (
-                        <FormControlLabel key={id} value={id + 1} control={<Radio />} label={el} />
-                      ))}
-                    </RadioGroup>
-                  )}
-                />
+                <div className={s.grades}>
+                  <Controller
+                    control={control}
+                    name="selectRate"
+                    render={({ field }) => (
+                      <RadioGroup {...field}>
+                        {rate.map((el, id) => (
+                          <FormControlLabel
+                            key={id}
+                            value={id + 1}
+                            control={<Radio />}
+                            label={el}
+                          />
+                        ))}
+                      </RadioGroup>
+                    )}
+                  />
+                </div>
                 <div className={s.buttons}>
                   <Button type={'submit'} variant="contained" className={s.btn}>
                     NEXT

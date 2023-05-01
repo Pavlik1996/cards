@@ -7,6 +7,7 @@ import { Button, Select, TextField } from '@mui/material'
 import { AppDispatch } from '../../../../app/store'
 import { cardsThunks } from '../../CardsSlice'
 import { sortEnums } from '../../enums/cards-enums'
+import FadeMenu from '../../Menu/MenuComponent'
 import { BasicModal } from '../BasicModal'
 
 import style from './ButtonAddNewCard.module.css'
@@ -59,7 +60,10 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
 
   return (
     <div className={style.packButton}>
-      <h2>My Pack</h2>
+      <h2>
+        My Pack
+        <FadeMenu />
+      </h2>
       <BasicModal
         variant={'contained'}
         name={'Add New Card'}

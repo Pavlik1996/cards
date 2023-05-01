@@ -52,10 +52,10 @@ export function App() {
         <Route path={'/signin'} element={<Signin />} />
         <Route path={'/signup'} element={<Signup />} />
         <Route path={'/packs'} element={<Packs />} />
-        <Route path={'/tablecards'} element={<CardsList />} />
+        <Route path={'/tablecards/:id'} element={<CardsList />} />
         <Route path={'/test'} element={<Test />} />
         <Route path={'/404'} element={<Error />} />
-        <Route path={'/learn'} element={<LearnList />} />
+        <Route path={'/learn/:id'} element={<LearnList />} />
         <Route path={'*'} element={<Navigate to={'/404'} />} />
       </Routes>
     </div>

@@ -16,7 +16,7 @@
 }
 
 .paperQ {
-  height: 492px;
+  height: 460px;
 }
 
 .question {
@@ -28,6 +28,8 @@
 }
 
 .grades {
+  margin-top: 15px;
+  margin-bottom: 30px;
   margin-left: 25px;
 }
 

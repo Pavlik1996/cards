@@ -1,46 +1,37 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TextField,
-} from '@mui/material'
+import { TextField } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { useSearchParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
-import { RootStateType, useAppDispatch } from '../../app/store'
+import { useAppDispatch } from '../../app/store'
 import { useDebounce } from '../../common/utils/hooks/useDebounce'
 import SuperPagination from '../../SuperComponents/c9-SuperPagination/SuperPagination'
 import { selectAuthUserId } from '../auth/auth-selector'
 
 import { BackButton } from './BackButton/BackButton'
-import { Card } from './Card'
 import { selectorCardsAll, selectorPackUserId } from './cards-selector'
 import style from './CardsList.module.css'
 import { cardsThunks } from './CardsSlice'
 import { sortEnums } from './enums/cards-enums'
 import { LearnButton } from './LearnButton/LearnButton'
 import { ButtonAddNewCard } from './modalsCards/ButtonAddNewCard/ButtonAddNewCard'
+import { TableComponent } from './Table/TableComponent'
 
 export const CardsList = () => {
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(4)
   const [value, setValue] = useState('')
   const [sort, setSort] = useState(false)
+  const param = useParams()
+
   const searchParam = useDebounce<string>(value)
-  const [searchParams, setSearchParams] = useSearchParams()
   const userId = useSelector(selectAuthUserId)
   const packUserId = useSelector(selectorPackUserId)
 
   const cards = useSelector(selectorCardsAll)
-  const cardsPack_id = useSelector<RootStateType, string>(state => state.packs.packId)
+
+  const cardsPack_id = param.id
   const dispatch = useAppDispatch()
 
   const onChangePagination = (newPage: number, newCount: number) => {
@@ -53,8 +44,6 @@ export const CardsList = () => {
   }
 
   useEffect(() => {
-    const params = Object.fromEntries(searchParams)
-
     dispatch(
       cardsThunks.fetchCards({
         cardsPack_id,
@@ -65,10 +54,6 @@ export const CardsList = () => {
       })
     )
   }, [page, pageCount, searchParam, sort])
-
-  const onClickHandler = () => {
-    setSort(!sort)
-  }
 
   return (
     <div className={style.wrapper}>
@@ -83,45 +68,14 @@ export const CardsList = () => {
       <div style={{ textAlign: 'start' }}>Search</div>
       <TextField sx={{ width: '100%' }} value={value} onChange={handleChange} />
       <div className={style.container}>
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead className={style.tableHead}>
-              <TableRow>
-                <TableCell align="left">
-                  <b>Question</b>
-                </TableCell>
-                <TableCell align="left">
-                  <b>Answer</b>
-                </TableCell>
-                <TableCell align="left">
-                  <label onClick={onClickHandler}>
-                    <b>Last Updated</b>
-                    <span>{!sort ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</span>
-                  </label>
-                </TableCell>
-                <TableCell align="left">
-                  <b>Grade</b>
-                </TableCell>
-                <TableCell>
-                  <b>Actions</b>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {cards.cards?.map(el => (
-                <Card
-                  card={el}
-                  key={el._id}
-                  page={page}
-                  pageCount={pageCount}
-                  sort={!sort ? 0 : 1}
-                  dispatch={dispatch}
-                  cardsPack_id={cardsPack_id}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <TableComponent
+          cards={cards}
+          cardsPack_id={cardsPack_id}
+          page={page}
+          pageCount={pageCount}
+          setSort={setSort}
+          sort={sort}
+        />
         <SuperPagination
           page={page}
           onChange={onChangePagination}

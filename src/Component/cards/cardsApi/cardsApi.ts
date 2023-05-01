@@ -2,10 +2,10 @@ import { instance } from '../../../api/api'
 
 export const cardsApi = {
   getCards(
-    cardsPack_id: string,
+    cardsPack_id?: string,
     sort?: number,
     page?: number,
-    pageCount: number = 999,
+    pageCount?: number,
     searchParam?: string
   ) {
     return instance.get<ResponseGetCardsType>(
