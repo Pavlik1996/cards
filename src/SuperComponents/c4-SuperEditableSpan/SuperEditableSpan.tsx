@@ -3,8 +3,8 @@ import React, { ChangeEvent, useState } from 'react'
 import { FieldValues } from 'react-hook-form'
 
 import { useAppDispatch } from '../../app/store'
-import pen from '../../assets/pen.svg'
-import submit from '../../assets/submit.svg'
+import pen from '../../assets/imgs/pen.svg'
+import submit from '../../assets/imgs/submit.svg'
 import { formHandler } from '../../utils/formHandler'
 
 import s from './SuperEditableSpan.module.css'

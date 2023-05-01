@@ -5,9 +5,9 @@ import { Navigate, useNavigate } from 'react-router-dom'
 
 import { selectAuthIsSignin } from '../../app/app-selectors'
 import { RootStateType, useAppDispatch, useAppSelector } from '../../app/store'
-import arrow from '../../assets/arrow.svg'
-import avatar from '../../assets/avatarBig.png'
-import logout from '../../assets/logout.svg'
+import arrow from '../../assets/imgs/arrow.svg'
+import avatar from '../../assets/imgs/avatarBig.png'
+import logout from '../../assets/imgs/logout.svg'
 import SuperEditableSpan from '../../SuperComponents/c4-SuperEditableSpan/SuperEditableSpan'
 import { authAPI } from '../auth/auth-api'
 import { makeLogout } from '../auth/auth-slice'
@@ -42,6 +42,10 @@ export const Profile = () => {
     dispatch(updateUserName(newName))
   }
 
+  const redirectToPacksHandler = () => {
+    navigate('/packs')
+  }
+
   if (!authIsSignin) {
     return <Navigate to={'/signin'} />
   }
@@ -49,7 +53,7 @@ export const Profile = () => {
   return (
     <div className={style.container}>
       <div className={style.wrapper}>
-        <div onClick={() => navigate(-1)} className={style.linkBackward}>
+        <div onClick={redirectToPacksHandler} className={style.linkBackward}>
           <img className={style.arrow} src={arrow} alt="arrow backward" />
           <span className={style.backwardText}>Back to Packs List</span>
         </div>

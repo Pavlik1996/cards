@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react'
 
 import { useAppDispatch } from '../../app/store'
-import camera from '../../assets/cameraIcon.svg'
+import camera from '../../assets/imgs/cameraIcon.svg'
 import { convertPictureFileTo64 } from '../../utils/ConvertPictureFileTo64'
 import { updateAvatar } from '../Profile/profile-slice'
 
