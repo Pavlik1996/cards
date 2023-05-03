@@ -3,9 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { appActions } from '../../app/app-slice'
 import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
 import { handleAxiosError } from '../../common/utils/handle-axios-error'
-import { CardType, ResponseGetCardsType } from '../cards/cardsApi/cardsApi'
-
-import { LearnApi } from './LearnApi'
+import { cardsApi, CardType, ResponseGetCardsType } from '../cards/cardsApi/cardsApi'
 
 const fetchCardsForLearn = createAppAsyncThunk<
   ResponseGetCardsType,
@@ -15,7 +13,7 @@ const fetchCardsForLearn = createAppAsyncThunk<
 
   try {
     dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-    const cards = await LearnApi.getCards(arg.cardsPack_id)
+    const cards = await cardsApi.getCards({ cardsPack_id: arg.cardsPack_id, pageCount: 999 })
 
     dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
 
@@ -35,7 +33,7 @@ const updateCardForLearn = createAppAsyncThunk<CardType, { _id: string | null; g
     try {
       dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
 
-      const card = await LearnApi.updateRate(arg._id, arg.grade)
+      const card = await cardsApi.updateRate(arg._id, arg.grade)
 
       dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
 

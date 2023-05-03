@@ -20,13 +20,13 @@ const fetchCards = createAppAsyncThunk<
 
   try {
     dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-    const cards = await cardsApi.getCards(
-      arg.cardsPack_id,
-      arg.sort,
-      arg.page,
-      arg.pageCount,
-      arg.searchParam
-    )
+    const cards = await cardsApi.getCards({
+      pageCount: arg.pageCount,
+      page: arg.page,
+      sort: arg.sort,
+      cardsPack_id: arg.cardsPack_id,
+      searchParam: arg.searchParam,
+    })
 
     dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
 

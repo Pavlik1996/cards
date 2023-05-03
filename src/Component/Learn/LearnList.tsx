@@ -5,13 +5,13 @@ import { Controller, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { useAppDispatch } from '../../app/store'
+import { useActions } from '../../common/utils/hooks/useActions'
 import { CardType } from '../cards/cardsApi/cardsApi'
 
-import { getCardFunction } from './getCardFunction'
+import { getCardFunction } from './getCardFunction/getCardFunction'
 import { selectorCards, selectorNameCard } from './learn-selectors'
-import s from './LearnList.module.css'
 import { learnThunks } from './LearnSlice'
+import s from './styles/LearnList.module.css'
 
 const rate = [
   'Я не знал',
@@ -31,7 +31,7 @@ export const LearnList = () => {
   const packName = useSelector(selectorNameCard)
   const [card, setCard] = useState<CardType>()
   const [showAnswer, setShowAnswer] = useState(false)
-  const dispatch = useAppDispatch()
+  const { updateCardForLearn, fetchCardsForLearn } = useActions(learnThunks)
   const { handleSubmit, control, reset } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -46,17 +46,15 @@ export const LearnList = () => {
   const onSubmit = (data: FormDataType) => {
     setCard(getCardFunction(cards.cards))
     setShowAnswer(!showAnswer)
-    dispatch(
-      learnThunks.updateCardForLearn({
-        _id: card?._id ? card?._id : null,
-        grade: +data.selectRate,
-      })
-    )
+    updateCardForLearn({
+      _id: card?._id ? card?._id : null,
+      grade: +data.selectRate,
+    })
     reset()
   }
 
   useEffect(() => {
-    dispatch(learnThunks.fetchCardsForLearn({ cardsPack_id: params.id })).then(res => {
+    fetchCardsForLearn({ cardsPack_id: params.id }).then(res => {
       if (res.payload) {
         setCard(getCardFunction(res.payload.cards))
       }
