@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { FC, useState } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
 import { Button } from '@mui/material'
 
-import { AppDispatch } from '../../../../app/store'
+import { useActions } from '../../../../common/utils/hooks/useActions'
 import { CardType } from '../../cardsApi/cardsApi'
 import { cardsThunks } from '../../CardsSlice'
 import { BasicModal } from '../BasicModal'
@@ -23,26 +23,21 @@ const styleObj = {
 }
 
 type PropsType = {
-  dispatch: AppDispatch
   card: CardType
   page: number
   pageCount: number
   sort: number
 }
 
-export const ButtonDeleteCard: React.FC<PropsType> = ({
-  dispatch,
-  card,
-  page,
-  pageCount,
-  sort,
-}) => {
+export const ButtonDeleteCard: FC<PropsType> = ({ card, page, pageCount, sort }) => {
   const [open, setOpen] = useState(false)
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const { deleteCard } = useActions(cardsThunks)
+
   const onClickHandler = () => {
-    dispatch(cardsThunks.deleteCard({ card, page, pageCount, sort }))
+    deleteCard({ card, page, pageCount, sort })
     handleClose()
   }
 

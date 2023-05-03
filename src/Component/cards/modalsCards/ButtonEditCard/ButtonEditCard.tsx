@@ -1,9 +1,9 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, FC, useState } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
 import { Button, Select, TextField } from '@mui/material'
 
-import { AppDispatch } from '../../../../app/store'
+import { useActions } from '../../../../common/utils/hooks/useActions'
 import { cardsThunks } from '../../CardsSlice'
 import { BasicModal } from '../BasicModal'
 
@@ -24,11 +24,10 @@ const styleObj = {
 type PropsType = {
   answer: string
   question: string
-  dispatch: AppDispatch
   id: string
 }
 
-export const ButtonEditCard: React.FC<PropsType> = ({ dispatch, id, answer, question }) => {
+export const ButtonEditCard: FC<PropsType> = ({ id, answer, question }) => {
   const [valueQ, setValueQ] = useState(question)
   const [valueA, setValueA] = useState(answer)
 
@@ -36,8 +35,10 @@ export const ButtonEditCard: React.FC<PropsType> = ({ dispatch, id, answer, ques
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const { updateCard } = useActions(cardsThunks)
+
   const onClickHandler = () => {
-    dispatch(cardsThunks.updateCard({ answer: valueA, id, question: valueQ }))
+    updateCard({ answer: valueA, id, question: valueQ })
 
     handleClose()
     setValueA('')

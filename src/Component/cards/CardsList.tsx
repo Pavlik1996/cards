@@ -4,13 +4,13 @@ import { TextField } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { useAppDispatch } from '../../app/store'
+import { useActions } from '../../common/utils/hooks/useActions'
 import { useDebounce } from '../../common/utils/hooks/useDebounce'
 import SuperPagination from '../../SuperComponents/c9-SuperPagination/SuperPagination'
 import { selectAuthUserId } from '../auth/auth-selector'
 
 import { BackButton } from './BackButton/BackButton'
-import { selectorCardsAll, selectorPackUserId } from './cards-selector'
+import { selectorCardsAll } from './cards-selector'
 import style from './CardsList.module.css'
 import { cardsThunks } from './CardsSlice'
 import { sortEnums } from './enums/cards-enums'
@@ -21,52 +21,47 @@ import { TableComponent } from './Table/TableComponent'
 export const CardsList = () => {
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(4)
-  const [value, setValue] = useState('')
+  const [searchCurrentParam, setSearchCurrentParam] = useState('')
   const [sort, setSort] = useState(false)
+
   const param = useParams()
+  const cardsPack_id = param.id
 
-  const searchParam = useDebounce<string>(value)
+  const searchParam = useDebounce<string>(searchCurrentParam)
   const userId = useSelector(selectAuthUserId)
-  const packUserId = useSelector(selectorPackUserId)
-
   const cards = useSelector(selectorCardsAll)
 
-  const cardsPack_id = param.id
-  const dispatch = useAppDispatch()
+  const { fetchCards } = useActions(cardsThunks)
 
   const onChangePagination = (newPage: number, newCount: number) => {
     setPage(newPage)
     setPageCount(newCount)
   }
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setValue(e.target.value)
+  const searchParamChangeHandler = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setSearchCurrentParam(e.target.value)
   }
 
   useEffect(() => {
-    dispatch(
-      cardsThunks.fetchCards({
-        cardsPack_id,
-        page,
-        pageCount,
-        searchParam,
-        sort: sort ? sortEnums.up : sortEnums.down,
-      })
-    )
+    fetchCards({
+      cardsPack_id,
+      page,
+      pageCount,
+      searchParam,
+      sort: sort ? sortEnums.up : sortEnums.down,
+    })
   }, [page, pageCount, searchParam, sort])
 
   return (
     <div className={style.wrapper}>
-      <BackButton dispatch={dispatch} />
-      <div>
-        {userId === packUserId ? (
-          <ButtonAddNewCard dispatch={dispatch} sort={sort} />
-        ) : (
-          <LearnButton cardsPack_id={cardsPack_id} dispatch={dispatch} />
-        )}
-      </div>
-      <div style={{ textAlign: 'start' }}>Search</div>
-      <TextField sx={{ width: '100%' }} value={value} onChange={handleChange} />
+      <BackButton />
+      <div>{userId === cards.packUserId ? <ButtonAddNewCard sort={sort} /> : <LearnButton />}</div>
+      <div className={style.search}>Search</div>
+      <TextField
+        sx={{ width: '100%' }}
+        value={searchCurrentParam}
+        onChange={searchParamChangeHandler}
+      />
       <div className={style.container}>
         <TableComponent
           cards={cards}

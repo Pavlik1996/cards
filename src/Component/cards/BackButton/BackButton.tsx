@@ -1,22 +1,18 @@
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 import { useNavigate } from 'react-router-dom'
 
-import { AppDispatch } from '../../../app/store'
+import { useActions } from '../../../common/utils/hooks/useActions'
 import { cardsActions } from '../CardsSlice'
 
 import style from './BackButton.module.css'
 
-type PropsType = {
-  dispatch: AppDispatch
-}
-
-export const BackButton: React.FC<PropsType> = props => {
-  const { dispatch } = props
+export const BackButton = () => {
+  const { resetSlice } = useActions(cardsActions)
   const navigate = useNavigate()
 
   const onClickBackHandler = () => {
     navigate('/packs')
-    dispatch(cardsActions.resetSlice())
+    resetSlice()
   }
 
   return (
