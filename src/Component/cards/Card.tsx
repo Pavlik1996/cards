@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { TableRow, TableCell, Rating } from '@mui/material'
 import { useSelector } from 'react-redux'
 
-import { AppDispatch } from '../../app/store'
 import { selectAuthUserId } from '../auth/auth-selector'
 
 import { CardType } from './cardsApi/cardsApi'
@@ -15,11 +14,10 @@ type PropsType = {
   page: number
   pageCount: number
   sort: number
-  dispatch: AppDispatch
   cardsPack_id: string | undefined
 }
 
-export const Card: React.FC<PropsType> = ({ card, page, pageCount, sort, dispatch }) => {
+export const Card: FC<PropsType> = ({ card, page, pageCount, sort }) => {
   const userId = useSelector(selectAuthUserId)
 
   const data = new Date(card.updated)
@@ -38,19 +36,8 @@ export const Card: React.FC<PropsType> = ({ card, page, pageCount, sort, dispatc
       <TableCell>
         {card.user_id === userId && (
           <div style={{ display: 'flex' }}>
-            <ButtonDeleteCard
-              card={card}
-              dispatch={dispatch}
-              page={page}
-              pageCount={pageCount}
-              sort={sort}
-            />
-            <ButtonEditCard
-              dispatch={dispatch}
-              id={card._id}
-              answer={card.answer}
-              question={card.question}
-            />
+            <ButtonDeleteCard card={card} page={page} pageCount={pageCount} sort={sort} />
+            <ButtonEditCard id={card._id} answer={card.answer} question={card.question} />
           </div>
         )}
       </TableCell>

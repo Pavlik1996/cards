@@ -4,7 +4,7 @@ import * as React from 'react'
 import CloseIcon from '@mui/icons-material/Close'
 import { Button, Select, TextField } from '@mui/material'
 
-import { AppDispatch } from '../../../../app/store'
+import { useActions } from '../../../../common/utils/hooks/useActions'
 import { cardsThunks } from '../../CardsSlice'
 import { sortEnums } from '../../enums/cards-enums'
 import FadeMenu from '../../Menu/MenuComponent'
@@ -13,7 +13,6 @@ import { BasicModal } from '../BasicModal'
 import style from './ButtonAddNewCard.module.css'
 
 type PropsType = {
-  dispatch: AppDispatch
   sort: boolean
 }
 
@@ -29,7 +28,7 @@ const styleObj = {
   borderRadius: 3,
 }
 
-export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
+export const ButtonAddNewCard: React.FC<PropsType> = ({ sort }) => {
   const [valueQ, setValueQ] = useState('')
   const [valueA, setValueA] = useState('')
 
@@ -37,14 +36,14 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
+  const { addNewCard } = useActions(cardsThunks)
+
   const onClickAddCardHandler = () => {
-    dispatch(
-      cardsThunks.addNewCard({
-        sort: !sort ? sortEnums.down : sortEnums.up,
-        answer: valueA,
-        question: valueQ,
-      })
-    )
+    addNewCard({
+      sort: !sort ? sortEnums.down : sortEnums.up,
+      answer: valueA,
+      question: valueQ,
+    })
     handleClose()
     setValueA('')
     setValueQ('')
