@@ -1,13 +1,15 @@
+import * as React from 'react'
 import { ChangeEvent, FC, useState } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
-import { Button, Select, TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 
 import { useActions } from '../../../../common/utils/hooks/useActions'
+import { InputTypeFile } from '../../../../common/utils/InputTypeFIle'
 import { cardsThunks } from '../../CardsSlice'
 import { BasicModal } from '../BasicModal'
 
-import style from './ButtonEditCard.module.css'
+import s from './ButtonEditCard.module.css'
 
 const styleObj = {
   position: 'absolute' as 'absolute',
@@ -25,9 +27,11 @@ type PropsType = {
   answer: string
   question: string
   id: string
+  questionImg: string
 }
 
-export const ButtonEditCard: FC<PropsType> = ({ id, answer, question }) => {
+export const ButtonEditCard: FC<PropsType> = ({ id, answer, question, questionImg }) => {
+  const [baseImg, setBaseImg] = useState(questionImg)
   const [valueQ, setValueQ] = useState(question)
   const [valueA, setValueA] = useState(answer)
 
@@ -38,11 +42,12 @@ export const ButtonEditCard: FC<PropsType> = ({ id, answer, question }) => {
   const { updateCard } = useActions(cardsThunks)
 
   const onClickHandler = () => {
-    updateCard({ answer: valueA, id, question: valueQ })
+    updateCard({ answer: valueA, id, question: valueQ, questionImg: baseImg })
 
     handleClose()
     setValueA('')
     setValueQ('')
+    setBaseImg('')
   }
 
   const onChangeAnswer = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -65,21 +70,28 @@ export const ButtonEditCard: FC<PropsType> = ({ id, answer, question }) => {
         open={open}
         btn={'edit'}
       >
-        <div className={style.body}>
-          <h2 className={style.modalHeader}>
+        <div className={s.body}>
+          <h2 className={s.modalHeader}>
             Edit card
-            <CloseIcon onClick={handleClose} className={style.closeIcon} />
+            <CloseIcon onClick={handleClose} className={s.closeIcon} />
           </h2>
           <hr />
-          <Select size="small"></Select>
-          <div className={style.inputs}>
-            <TextField
-              label="Question"
-              variant="standard"
-              value={valueQ}
-              onChange={onChangeQuestion}
-              sx={{ paddingTop: '10px', paddingBottom: '10px' }}
-            />
+          <div className={s.inputs}>
+            {questionImg ? (
+              <>
+                <img src={baseImg} alt={'11'} className={s.coverImg} />
+                <InputTypeFile setImage={setBaseImg} />
+              </>
+            ) : (
+              <TextField
+                label="Question"
+                variant="standard"
+                value={valueQ}
+                onChange={onChangeQuestion}
+                sx={{ paddingTop: '10px', paddingBottom: '10px' }}
+              />
+            )}
+
             <TextField
               label="Answer"
               variant="standard"
@@ -88,11 +100,11 @@ export const ButtonEditCard: FC<PropsType> = ({ id, answer, question }) => {
               sx={{ paddingTop: '10px', paddingBottom: '10px' }}
             />
           </div>
-          <div className={style.buttons}>
-            <Button variant={'outlined'} className={style.btnCancel} onClick={handleClose}>
+          <div className={s.buttons}>
+            <Button variant={'outlined'} className={s.btnCancel} onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant={'contained'} className={style.btnSave} onClick={onClickHandler}>
+            <Button variant={'contained'} className={s.btnSave} onClick={onClickHandler}>
               Save
             </Button>
           </div>

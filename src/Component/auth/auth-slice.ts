@@ -7,6 +7,26 @@ import { profileActions, UserType } from '../Profile/profile-slice'
 
 import { authAPI, SigninParamsType, SignupParamsType } from './auth-api'
 
+export const initialized = createAppAsyncThunk<void, void>(
+  'auth/initialized',
+  async (_, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI
+
+    try {
+      const res = await authAPI.me()
+
+      dispatch(profileActions.setUser(res))
+      dispatch(authActions.setSignIn({ isSignin: true }))
+    } catch (e) {
+      handleAxiosError(dispatch, e)
+
+      return rejectWithValue(null)
+    } finally {
+      dispatch(authActions.setIsInitialized({ isInitialized: true }))
+    }
+  }
+)
+
 const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
   'auth/signin',
   async (data: SigninParamsType, thunkAPI) => {
@@ -14,9 +34,9 @@ const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
 
     try {
       dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
-      const res = await authAPI.signin(data)
+      await authAPI.signin(data)
 
-      dispatch(authActions.setUserId({ user_id: res._id }))
+      dispatch(authThunks.initialized())
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
 
       return { isSignin: true }
@@ -34,7 +54,7 @@ const signup = createAppAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
 
     try {
       dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
-      const res = await authAPI.signup(data)
+      await authAPI.signup(data)
 
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
 
@@ -46,31 +66,12 @@ const signup = createAppAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
     }
   }
 )
-const initialized = createAppAsyncThunk<void, undefined>(
-  'auth/initialized',
-  async (_, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
-
-    try {
-      const res = await authAPI.me()
-
-      dispatch(authActions.setUserId({ user_id: res._id }))
-      dispatch(authActions.setSignIn({ isSignin: true }))
-    } catch (e) {
-      handleAxiosError(dispatch, e)
-
-      return rejectWithValue(null)
-    } finally {
-      dispatch(authActions.setIsInitialized({ isInitialized: true }))
-    }
-  }
-)
 
 export const makeLogout = () => (dispatch: Dispatch) => {
   dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
   authAPI
     .logout()
-    .then(res => {
+    .then(() => {
       dispatch(authActions.setSignIn({ isSignin: false }))
       dispatch(profileActions.setUser({} as UserType))
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
@@ -103,9 +104,6 @@ const slice = createSlice({
     },
     setAuthStatus: (state, action: PayloadAction<{ authStatus: RequestStatusType }>) => {
       state.authStatus = action.payload.authStatus
-    },
-    setUserId: (state, action: PayloadAction<{ user_id: string }>) => {
-      state.user_id = action.payload.user_id
     },
     setLogout: (state, action: PayloadAction<{ isSignin: boolean }>) => {
       state.isSignin = action.payload.isSignin

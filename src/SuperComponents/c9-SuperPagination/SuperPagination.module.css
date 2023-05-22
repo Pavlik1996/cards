@@ -1,6 +1,8 @@
 .pagination {
     display: flex;
 
+    margin-top: 10px;
+
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
     font-weight: 400;

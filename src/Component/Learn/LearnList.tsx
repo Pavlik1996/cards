@@ -66,7 +66,11 @@ export const LearnList = () => {
       <h2>PackName: {packName}</h2>
       <Paper elevation={6} className={!showAnswer ? s.paper : s.paper + ' ' + s.paperQ}>
         <div className={s.question}>
-          <b>Question: </b> {card?.question}
+          {card?.questionImg ? (
+            <img src={card.questionImg} alt={'1'} className={s.baseImg} />
+          ) : (
+            <b>Question: {card?.question}</b>
+          )}
         </div>
         <div className={s.shots}>Количество попыток ответов на вопрос: {card?.shots}</div>
         {!showAnswer ? (

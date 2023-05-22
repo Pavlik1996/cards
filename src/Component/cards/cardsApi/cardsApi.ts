@@ -20,9 +20,9 @@ export const cardsApi = {
   deleteCard(id: string) {
     return instance.delete<ResponseDeleteCardType>(`cards/card?id=${id}`)
   },
-  updateCard(id: string, question: string, answer: string) {
+  updateCard(id: string, question: string, answer: string, questionImg?: string) {
     return instance.put<ResponseUpdateCardType>('cards/card', {
-      card: { _id: id, question, answer },
+      card: { _id: id, question, answer, questionImg },
     })
   },
   updateRate(_id: string | null, grade: number) {
@@ -31,6 +31,7 @@ export const cardsApi = {
 }
 
 export type CardType = {
+  questionImg: string
   answer: string
   question: string
   cardsPack_id: string
@@ -75,10 +76,12 @@ export type updateCardType = {
   id: string
   question: string
   answer: string
+  questionImg?: string
 }
 
 export type PutCardType = {
-  cardsPack_id: string
+  cardsPack_id: string | undefined
   question: string
   answer: string
+  questionImg?: string
 }

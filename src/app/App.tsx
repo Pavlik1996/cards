@@ -14,6 +14,7 @@ import { ErrorSnackbar } from '../Component/error-snackbar/ErrorSnackBar'
 import { CreateNewPassword } from '../Component/forgot_password/components/CreateNewPassword'
 import { ForgotPassword } from '../Component/forgot_password/components/ForgotPassword'
 import { CheckEmail } from '../Component/forgot_password/components/СheckEmail'
+import { Header } from '../Component/header/Header'
 import { LearnList } from '../Component/Learn/LearnList'
 import { Packs } from '../Component/packs/Packs'
 import { Profile } from '../Component/Profile/Profile'
@@ -41,6 +42,7 @@ export function App() {
 
   return (
     <div className="App">
+      <Header />
       <div className={'App-status'}>{appStatus === 'loading' && <LinearProgress />}</div>
       <ErrorSnackbar />
       <Routes>

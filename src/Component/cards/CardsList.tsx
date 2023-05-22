@@ -4,10 +4,11 @@ import { TextField } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
+import { selectAppStatus } from '../../app/app-selectors'
 import { useActions } from '../../common/utils/hooks/useActions'
 import { useDebounce } from '../../common/utils/hooks/useDebounce'
 import SuperPagination from '../../SuperComponents/c9-SuperPagination/SuperPagination'
-import { selectAuthUserId } from '../auth/auth-selector'
+import { selectUserId } from '../Profile/profile-selector'
 
 import { BackButton } from './BackButton/BackButton'
 import { selectorCardsAll } from './cards-selector'
@@ -25,11 +26,13 @@ export const CardsList = () => {
   const [sort, setSort] = useState(false)
 
   const param = useParams()
+
   const cardsPack_id = param.id
 
   const searchParam = useDebounce<string>(searchCurrentParam)
-  const userId = useSelector(selectAuthUserId)
+  const userId = useSelector(selectUserId)
   const cards = useSelector(selectorCardsAll)
+  const status = useSelector(selectAppStatus)
 
   const { fetchCards } = useActions(cardsThunks)
 
@@ -55,8 +58,14 @@ export const CardsList = () => {
   return (
     <div className={style.wrapper}>
       <BackButton />
-      <div>{userId === cards.packUserId ? <ButtonAddNewCard sort={sort} /> : <LearnButton />}</div>
-      <div className={style.search}>Search</div>
+      <div>
+        {userId === cards.packUserId ? (
+          <ButtonAddNewCard sort={sort} cardsPack_id={cardsPack_id} />
+        ) : (
+          <LearnButton />
+        )}
+      </div>
+      <b className={style.search}>Search</b>
       <TextField
         sx={{ width: '100%' }}
         value={searchCurrentParam}
@@ -73,6 +82,7 @@ export const CardsList = () => {
         />
         <SuperPagination
           page={page}
+          isLoading={status === 'loading'}
           onChange={onChangePagination}
           totalCount={cards.cardsTotalCount}
           itemsCountForPage={pageCount}

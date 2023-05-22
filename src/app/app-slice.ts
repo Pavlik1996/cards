@@ -16,6 +16,33 @@ const slice = createSlice({
       state.appStatus = action.payload.appStatus
     },
   },
+  extraReducers: builder => {
+    builder
+      .addMatcher(
+        action => {
+          return action.type.endsWith('/pending')
+        },
+        state => {
+          state.appStatus = 'loading'
+        }
+      )
+      .addMatcher(
+        action => {
+          return action.type.endsWith('/rejected')
+        },
+        state => {
+          state.appStatus = 'failed'
+        }
+      )
+      .addMatcher(
+        action => {
+          return action.type.endsWith('/fulfilled')
+        },
+        state => {
+          state.appStatus = 'succeeded'
+        }
+      )
+  },
 })
 
 export const appSlice = slice.reducer

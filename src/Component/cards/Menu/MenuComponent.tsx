@@ -52,15 +52,12 @@ export default function FadeMenu() {
       >
         <MenuItem>
           <EditPackModal prevName={packName} id={cardsPack_id} />
-          &nbsp;&nbsp;Edit
         </MenuItem>
         <MenuItem>
           <DeletePackModal prevName={packName} id={cardsPack_id} />
-          &nbsp;&nbsp;Delete
         </MenuItem>
         <MenuItem>
           <SchoolIcon onClick={onCLickHandler} />
-          &nbsp;&nbsp;Learn
         </MenuItem>
       </Menu>
     </div>

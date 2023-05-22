@@ -41,13 +41,6 @@ const slice = createSlice({
   },
 })
 
-export const getProfileData = (data: UserType) => (dispatch: Dispatch) => {
-  dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
-  authAPI.me().then(res => {
-    dispatch(profileActions.setUser(res))
-    dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
-  })
-}
 export const updateUserName = (newName: string) => (dispatch: Dispatch) => {
   dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
   authAPI.updateName(newName).then(res => {

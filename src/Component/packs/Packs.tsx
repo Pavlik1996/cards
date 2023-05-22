@@ -8,7 +8,8 @@ import { useSelector } from 'react-redux'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
 
 import { useActions } from '../../common/utils/hooks/useActions'
-import { selectAuthIsSignin, selectAuthUserId } from '../auth/auth-selector'
+import { selectAuthIsSignin } from '../auth/auth-selector'
+import { selectUserId } from '../Profile/profile-selector'
 
 import { AddPackModal } from './modals/add-modal/AddPackModal'
 import { PacksPagination } from './packs-pagination/PacksPagination'
@@ -23,7 +24,7 @@ import { TableHeadComponent } from './table/table-head/TableHead'
 
 export const Packs = () => {
   const { cardPacksTotalCount, cardPacks, minCardsCount, maxCardsCount } = useSelector(selectPacks)
-  const user_idAuth = useSelector(selectAuthUserId)
+  const user_idAuth = useSelector(selectUserId)
   const authIsSignin = useSelector(selectAuthIsSignin)
   const stateParams = useSelector(selectPacksStateParams)
 

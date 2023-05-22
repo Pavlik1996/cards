@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
@@ -9,11 +9,10 @@ import arrow from '../../assets/imgs/arrow.svg'
 import avatar from '../../assets/imgs/avatarBig.png'
 import logout from '../../assets/imgs/logout.svg'
 import SuperEditableSpan from '../../SuperComponents/c4-SuperEditableSpan/SuperEditableSpan'
-import { authAPI } from '../auth/auth-api'
 import { makeLogout } from '../auth/auth-slice'
-import AvatarLoader from '../AvatarLoader/AvatarLoader'
+import AvatarLoader from '../avatarLoader/AvatarLoader'
 
-import { getProfileData, updateUserName } from './profile-slice'
+import { updateUserName } from './profile-slice'
 import style from './Profile.module.css'
 
 // <SuperEditableSpan value={userName} onChangeText={handlerUpdateName} />
@@ -27,12 +26,6 @@ export const Profile = () => {
 
   // const userName = userNameHandler(user.name) == undefined ? user.name : userNameHandler(user.name) //user.name
   const userName = user.name == undefined ? user.email : user.name
-
-  useEffect(() => {
-    authAPI.me().then(res => {
-      dispatch(getProfileData(res))
-    })
-  }, [])
 
   const logoutHandler = () => {
     dispatch(makeLogout())
