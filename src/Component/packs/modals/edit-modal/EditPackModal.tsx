@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
 
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import BorderColorIcon from '@mui/icons-material/BorderColor'
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
+import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import { useActions } from '../../../../common/utils/hooks/useActions'
+import { convertFileToBase64 } from '../../convert-file-base64'
 import { packsThunks } from '../../packs-slice'
 import { BaseModal } from '../BaseModal'
 
 import s from './EditPackModal.module.css'
 
-export const EditPackModal: React.FC<EditType> = ({ id, prevName }) => {
+export const EditPackModal: React.FC<EditType> = ({ id, prevName, prevCover }) => {
   const { updatePack } = useActions(packsThunks)
 
   const [open, setOpen] = useState(false)
@@ -27,12 +30,27 @@ export const EditPackModal: React.FC<EditType> = ({ id, prevName }) => {
     },
   })
   const onSubmit: SubmitHandler<any> = data => {
-    const finalData = { cardsPack: { _id: id, name: data.name } }
+    const finalData = { cardsPack: { _id: id, name: data.name, deckCover: ava } }
 
     updatePack(finalData)
     setOpen(false)
     handleClose()
     reset(data)
+  }
+
+  const [ava, setAva] = useState<string | undefined>(prevCover)
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files.length) {
+      const file = event.target.files[0]
+
+      const formData = new FormData()
+
+      formData.append('img_file', file, file.name)
+
+      convertFileToBase64(file, (file64: string) => {
+        setAva(file64)
+      })
+    }
   }
 
   return (
@@ -43,6 +61,15 @@ export const EditPackModal: React.FC<EditType> = ({ id, prevName }) => {
       title={'Edit PACK'}
       button={<BorderColorIcon />}
     >
+      <div style={{ margin: '10px 0 10px 0' }}>
+        {ava && <img src={ava} style={{ width: '100px' }} alt="ava" />}
+        <label>
+          <input type="file" onChange={handleFileUpload} style={{ display: 'none' }} />
+          <IconButton component="span">
+            <AddPhotoAlternateIcon />
+          </IconButton>
+        </label>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className={s.formWrapper}>
         <Controller
           name="name"
@@ -76,4 +103,4 @@ export const EditPackModal: React.FC<EditType> = ({ id, prevName }) => {
   )
 }
 
-type EditType = { id: string; prevName: string }
+type EditType = { id: string; prevName: string; prevCover?: string | undefined }

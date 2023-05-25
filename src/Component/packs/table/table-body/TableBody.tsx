@@ -1,5 +1,6 @@
 import React from 'react'
 
+import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported'
 import SchoolIcon from '@mui/icons-material/School'
 import IconButton from '@mui/material/IconButton'
 import TableBody from '@mui/material/TableBody'
@@ -42,6 +43,17 @@ export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks
 
         return (
           <TableRow key={el._id} sx={style.tableRow} hover>
+            <TableCell>
+              {el.deckCover ? (
+                <img
+                  src={el.deckCover}
+                  style={{ maxWidth: '50px', height: '70px', objectFit: 'cover' }}
+                  alt="deck cover"
+                />
+              ) : (
+                <ImageNotSupportedIcon color="primary" />
+              )}
+            </TableCell>
             <TableCell
               className={s.nameCell}
               component="th"
@@ -62,7 +74,7 @@ export const TableBodyComponent: React.FC<TableBodyComponentType> = ({ cardPacks
                     <SchoolIcon />
                   </IconButton>
                   <IconButton color="primary">
-                    <EditPackModal id={el._id} prevName={el.name} />
+                    <EditPackModal id={el._id} prevName={el.name} prevCover={el.deckCover} />
                   </IconButton>
                   <IconButton color="primary">
                     <DeletePackModal id={el._id} prevName={el.name} />
