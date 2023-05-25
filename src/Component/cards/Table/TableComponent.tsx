@@ -1,3 +1,5 @@
+import { FC } from 'react'
+
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
 import {
@@ -10,7 +12,6 @@ import {
   Table,
 } from '@mui/material'
 
-import { useAppDispatch } from '../../../app/store'
 import { Card } from '../Card'
 import { ResponseGetCardsType } from '../cardsApi/cardsApi'
 
@@ -25,7 +26,7 @@ type PropsType = {
   setSort: (value: boolean) => void
 }
 
-export const TableComponent: React.FC<PropsType> = ({
+export const TableComponent: FC<PropsType> = ({
   cardsPack_id,
   setSort,
   sort,
@@ -33,7 +34,6 @@ export const TableComponent: React.FC<PropsType> = ({
   page,
   pageCount,
 }) => {
-  const dispatch = useAppDispatch()
   const onClickHandler = () => {
     setSort(!sort)
   }
@@ -71,7 +71,6 @@ export const TableComponent: React.FC<PropsType> = ({
               page={page}
               pageCount={pageCount}
               sort={!sort ? 0 : 1}
-              dispatch={dispatch}
               cardsPack_id={cardsPack_id}
             />
           ))}

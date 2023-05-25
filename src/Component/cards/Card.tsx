@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { TableRow, TableCell, Rating } from '@mui/material'
 import { useSelector } from 'react-redux'
 
-import { AppDispatch } from '../../app/store'
-import { selectAuthUserId } from '../auth/auth-selector'
+import cover from '../../assets/imgs/standard_cover.svg'
+import { selectUserId } from '../Profile/profile-selector'
 
+import s from './card.module.css'
 import { CardType } from './cardsApi/cardsApi'
 import { ButtonDeleteCard } from './modalsCards/ButtonDeleteCard/ButtonDeleteCard'
 import { ButtonEditCard } from './modalsCards/ButtonEditCard/ButtonEditCard'
@@ -15,41 +16,39 @@ type PropsType = {
   page: number
   pageCount: number
   sort: number
-  dispatch: AppDispatch
   cardsPack_id: string | undefined
 }
 
-export const Card: React.FC<PropsType> = ({ card, page, pageCount, sort, dispatch }) => {
-  const userId = useSelector(selectAuthUserId)
+export const Card: FC<PropsType> = ({ card, page, pageCount, sort }) => {
+  const userId = useSelector(selectUserId)
 
   const data = new Date(card.updated)
   const formattedDate = new Intl.DateTimeFormat(['ru']).format(data)
 
   return (
     <TableRow key={card._id}>
-      <TableCell component="th" scope="row">
+      <TableCell
+        component="th"
+        scope="row"
+        style={{ display: 'flex', alignItems: 'center', height: '65px' }}
+      >
+        <img src={card.questionImg || cover} alt={'ddd'} className={s.coverImg} />
         {card.question}
       </TableCell>
       <TableCell align="left">{card.answer}</TableCell>
       <TableCell align="left">{formattedDate}</TableCell>
       <TableCell align="left">
-        <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+        <Rating name="half-rating" defaultValue={card.grade} precision={1} />
       </TableCell>
       <TableCell>
         {card.user_id === userId && (
           <div style={{ display: 'flex' }}>
-            <ButtonDeleteCard
-              card={card}
-              dispatch={dispatch}
-              page={page}
-              pageCount={pageCount}
-              sort={sort}
-            />
+            <ButtonDeleteCard card={card} page={page} pageCount={pageCount} sort={sort} />
             <ButtonEditCard
-              dispatch={dispatch}
               id={card._id}
               answer={card.answer}
               question={card.question}
+              questionImg={card.questionImg}
             />
           </div>
         )}

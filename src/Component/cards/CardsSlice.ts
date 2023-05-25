@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { appActions } from '../../app/app-slice'
 import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
 import { handleAxiosError } from '../../common/utils/handle-axios-error'
 
@@ -19,16 +18,13 @@ const fetchCards = createAppAsyncThunk<
   const { dispatch, rejectWithValue } = thunkAPI
 
   try {
-    dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-    const cards = await cardsApi.getCards(
-      arg.cardsPack_id,
-      arg.sort,
-      arg.page,
-      arg.pageCount,
-      arg.searchParam
-    )
-
-    dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
+    const cards = await cardsApi.getCards({
+      pageCount: arg.pageCount,
+      page: arg.page,
+      sort: arg.sort,
+      cardsPack_id: arg.cardsPack_id,
+      searchParam: arg.searchParam,
+    })
 
     return cards.data
   } catch (e) {
@@ -40,29 +36,35 @@ const fetchCards = createAppAsyncThunk<
 
 const addNewCard = createAppAsyncThunk(
   'cards/addnewcard',
-  async (arg: { sort: number; answer: string; question: string }, thunkAPI) => {
+  async (
+    arg: {
+      sort: number
+      answer: string
+      question: string
+      questionImg: string
+      cardsPack_id: string | undefined
+    },
+    thunkAPI
+  ) => {
     const { dispatch, rejectWithValue, getState } = thunkAPI
     const { page, pageCount } = getState().cards
-    const { packId } = getState().packs
 
     try {
-      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-
       await cardsApi.addCard({
-        cardsPack_id: packId,
+        cardsPack_id: arg.cardsPack_id,
         answer: arg.answer,
         question: arg.question,
+        questionImg: arg.questionImg,
       })
 
       dispatch(
         cardsThunks.fetchCards({
           sort: arg.sort,
-          cardsPack_id: packId,
+          cardsPack_id: arg.cardsPack_id,
           page: page,
           pageCount: pageCount,
         })
       )
-      dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
     } catch (e) {
       handleAxiosError(dispatch, e)
 
@@ -77,8 +79,6 @@ const deleteCard = createAppAsyncThunk(
     const { dispatch, rejectWithValue } = thunkAPI
 
     try {
-      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-
       await cardsApi.deleteCard(data.card._id)
 
       dispatch(
@@ -89,7 +89,6 @@ const deleteCard = createAppAsyncThunk(
           pageCount: data.pageCount,
         })
       )
-      dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
     } catch (e) {
       handleAxiosError(dispatch, e)
 
@@ -104,11 +103,7 @@ const updateCard = createAppAsyncThunk(
     const { dispatch, rejectWithValue } = thunkAPI
 
     try {
-      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-
-      const res = await cardsApi.updateCard(data.id, data.question, data.answer)
-
-      dispatch(appActions.setAppStatus({ appStatus: 'failed' }))
+      const res = await cardsApi.updateCard(data.id, data.question, data.answer, data.questionImg)
 
       return res.data.updatedCard
     } catch (e) {
@@ -140,6 +135,7 @@ const slice = createSlice({
         if (card) {
           card.question = action.payload.question
           card.answer = action.payload.answer
+          card.questionImg = action.payload.questionImg
         }
       })
   },

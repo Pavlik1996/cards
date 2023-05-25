@@ -1,20 +1,27 @@
-import { ChangeEvent, useState } from 'react'
 import * as React from 'react'
+import { ChangeEvent, useState } from 'react'
 
 import CloseIcon from '@mui/icons-material/Close'
-import { Button, Select, TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 
-import { AppDispatch } from '../../../../app/store'
+import { useActions } from '../../../../common/utils/hooks/useActions'
+import { InputTypeFile } from '../../../../common/utils/InputTypeFIle'
+import SuperSelect from '../../../../SuperComponents/c5-SuperSelect/SuperSelect'
 import { cardsThunks } from '../../CardsSlice'
 import { sortEnums } from '../../enums/cards-enums'
 import FadeMenu from '../../Menu/MenuComponent'
 import { BasicModal } from '../BasicModal'
 
-import style from './ButtonAddNewCard.module.css'
+import s from './ButtonAddNewCard.module.css'
+
+const arrSelectValue = [
+  { id: 1, value: 'Вопрос текстом' },
+  { id: 2, value: 'Вопрос картинкой' },
+]
 
 type PropsType = {
-  dispatch: AppDispatch
   sort: boolean
+  cardsPack_id: string | undefined
 }
 
 const styleObj = {
@@ -29,7 +36,9 @@ const styleObj = {
   borderRadius: 3,
 }
 
-export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
+export const ButtonAddNewCard: React.FC<PropsType> = ({ sort, cardsPack_id }) => {
+  const [baseImg, setBaseImg] = useState('')
+  const [value, onChangeOption] = useState(1)
   const [valueQ, setValueQ] = useState('')
   const [valueA, setValueA] = useState('')
 
@@ -37,17 +46,20 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const onClickAddCardHandler = () => {
-    dispatch(
-      cardsThunks.addNewCard({
-        sort: !sort ? sortEnums.down : sortEnums.up,
-        answer: valueA,
-        question: valueQ,
-      })
-    )
+  const { addNewCard } = useActions(cardsThunks)
+
+  const addCardHandler = () => {
+    addNewCard({
+      sort: !sort ? sortEnums.down : sortEnums.up,
+      answer: valueA,
+      question: valueQ,
+      questionImg: baseImg,
+      cardsPack_id,
+    })
     handleClose()
     setValueA('')
     setValueQ('')
+    setBaseImg('')
   }
 
   const onChangeAnswer = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -59,7 +71,7 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
   }
 
   return (
-    <div className={style.packButton}>
+    <div className={s.packButton}>
       <h2>
         My Pack
         <FadeMenu />
@@ -67,28 +79,35 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
       <BasicModal
         variant={'contained'}
         name={'Add New Card'}
-        className={style.btn}
+        className={s.btn}
         style={styleObj}
         handleClose={handleClose}
         handleOpen={handleOpen}
         open={open}
         btn={'btn'}
       >
-        <div className={style.body}>
-          <h2 className={style.modalHeader}>
+        <div className={s.body}>
+          <h2 className={s.modalHeader}>
             Add new card
-            <CloseIcon onClick={handleClose} className={style.closeIcon} />
+            <CloseIcon onClick={handleClose} className={s.closeIcon} />
           </h2>
           <hr />
-          <Select size="small"></Select>
-          <div className={style.inputs}>
-            <TextField
-              label="Question"
-              variant="standard"
-              value={valueQ}
-              onChange={onChangeQuestion}
-              sx={{ paddingTop: '10px', paddingBottom: '10px' }}
-            />
+          <SuperSelect options={arrSelectValue} value={value} onChangeOption={onChangeOption} />
+          <div className={s.inputs}>
+            {value === 1 ? (
+              <TextField
+                label="Question"
+                variant="standard"
+                value={valueQ}
+                onChange={onChangeQuestion}
+                sx={{ paddingTop: '10px', paddingBottom: '10px' }}
+              />
+            ) : (
+              <>
+                <img src={baseImg} className={s.coverImg} alt={'1'} />
+                <InputTypeFile setImage={setBaseImg} />
+              </>
+            )}
             <TextField
               label="Answer"
               variant="standard"
@@ -97,11 +116,11 @@ export const ButtonAddNewCard: React.FC<PropsType> = ({ dispatch, sort }) => {
               sx={{ paddingTop: '10px', paddingBottom: '10px' }}
             />
           </div>
-          <div className={style.buttons}>
-            <Button variant={'outlined'} className={style.btnCancel} onClick={handleClose}>
+          <div className={s.buttons}>
+            <Button variant={'outlined'} className={s.btnCancel} onClick={handleClose}>
               Cancel
             </Button>
-            <Button variant={'contained'} className={style.btnSave} onClick={onClickAddCardHandler}>
+            <Button variant={'contained'} className={s.btnSave} onClick={addCardHandler}>
               AddCard
             </Button>
           </div>

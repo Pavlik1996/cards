@@ -12,11 +12,11 @@
 
 .paper {
   width: 439px;
-  height: 204px;
+  height: 224px;
 }
 
 .paperQ {
-  height: 460px;
+  height: 500px;
 }
 
 .question {
@@ -52,4 +52,8 @@
 
   border-radius: 35px !important;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
+}
+
+.baseImg {
+  width: 70px;
 }

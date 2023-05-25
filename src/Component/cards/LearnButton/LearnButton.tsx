@@ -1,20 +1,14 @@
 import { Button } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-
-import { AppDispatch } from '../../../app/store'
-import { cardsThunks } from '../CardsSlice'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import s from './LearnButton.module.css'
 
-type PropsType = {
-  cardsPack_id: string | undefined
-  dispatch: AppDispatch
-}
-
-export const LearnButton: React.FC<PropsType> = ({ cardsPack_id, dispatch }) => {
+export const LearnButton = () => {
   const navigate = useNavigate()
 
-  const onClickHandler = () => navigate('/learn')
+  const params = useParams<{ id: string }>()
+
+  const onClickHandler = () => navigate(`/learn/${params.id}`)
 
   return (
     <div className={s.body}>

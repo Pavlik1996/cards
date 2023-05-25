@@ -1,69 +1,72 @@
 .body {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
+    display: flex;
+    flex-direction: column;
+
+    padding: 10px;
 }
 
 .body hr {
-  width: 100%;
+    width: 100%;
 }
 
 .body span {
-    margin-bottom: 55px;
     margin-top: 15px;
+    margin-bottom: 55px;
+
     text-align: center;
 }
 
 .btn {
-  display: flex;
-  justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .btnDelete {
-  width: 127px;
-  height: 36px;
+    width: 127px;
+    height: 36px;
 
-  font-family: 'Montserrat', serif !important;
-  font-size: 17px !important;
-  font-weight: 500 !important;
-  text-transform: none !important;
+    font-family: 'Montserrat', serif !important;
+    font-size: 17px !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
 
-  border-radius: 35px !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
-  background-color: red !important;
+    background-color: red !important;
+    border-radius: 35px !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
 }
 
 .btnDelete:hover {
-  background-color: rgb(204, 0, 0) !important;
+    background-color: rgb(204, 0, 0) !important;
 }
 
 .btnCancel {
-  width: 127px;
-  height: 36px;
+    width: 127px;
+    height: 36px;
 
-  font-family: 'Montserrat', serif !important;
-  font-size: 17px !important;
-  font-weight: 500 !important;
-  text-transform: none !important;
+    font-family: 'Montserrat', serif !important;
+    font-size: 17px !important;
+    font-weight: 500 !important;
+    color: black !important;
+    text-transform: none !important;
 
-  border-radius: 35px !important;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
-  color: black !important;
-  border: 0;
+    border: 0;
+    border-radius: 35px !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35) !important;
 }
 
 .btnCancel:hover {
-  background-color: rgb(216, 216, 216) !important;
+    background-color: rgb(216, 216, 216) !important;
 }
 
 .modalHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .closeIcon:hover {
-  cursor: pointer;
+    cursor: pointer;
 }

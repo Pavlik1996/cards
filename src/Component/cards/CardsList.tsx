@@ -4,13 +4,14 @@ import { TextField } from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
-import { useAppDispatch } from '../../app/store'
+import { selectAppStatus } from '../../app/app-selectors'
+import { useActions } from '../../common/utils/hooks/useActions'
 import { useDebounce } from '../../common/utils/hooks/useDebounce'
 import SuperPagination from '../../SuperComponents/c9-SuperPagination/SuperPagination'
-import { selectAuthUserId } from '../auth/auth-selector'
+import { selectUserId } from '../Profile/profile-selector'
 
 import { BackButton } from './BackButton/BackButton'
-import { selectorCardsAll, selectorPackUserId } from './cards-selector'
+import { selectorCardsAll } from './cards-selector'
 import style from './CardsList.module.css'
 import { cardsThunks } from './CardsSlice'
 import { sortEnums } from './enums/cards-enums'
@@ -21,52 +22,55 @@ import { TableComponent } from './Table/TableComponent'
 export const CardsList = () => {
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(4)
-  const [value, setValue] = useState('')
+  const [searchCurrentParam, setSearchCurrentParam] = useState('')
   const [sort, setSort] = useState(false)
+
   const param = useParams()
 
-  const searchParam = useDebounce<string>(value)
-  const userId = useSelector(selectAuthUserId)
-  const packUserId = useSelector(selectorPackUserId)
-
-  const cards = useSelector(selectorCardsAll)
-
   const cardsPack_id = param.id
-  const dispatch = useAppDispatch()
+
+  const searchParam = useDebounce<string>(searchCurrentParam)
+  const userId = useSelector(selectUserId)
+  const cards = useSelector(selectorCardsAll)
+  const status = useSelector(selectAppStatus)
+
+  const { fetchCards } = useActions(cardsThunks)
 
   const onChangePagination = (newPage: number, newCount: number) => {
     setPage(newPage)
     setPageCount(newCount)
   }
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    setValue(e.target.value)
+  const searchParamChangeHandler = (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    setSearchCurrentParam(e.target.value)
   }
 
   useEffect(() => {
-    dispatch(
-      cardsThunks.fetchCards({
-        cardsPack_id,
-        page,
-        pageCount,
-        searchParam,
-        sort: sort ? sortEnums.up : sortEnums.down,
-      })
-    )
+    fetchCards({
+      cardsPack_id,
+      page,
+      pageCount,
+      searchParam,
+      sort: sort ? sortEnums.up : sortEnums.down,
+    })
   }, [page, pageCount, searchParam, sort])
 
   return (
     <div className={style.wrapper}>
-      <BackButton dispatch={dispatch} />
+      <BackButton />
       <div>
-        {userId === packUserId ? (
-          <ButtonAddNewCard dispatch={dispatch} sort={sort} />
+        {userId === cards.packUserId ? (
+          <ButtonAddNewCard sort={sort} cardsPack_id={cardsPack_id} />
         ) : (
-          <LearnButton cardsPack_id={cardsPack_id} dispatch={dispatch} />
+          <LearnButton />
         )}
       </div>
-      <div style={{ textAlign: 'start' }}>Search</div>
-      <TextField sx={{ width: '100%' }} value={value} onChange={handleChange} />
+      <b className={style.search}>Search</b>
+      <TextField
+        sx={{ width: '100%' }}
+        value={searchCurrentParam}
+        onChange={searchParamChangeHandler}
+      />
       <div className={style.container}>
         <TableComponent
           cards={cards}
@@ -78,6 +82,7 @@ export const CardsList = () => {
         />
         <SuperPagination
           page={page}
+          isLoading={status === 'loading'}
           onChange={onChangePagination}
           totalCount={cards.cardsTotalCount}
           itemsCountForPage={pageCount}
