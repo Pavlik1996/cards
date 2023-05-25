@@ -32,7 +32,7 @@ export const EditPackModal: React.FC<EditType> = ({ id, prevName }) => {
     updatePack(finalData)
     setOpen(false)
     handleClose()
-    reset()
+    reset(data)
   }
 
   return (
