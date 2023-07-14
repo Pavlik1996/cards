@@ -1,75 +1,103 @@
 .userNameContainer {
-    display: flex;
-    gap: 8px;
-    align-items: center;
+  display: flex;
+  gap: 8px;
+  align-items: center;
 
-    margin-bottom: 14px;
+  margin-bottom: 14px;
 }
 
 .userName {
-    font-size: 20px;
-    font-weight: 500;
-    line-height: 24px;
-    color: inherit;
+  margin: 0;
+
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  color: inherit;
 }
 
 .iconPen {
-    cursor: pointer;
+  cursor: pointer;
 
-    align-self: center;
+  align-self: center;
 
-    width: 16px;
-    height: 16px;
+  width: 16px;
+  height: 16px;
 
-    transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .iconPen :hover {
-    transform: translateY(-1px);
+  transform: translateY(-1px);
 }
 
 .iconPen :active {
-    transform: translateY(1px);
+  transform: translateY(1px);
 }
 
 .inputWrapper {
-    /*@include input;*/
+  position: relative;
 
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  justify-content: center;
 
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    justify-content: center;
-
-    margin-bottom: 14px;
+  margin-bottom: 14px;
 }
+
+.labelInput {
+  display: flex;
+  flex-direction: column;
+}
+
+.labelInput > span {
+  font-family: Montserrat, serif;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px; /* 153.846% */
+  color: #000;
+
+  opacity: 0.5;
+}
+
+.input {
+  width: 347px;
+
+  border: none;
+  border-bottom: 1.5px solid #8d8d8d;;
+}
+
 .errorName {
-    color: #b31232;
+  color: #b31232;
 }
+
 .confirmName {
-    /*@include flexCenter;*/
+  cursor: pointer;
 
-    cursor: pointer;
+  position: absolute;
+  top: 70%;
+  right: 2%;
+  transform: translateY(-50%);
 
-    position: absolute;
-    top: 70%;
-    right: 2%;
-    transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
 
-    width: 24px;
-    height: 24px;
+  background-color: #fff;
+  border: none;
+  border-radius: 50%;
 
-    background-color: #fff;
-    border: none;
-    border-radius: 50%;
-
-    transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
+
 .confirmName :disabled {
-    opacity: 0.5;
+  opacity: 0.5;
 }
+
 .updateIcon {
-    width: 25px;
-    height: 24px;
+  position: relative;
+  bottom: 5px;
+
+  width: 25px;
+  height: 25px;
 }

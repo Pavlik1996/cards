@@ -1,8 +1,7 @@
 import React, { ChangeEvent, useState } from 'react'
 
-import { FieldValues } from 'react-hook-form'
+import TextField from '@mui/material/TextField'
 
-import { useAppDispatch } from '../../app/store'
 import pen from '../../assets/imgs/pen.svg'
 import submit from '../../assets/imgs/submit.svg'
 import { formHandler } from '../../utils/formHandler'
@@ -11,20 +10,17 @@ import s from './SuperEditableSpan.module.css'
 
 type EditableSpanType = {
   value: string
-  onChange?: (newValue: string) => void
   callback?: (newValue: string) => void
 }
 
-const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', onChange, callback }) => {
-  const dispatch = useAppDispatch()
-
+export const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', callback }) => {
   const [isEditMode, setEditMode] = useState(false)
   const [userName, setUserName] = useState(value)
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setUserName(e.currentTarget.value)
   }
-  const { errorName, register, reset, isValid, handleSubmit } = formHandler('name')
-  const onSubmit = (data: FieldValues) => {
+  const { errorName, register, isValid, handleSubmit } = formHandler('name')
+  const onSubmit = () => {
     if (callback) {
       callback(userName)
     }
@@ -35,7 +31,7 @@ const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', onChange, c
     <div className={s.inputWrapper}>
       <form className={s.form} onSubmit={handleSubmit(onSubmit)}>
         <label className={s.labelInput}>
-          Nickname
+          <span>Nickname</span>
           <input
             {...register('name')}
             value={userName}
@@ -61,5 +57,3 @@ const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', onChange, c
     </div>
   )
 }
-
-export default SuperEditableSpan

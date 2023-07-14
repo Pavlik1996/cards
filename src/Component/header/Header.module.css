@@ -30,10 +30,28 @@
 }
 
 .avatar {
+    cursor: pointer;
+
     height: 36px;
     margin-left: 30px;
+
+    border-radius: 50%;
+    box-shadow: none;
+
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.avatar:hover {
+    box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.5);
 }
 
 .logo:hover {
     cursor: pointer;
+}
+
+.modal {
+    /*position: absolute;*/
+    /*top: 70px;*/
+    /*right: 240px;*/
+
 }

@@ -1,22 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import Button from '@mui/material/Button'
-import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { RootStateType, useAppSelector } from '../../app/store'
+import { useAppSelector } from '../../app/store'
 import avatar from '../../assets/imgs/avatarBig.png'
 import logo from '../../assets/imgs/logoIncubator.svg'
 import { selectAuthIsSignIn } from '../auth/auth-selector'
+import { selectUser, selectUserAvatar } from '../Profile/profile-selector'
 
 import s from './Header.module.css'
+import { HeaderModal } from './headerModal/HeaderModal'
 
 export const Header = () => {
   const navigate = useNavigate()
-  const signin = useSelector(selectAuthIsSignIn)
-  const user = useAppSelector((state: RootStateType) => state.profile.user)
-  const userAvatar = useAppSelector((state: RootStateType) => state.profile.user.avatar) || avatar
-  const userName = user.name == undefined ? user.email : user.name
+  const signIn = useAppSelector(selectAuthIsSignIn)
+  const user = useAppSelector(selectUser)
+  const userAvatar = useAppSelector(selectUserAvatar) || avatar
+  const userName = user.name ? user.name : user.email
+  const [showModal, setShowModal] = useState(false)
 
   const redirectLoginHandler = () => {
     navigate('/signin')
@@ -26,14 +28,24 @@ export const Header = () => {
     navigate('/')
   }
 
+  const showModalChangeHandler = () => {
+    setShowModal(!showModal)
+  }
+
   return (
     <div className={s.wrapper}>
       <img src={logo} alt={'logo it-incubator'} onClick={redirectHomeHandler} className={s.logo} />
       <div className={s.headerInfo}>
-        {signin ? (
+        {signIn ? (
           <>
             <span>{userName}</span>
-            <img src={userAvatar} alt="user avatar" className={s.avatar} />
+            <img
+              src={userAvatar}
+              alt="user avatar"
+              className={s.avatar}
+              onClick={showModalChangeHandler}
+            />
+            <div className={s.modal}>{showModal && <HeaderModal />}</div>
           </>
         ) : (
           <Button variant={'contained'} className={s.btn} onClick={redirectLoginHandler}>

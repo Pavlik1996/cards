@@ -1,30 +1,28 @@
 import React from 'react'
 
+import Paper from '@mui/material/Paper'
 import { useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 
 import { selectAuthIsSignin } from '../../app/app-selectors'
 import { RootStateType, useAppDispatch, useAppSelector } from '../../app/store'
-import arrow from '../../assets/imgs/arrow.svg'
 import avatar from '../../assets/imgs/avatarBig.png'
-import logout from '../../assets/imgs/logout.svg'
-import SuperEditableSpan from '../../SuperComponents/c4-SuperEditableSpan/SuperEditableSpan'
+import logOutSvg from '../../assets/imgs/logout.svg'
+import { SuperEditableSpan } from '../../SuperComponents/c4-SuperEditableSpan/SuperEditableSpan'
 import { makeLogout } from '../auth/auth-slice'
 import AvatarLoader from '../avatarLoader/AvatarLoader'
+import { BackButton } from '../cards/BackButton/BackButton'
 
+import { selectUser, selectUserAvatar } from './profile-selector'
 import { updateUserName } from './profile-slice'
-import style from './Profile.module.css'
-
-// <SuperEditableSpan value={userName} onChangeText={handlerUpdateName} />
+import s from './Profile.module.css'
 
 export const Profile = () => {
-  const authIsSignin = useSelector(selectAuthIsSignin)
+  const authIsSignIn = useSelector(selectAuthIsSignin)
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
-  const user = useAppSelector((state: RootStateType) => state.profile.user)
-  const userAvatar = useAppSelector((state: RootStateType) => state.profile.user.avatar) || avatar
+  const user = useAppSelector(selectUser)
+  const userAvatar = useAppSelector(selectUserAvatar) || avatar
 
-  // const userName = userNameHandler(user.name) == undefined ? user.name : userNameHandler(user.name) //user.name
   const userName = user.name == undefined ? user.email : user.name
 
   const logoutHandler = () => {
@@ -35,36 +33,27 @@ export const Profile = () => {
     dispatch(updateUserName(newName))
   }
 
-  const redirectToPacksHandler = () => {
-    navigate('/packs')
-  }
-
-  if (!authIsSignin) {
+  if (!authIsSignIn) {
     return <Navigate to={'/signin'} />
   }
 
   return (
-    <div className={style.container}>
-      <div className={style.wrapper}>
-        <div onClick={redirectToPacksHandler} className={style.linkBackward}>
-          <img className={style.arrow} src={arrow} alt="arrow backward" />
-          <span className={style.backwardText}>Back to Packs List</span>
+    <div className={s.wrapper}>
+      <div className={s.container}>
+        <div className={s.backBtn}>
+          <BackButton />
         </div>
-        <div className={style.profileContainer}>
-          <h2 className={style.title}>Personal Information</h2>
-          <div className={style.avatarContainer}>
-            <div className={style.decoration}>
-              <AvatarLoader />
-            </div>
-            <img src={userAvatar} alt="user avatar" style={{ width: '96px', height: '96px' }} />
-          </div>
-          <SuperEditableSpan value={userName} callback={handlerUpdateName} />
-
-          <span className={style.emailText}>{user.email}</span>
-          <span onClick={logoutHandler} className={style.logOut}>
-            <img className={style.logOutIcon} src={logout} alt="button logout" />
-            <span className={style.logOutText}>Log out</span>
-          </span>
+        <div className={s.profileBlock}>
+          <Paper className={s.profile}>
+            <h2>Personal Information</h2>
+            <img src={userAvatar} alt="avatar for user" className={s.avatar} />
+            <SuperEditableSpan value={userName} callback={handlerUpdateName} />
+            <div className={s.email}>{user.email}</div>
+            <button onClick={logoutHandler} className={s.logOutBtn}>
+              <img src={logOutSvg} />
+              Log out
+            </button>
+          </Paper>
         </div>
       </div>
     </div>
