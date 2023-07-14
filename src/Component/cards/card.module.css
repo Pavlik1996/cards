@@ -2,3 +2,19 @@
     width: 65px;
     margin-right: 5px;
 }
+
+.cellQuestion {
+    display: flex;
+    align-items: center;
+
+    height: 65px;
+}
+
+.cellAnswer {
+    overflow: hidden;
+
+    max-width: 170px;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

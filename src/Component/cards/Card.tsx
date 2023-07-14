@@ -27,15 +27,13 @@ export const Card: FC<PropsType> = ({ card, page, pageCount, sort }) => {
 
   return (
     <TableRow key={card._id}>
-      <TableCell
-        component="th"
-        scope="row"
-        style={{ display: 'flex', alignItems: 'center', height: '65px' }}
-      >
+      <TableCell component="th" scope="row" className={s.cellQuestion}>
         <img src={card.questionImg || cover} alt={'ddd'} className={s.coverImg} />
         {card.question}
       </TableCell>
-      <TableCell align="left">{card.answer}</TableCell>
+      <TableCell align="left" className={s.cellAnswer}>
+        {card.answer.length > 50 ? `${card.answer.substring(0, 50)}...` : card.answer}
+      </TableCell>
       <TableCell align="left">{formattedDate}</TableCell>
       <TableCell align="left">
         <Rating name="half-rating" defaultValue={card.grade} precision={1} />
