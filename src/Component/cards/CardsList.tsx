@@ -65,13 +65,15 @@ export const CardsList = () => {
           <LearnButton />
         )}
       </div>
-      <b className={s.searchText}>Search</b>
-      <TextField
-        sx={{ width: '100%' }}
-        value={searchCurrentParam}
-        onChange={searchParamChangeHandler}
-        className={s.inputSearch}
-      />
+      <div className={s.inputBlock}>
+        <b className={s.searchText}>Search</b>
+        <input
+          value={searchCurrentParam}
+          onChange={searchParamChangeHandler}
+          className={s.inputSearch}
+          placeholder={'Provide your text'}
+        />
+      </div>
       <div className={s.container}>
         <TableComponent
           cards={cards}

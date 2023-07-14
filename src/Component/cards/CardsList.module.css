@@ -21,6 +21,12 @@
     background-color: #efefef;
 }
 
+.inputBlock {
+    display: flex;
+    flex-direction: column;
+}
+
+
 .searchText {
     margin-bottom: 10px;
 
@@ -28,5 +34,6 @@
 }
 
 .inputSearch {
+    height: 36px;
     margin-bottom: 10px;
 }
