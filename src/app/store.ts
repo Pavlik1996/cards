@@ -15,12 +15,12 @@ import { appSlice } from './app-slice'
 const rootReducers = combineReducers({
   app: appSlice,
   auth: authSlice,
-  forgotPassword: forgotReducer,
   packs: packsSlice,
-  packsSearchParams: packsSearchParamsSlice,
   cards: cardsReducer,
   learn: learnReducer,
   profile: profileReducer,
+  forgotPassword: forgotReducer,
+  packsSearchParams: packsSearchParamsSlice,
 })
 
 export const store = configureStore({

@@ -3,23 +3,23 @@
   align-items: center;
   justify-content: center;
 
-  height: 100vh;
+  height: calc(100vh - 60px);
 
   font-family: 'Montserrat', serif;
 }
 
 .title {
-  margin-bottom: 75px;
+  margin-bottom: 37px;
 
   font-size: 32px;
   font-weight: 600;
   font-style: normal;
-  line-height: 32px;
+  line-height: 33px;
 }
 
 .forgot {
   width: 413px;
-  height: 486px;
+  height: 456px;
   padding: 33px;
 
   background: #ffffff;
@@ -38,7 +38,6 @@
   display: flex;
   justify-content: flex-start;
 
-  margin-top: 26px;
   margin-bottom: 35px;
 
   font-size: 16px;

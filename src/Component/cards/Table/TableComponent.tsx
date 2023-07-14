@@ -50,9 +50,9 @@ export const TableComponent: FC<PropsType> = ({
               <b>Answer</b>
             </TableCell>
             <TableCell align="left">
-              <label onClick={onClickHandler}>
+              <label onClick={onClickHandler} className={style.lastUpdate}>
                 <b>Last Updated</b>
-                <span>{!sort ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</span>
+                {sort ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
               </label>
             </TableCell>
             <TableCell align="left">

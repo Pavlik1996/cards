@@ -33,15 +33,7 @@
     font-weight: bold;
 }
 
-.linkSUP {
-    cursor: pointer;
-
-    margin-top: 11px;
-
-    color: #366eff;
-    text-decoration: underline;
+.textSignUp {
+    margin-bottom: 11px;
 }
 
-.linkSUP:hover {
-    font-weight: bold;
-}

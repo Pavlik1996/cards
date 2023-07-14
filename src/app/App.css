@@ -42,5 +42,9 @@
 }
 
 .App-status {
-  height: 15px;
+  position: absolute;
+  top: 60px;
+
+  width: 100%;
+
 }

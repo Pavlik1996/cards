@@ -5,10 +5,10 @@ import Table from '@mui/material/Table'
 import TableContainer from '@mui/material/TableContainer'
 import Typography from '@mui/material/Typography'
 import { useSelector } from 'react-redux'
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
+import { Navigate, useSearchParams } from 'react-router-dom'
 
 import { useActions } from '../../common/utils/hooks/useActions'
-import { selectAuthIsSignin } from '../auth/auth-selector'
+import { selectAuthIsSignIn } from '../auth/auth-selector'
 import { selectUserId } from '../Profile/profile-selector'
 
 import { AddPackModal } from './modals/add-modal/AddPackModal'
@@ -25,13 +25,11 @@ import { TableHeadComponent } from './table/table-head/TableHead'
 export const Packs = () => {
   const { cardPacksTotalCount, cardPacks, minCardsCount, maxCardsCount } = useSelector(selectPacks)
   const user_idAuth = useSelector(selectUserId)
-  const authIsSignin = useSelector(selectAuthIsSignin)
+  const authIsSignin = useSelector(selectAuthIsSignIn)
   const stateParams = useSelector(selectPacksStateParams)
 
   const { setSearchingParams } = useActions(searchParamsActions)
   const { fetchPacks } = useActions(packsThunks)
-
-  const navigate = useNavigate()
 
   const [searchParams, setSearchParams] = useSearchParams()
 

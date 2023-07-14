@@ -6,15 +6,6 @@
     margin: 16px 0 31px 0;
 }
 
-.link {
-    cursor: pointer;
-
-    margin-top: 11px;
-
-    color: #366eff;
-    text-decoration: underline;
-}
-
-.link:hover {
-    font-weight: bold;
+.textSignUp {
+    margin-bottom: 11px;
 }

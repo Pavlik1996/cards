@@ -7,7 +7,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { Error } from '../Component/404/Error'
 import { authThunks } from '../Component/auth/auth-slice'
-import { Signin } from '../Component/auth/signin/Signin'
+import { SignIn } from '../Component/auth/signin/SignIn'
 import { Signup } from '../Component/auth/signup/Signup'
 import { CardsList } from '../Component/cards/CardsList'
 import { ErrorSnackbar } from '../Component/error-snackbar/ErrorSnackBar'
@@ -51,7 +51,7 @@ export function App() {
         <Route path={'/set-new-password/:id'} element={<CreateNewPassword />} />
         <Route path={'/forgotpassword'} element={<ForgotPassword />} />
         <Route path={'/checkemail'} element={<CheckEmail />} />
-        <Route path={'/signin'} element={<Signin />} />
+        <Route path={'/signin'} element={<SignIn />} />
         <Route path={'/signup'} element={<Signup />} />
         <Route path={'/packs'} element={<Packs />} />
         <Route path={'/tablecards/:id'} element={<CardsList />} />

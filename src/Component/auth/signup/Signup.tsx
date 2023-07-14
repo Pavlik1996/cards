@@ -10,11 +10,11 @@ import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import { useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import * as yup from 'yup'
 
 import { useActions } from '../../../common/utils/hooks/useActions'
-import { selectAuthIsSignup } from '../auth-selector'
+import { selectAuthIsSignUp } from '../auth-selector'
 import { authThunks } from '../auth-slice'
 
 import s from './Signup.module.css'
@@ -23,11 +23,13 @@ const style = {
   wrapper: {
     display: 'flex',
     justifyContent: 'center',
+    height: 'calc(100vh - 60px)',
+    alignItems: 'center',
     flexWrap: 'wrap',
     '& > :not(style)': {
       m: 1,
-      width: 347,
-      height: 557,
+      width: 413,
+      height: 528,
     },
   },
   container: {
@@ -54,9 +56,8 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>
 
 export const Signup = () => {
-  const authIsSignup = useSelector(selectAuthIsSignup)
+  const authIsSignup = useSelector(selectAuthIsSignUp)
   const { signup } = useActions(authThunks)
-  const navigate = useNavigate()
 
   const [firstPasswordShown, setFirstPasswordShown] = useState(false)
   const [secondPasswordShown, setSecondPasswordShown] = useState(false)
@@ -73,10 +74,6 @@ export const Signup = () => {
   })
   const onSubmit = (data: any) => {
     signup(data)
-  }
-
-  const redirectToSigninHandler = () => {
-    navigate('/signin')
   }
 
   if (authIsSignup) {
@@ -136,10 +133,8 @@ export const Signup = () => {
             Sign Up
           </Button>
         </form>
-        <div>Already have an account?</div>
-        <div onClick={redirectToSigninHandler} className={s.link}>
-          Sign In
-        </div>
+        <span className={s.textSignUp}>Already have an account?</span>
+        <Link to={'/signin'}>Sign In</Link>
       </Paper>
     </Box>
   )

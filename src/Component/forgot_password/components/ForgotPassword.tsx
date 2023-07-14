@@ -3,14 +3,14 @@ import React from 'react'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, CircularProgress, FormControl, FormGroup, TextField } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useSelector } from 'react-redux'
-import { Navigate, NavLink } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import * as yup from 'yup'
 
-import { RootStateType, useAppDispatch } from '../../../app/store'
+import { useAppDispatch, useAppSelector } from '../../../app/store'
 import { forgotDataType } from '../forgot_api/forgotApi'
+import { isForgotSelect, progressForgotSelect } from '../forgot_redux/forgot-selectors'
 import { forgotThunks } from '../forgot_redux/forgotPassSlice'
-import style from '../styles/forgot.module.css'
+import s from '../styles/forgot.module.css'
 
 const schema = yup
   .object({
@@ -21,8 +21,8 @@ const schema = yup
 type FormDataType = yup.InferType<typeof schema>
 
 export const ForgotPassword = () => {
-  const isForgot = useSelector<RootStateType, boolean>(state => state.forgotPassword.isForgot)
-  const progress = useSelector<RootStateType, boolean>(state => state.forgotPassword.progress)
+  const isForgot = useAppSelector(isForgotSelect)
+  const progress = useAppSelector(progressForgotSelect)
   const dispatch = useAppDispatch()
 
   const {
@@ -60,16 +60,16 @@ export const ForgotPassword = () => {
 
   if (progress) {
     return (
-      <div className={style.wrapper}>
+      <div className={s.wrapper}>
         <CircularProgress />
       </div>
     )
   }
 
   return (
-    <div className={style.wrapper}>
-      <div className={style.forgot}>
-        <h2 className={style.title}>Forgot your password?</h2>
+    <div className={s.wrapper}>
+      <div className={s.forgot}>
+        <h2 className={s.title}>Forgot your password?</h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
             <FormGroup>
@@ -79,17 +79,15 @@ export const ForgotPassword = () => {
                 variant="standard"
                 placeholder={'Email'}
               />
-              <div className={style.errorMessage}>{errors.email?.message}</div>
-              <p className={style.infoText}>
+              <div className={s.errorMessage}>{errors.email?.message}</div>
+              <p className={s.infoText}>
                 Enter your email address and we will send you further instructions
               </p>
-              <Button className={style.btn} type={'submit'} variant={'contained'}>
+              <Button className={s.btn} type={'submit'} variant={'contained'}>
                 Send Instructions
               </Button>
-              <div className={style.rememberText}>Did you remember your password?</div>
-              <NavLink to={'/login'} style={{ fontSize: '22px' }}>
-                Try logging in
-              </NavLink>
+              <span className={s.rememberText}>Did you remember your password?</span>
+              <Link to={'/login'}>Try logging in</Link>
             </FormGroup>
           </FormControl>
         </form>

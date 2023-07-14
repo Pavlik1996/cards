@@ -7,13 +7,13 @@ import { useNavigate } from 'react-router-dom'
 import { RootStateType, useAppSelector } from '../../app/store'
 import avatar from '../../assets/imgs/avatarBig.png'
 import logo from '../../assets/imgs/logoIncubator.svg'
-import { selectAuthIsSignin } from '../auth/auth-selector'
+import { selectAuthIsSignIn } from '../auth/auth-selector'
 
 import s from './Header.module.css'
 
 export const Header = () => {
   const navigate = useNavigate()
-  const signin = useSelector(selectAuthIsSignin)
+  const signin = useSelector(selectAuthIsSignIn)
   const user = useAppSelector((state: RootStateType) => state.profile.user)
   const userAvatar = useAppSelector((state: RootStateType) => state.profile.user.avatar) || avatar
   const userName = user.name == undefined ? user.email : user.name

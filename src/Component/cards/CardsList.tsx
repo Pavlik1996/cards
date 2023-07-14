@@ -12,7 +12,7 @@ import { selectUserId } from '../Profile/profile-selector'
 
 import { BackButton } from './BackButton/BackButton'
 import { selectorCardsAll } from './cards-selector'
-import style from './CardsList.module.css'
+import s from './CardsList.module.css'
 import { cardsThunks } from './CardsSlice'
 import { sortEnums } from './enums/cards-enums'
 import { LearnButton } from './LearnButton/LearnButton'
@@ -56,7 +56,7 @@ export const CardsList = () => {
   }, [page, pageCount, searchParam, sort])
 
   return (
-    <div className={style.wrapper}>
+    <div className={s.wrapper}>
       <BackButton />
       <div>
         {userId === cards.packUserId ? (
@@ -65,13 +65,14 @@ export const CardsList = () => {
           <LearnButton />
         )}
       </div>
-      <b className={style.search}>Search</b>
+      <b className={s.searchText}>Search</b>
       <TextField
         sx={{ width: '100%' }}
         value={searchCurrentParam}
         onChange={searchParamChangeHandler}
+        className={s.inputSearch}
       />
-      <div className={style.container}>
+      <div className={s.container}>
         <TableComponent
           cards={cards}
           cardsPack_id={cardsPack_id}

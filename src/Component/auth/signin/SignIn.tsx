@@ -10,11 +10,11 @@ import Paper from '@mui/material/Paper'
 import TextField from '@mui/material/TextField'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 
 import { useActions } from '../../../common/utils/hooks/useActions'
-import { SigninParamsType } from '../auth-api'
-import { selectAuthIsSignin } from '../auth-selector'
+import { SignInParamsType } from '../auth-api'
+import { selectAuthIsSignIn } from '../auth-selector'
 import { authThunks } from '../auth-slice'
 
 import s from './Signin.module.css'
@@ -22,6 +22,9 @@ import s from './Signin.module.css'
 const style = {
   wrapper: {
     display: 'flex',
+    width: '100%',
+    height: 'calc(100vh - 60px)',
+    alignItems: 'center',
     justifyContent: 'center',
     flexWrap: 'wrap',
     '& > :not(style)': {
@@ -39,12 +42,9 @@ const style = {
   password: { margin: '12px 0 24px 0' },
 }
 
-export const Signin = () => {
-  const authIsSignin = useSelector(selectAuthIsSignin)
-
-  const { signin } = useActions(authThunks)
-
-  const navigate = useNavigate()
+export const SignIn = () => {
+  const authIsSignIn = useSelector(selectAuthIsSignIn)
+  const { signIn } = useActions(authThunks)
 
   const [passwordShown, setPasswordShown] = useState(false)
 
@@ -57,14 +57,11 @@ export const Signin = () => {
       rememberMe: false,
     },
   })
-  const onSubmit: SubmitHandler<SigninParamsType> = data => {
-    signin(data)
+  const onSubmit: SubmitHandler<SignInParamsType> = data => {
+    signIn(data)
   }
 
-  const redirectToForgotPwdHandler = () => navigate('/forgotpassword')
-  const redirectToSignupHandler = () => navigate('/signup')
-
-  if (authIsSignin) {
+  if (authIsSignIn) {
     return <Navigate to={'/profile'} />
   }
 
@@ -95,7 +92,7 @@ export const Signin = () => {
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={togglePassword}>
-                        {passwordShown ? <VisibilityOff /> : <Visibility />}
+                        {passwordShown ? <Visibility /> : <VisibilityOff />}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -116,18 +113,18 @@ export const Signin = () => {
             />
           </div>
           <div className={s.forgotPasswordWrapper}>
-            <div className={s.linkFPWD} onClick={redirectToForgotPwdHandler}>
+            <Link className={s.linkFPWD} to={'/forgotpassword'}>
               Forgot Password?
-            </div>
+            </Link>
           </div>
           <Button type="submit" variant="contained" fullWidth>
             Sign In
           </Button>
         </form>
-        <div>{`Haven't got an account?`}</div>
-        <div onClick={redirectToSignupHandler} className={s.linkSUP}>
+        <span className={s.textSignUp}>{`Haven't got an account?`}</span>
+        <Link className={s.linkSUP} to={'/signup'}>
           Sign Up
-        </div>
+        </Link>
       </Paper>
     </Box>
   )

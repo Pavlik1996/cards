@@ -2,7 +2,7 @@ import { instance } from '../../api/api'
 import { UserType } from '../Profile/profile-slice'
 
 export const authAPI = {
-  signin(data: SigninParamsType) {
+  signin(data: SignInParamsType) {
     return instance.post<ResponseType & UserType>('auth/login', data).then(res => res.data)
   },
   signup(data: SignupParamsType) {
@@ -38,7 +38,7 @@ type ResponseType = {
   error?: string
 }
 
-export type SigninParamsType = {
+export type SignInParamsType = {
   email: string
   password: string
   rememberMe: boolean

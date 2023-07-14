@@ -5,7 +5,7 @@ import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
 import { handleAxiosError } from '../../common/utils/handle-axios-error'
 import { profileActions, UserType } from '../Profile/profile-slice'
 
-import { authAPI, SigninParamsType, SignupParamsType } from './auth-api'
+import { authAPI, SignInParamsType, SignupParamsType } from './auth-api'
 
 export const initialized = createAppAsyncThunk<void, void>(
   'auth/initialized',
@@ -16,7 +16,7 @@ export const initialized = createAppAsyncThunk<void, void>(
       const res = await authAPI.me()
 
       dispatch(profileActions.setUser(res))
-      dispatch(authActions.setSignIn({ isSignin: true }))
+      dispatch(authActions.setSignIn({ isSignIn: true }))
     } catch (e) {
       handleAxiosError(dispatch, e)
 
@@ -27,9 +27,9 @@ export const initialized = createAppAsyncThunk<void, void>(
   }
 )
 
-const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
+const signin = createAppAsyncThunk<{ isSignIn: boolean }, SignInParamsType>(
   'auth/signin',
-  async (data: SigninParamsType, thunkAPI) => {
+  async (data: SignInParamsType, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
 
     try {
@@ -39,7 +39,7 @@ const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
       dispatch(authThunks.initialized())
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
 
-      return { isSignin: true }
+      return { isSignIn: true }
     } catch (e) {
       handleAxiosError(dispatch, e)
 
@@ -47,7 +47,7 @@ const signin = createAppAsyncThunk<{ isSignin: boolean }, SigninParamsType>(
     }
   }
 )
-const signup = createAppAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
+const signup = createAppAsyncThunk<{ isSignUp: boolean }, SignupParamsType>(
   'auth/signup',
   async (data: SignupParamsType, thunkAPI) => {
     const { dispatch, rejectWithValue } = thunkAPI
@@ -58,7 +58,7 @@ const signup = createAppAsyncThunk<{ isSignup: boolean }, SignupParamsType>(
 
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
 
-      return { isSignup: true }
+      return { isSignUp: true }
     } catch (e) {
       handleAxiosError(dispatch, e)
 
@@ -72,7 +72,7 @@ export const makeLogout = () => (dispatch: Dispatch) => {
   authAPI
     .logout()
     .then(() => {
-      dispatch(authActions.setSignIn({ isSignin: false }))
+      dispatch(authActions.setSignIn({ isSignIn: false }))
       dispatch(profileActions.setUser({} as UserType))
       dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
     })
@@ -85,8 +85,8 @@ export const makeLogout = () => (dispatch: Dispatch) => {
 const slice = createSlice({
   name: 'auth',
   initialState: {
-    isSignin: false,
-    isSignup: false,
+    isSignIn: false,
+    isSignUp: false,
     isInitialized: false as boolean | undefined,
     error: null as string | null,
     authStatus: 'idle' as RequestStatusType,
@@ -96,8 +96,8 @@ const slice = createSlice({
     setIsInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
       state.isInitialized = action.payload.isInitialized
     },
-    setSignIn: (state, action: PayloadAction<{ isSignin: boolean }>) => {
-      state.isSignin = action.payload.isSignin
+    setSignIn: (state, action: PayloadAction<{ isSignIn: boolean }>) => {
+      state.isSignIn = action.payload.isSignIn
     },
     setError: (state, action: PayloadAction<{ error: string | null }>) => {
       state.error = action.payload.error
@@ -105,21 +105,21 @@ const slice = createSlice({
     setAuthStatus: (state, action: PayloadAction<{ authStatus: RequestStatusType }>) => {
       state.authStatus = action.payload.authStatus
     },
-    setLogout: (state, action: PayloadAction<{ isSignin: boolean }>) => {
-      state.isSignin = action.payload.isSignin
+    setLogout: (state, action: PayloadAction<{ isSignIn: boolean }>) => {
+      state.isSignIn = action.payload.isSignIn
     },
   },
   extraReducers: builder => {
     builder
       .addCase(signin.fulfilled, (state, action) => {
-        state.isSignin = action.payload.isSignin
+        state.isSignIn = action.payload.isSignIn
       })
       .addCase(signup.fulfilled, (state, action) => {
-        state.isSignup = action.payload.isSignup
+        state.isSignUp = action.payload.isSignUp
       })
   },
 })
 
 export const authSlice = slice.reducer
 export const authActions = slice.actions
-export const authThunks = { signin, signup, initialized }
+export const authThunks = { signIn: signin, signup, initialized }

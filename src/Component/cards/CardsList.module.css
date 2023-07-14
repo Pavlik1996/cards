@@ -1,6 +1,6 @@
 .wrapper {
-    width: 1008px;
-    margin: 0 auto;
+    height: calc(100vh - 60px);
+    margin: 25px 40px 10px 40px;
 
     font-family: 'Montserrat', sans-serif;
 }
@@ -13,7 +13,6 @@
 
 .container {
     width: 100%;
-    margin-top: 10px;
 }
 
 .tableHead {
@@ -22,8 +21,12 @@
     background-color: #efefef;
 }
 
-.search {
+.searchText {
     margin-bottom: 10px;
 
     text-align: center;
+}
+
+.inputSearch {
+    margin-bottom: 10px;
 }

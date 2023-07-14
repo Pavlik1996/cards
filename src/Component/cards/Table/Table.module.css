@@ -1,6 +1,13 @@
 .tableHead {
-    width: 100%;
-  
     background-color: #efefef;
-  }
-  
+}
+
+.lastUpdate {
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+}
+
