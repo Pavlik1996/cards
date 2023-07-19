@@ -20,7 +20,6 @@ export const InputTypeFile: React.FC<PropsType> = ({ setImage }) => {
       if (file.size < 4000000) {
         convertFileToBase64(file, (file64: string) => {
           setImage(file64)
-          console.log('file64: ', file64)
         })
       } else {
         dispatch(appActions.setError({ error: 'Size of image is too big' }))

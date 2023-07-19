@@ -1,5 +1,4 @@
 import { instance } from '../../api/api'
-import { UserType } from '../Profile/profile-slice'
 
 export const authAPI = {
   signin(data: SignInParamsType) {
@@ -36,6 +35,22 @@ type ResponseType = {
   updated: string
   avatar?: string
   error?: string
+}
+
+export type UserType = {
+  _id: string
+  email: string
+  avatar?: string
+  rememberMe: boolean
+  isAdmin: boolean
+  name: string
+  verified: boolean
+  publicCardPacksCount: number
+  created: string
+  updated: string
+  __v?: number | undefined
+  token?: string | undefined
+  tokenDeathTime?: number | undefined
 }
 
 export type SignInParamsType = {

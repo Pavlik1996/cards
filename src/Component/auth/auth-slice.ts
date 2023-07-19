@@ -3,9 +3,9 @@ import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 import { RequestStatusType } from '../../common/types/types'
 import { createAppAsyncThunk } from '../../common/utils/create-app-async-thunk'
 import { handleAxiosError } from '../../common/utils/handle-axios-error'
-import { profileActions, UserType } from '../Profile/profile-slice'
+import { profileActions } from '../Profile/profile-slice'
 
-import { authAPI, SignInParamsType, SignupParamsType } from './auth-api'
+import { authAPI, SignInParamsType, SignupParamsType, UserType } from './auth-api'
 
 export const initialized = createAppAsyncThunk<void, void>(
   'auth/initialized',

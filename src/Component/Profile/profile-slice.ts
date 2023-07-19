@@ -1,27 +1,52 @@
-import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { appActions } from '../../app/app-slice'
-import { authAPI } from '../auth/auth-api'
+import { handleAxiosError } from '../../common/utils/handle-axios-error'
+import { authAPI, UserType } from '../auth/auth-api'
 
-export type UserType = {
-  _id: string
-  email: string
-  avatar?: string
-  rememberMe: boolean
-  isAdmin: boolean
-  name: string
-  verified: boolean
-  publicCardPacksCount: number
-  created: string
-  updated: string
-  __v?: number | undefined
-  token?: string | undefined
-  tokenDeathTime?: number | undefined
-}
+import { createAppAsyncThunk } from './../../common/utils/create-app-async-thunk'
 
 const initialState = {
   user: {} as UserType,
 }
+
+const updateUserName = createAppAsyncThunk<UserType, { newName: string }>(
+  'profile/updateUserName',
+  async (arg, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI
+
+    try {
+      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
+
+      const user = await authAPI.updateName(arg.newName)
+
+      return user.data.updatedUser
+    } catch (e) {
+      handleAxiosError(dispatch, e)
+
+      return rejectWithValue(null)
+    }
+  }
+)
+
+const updateAvatar = createAppAsyncThunk<UserType, { newAvatar: string }>(
+  'profile/updateAvatar',
+  async (arg, thunkAPI) => {
+    const { dispatch, rejectWithValue } = thunkAPI
+
+    try {
+      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
+
+      const user = await authAPI.updateAvatar(arg.newAvatar)
+
+      return user.data.updatedUser
+    } catch (e) {
+      handleAxiosError(dispatch, e)
+
+      return rejectWithValue(null)
+    }
+  }
+)
 
 const slice = createSlice({
   name: 'profile',
@@ -30,30 +55,18 @@ const slice = createSlice({
     setUser: (state, action: PayloadAction<UserType>) => {
       state.user = action.payload
     },
-    updateName: (state, action: PayloadAction<{ newName: string }>) => {
-      state.user.name = action.payload.newName
-    },
-    updateUserAvatar: (state, action: PayloadAction<{ avatar: string }>) => {
-      state.user.avatar = action.payload.avatar
-    },
+  },
+  extraReducers: builder => {
+    builder
+      .addCase(updateUserName.fulfilled, (state, action) => {
+        state.user = action.payload
+      })
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        state.user = action.payload
+      })
   },
 })
 
-export const updateUserName = (newName: string) => (dispatch: Dispatch) => {
-  dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-  authAPI.updateName(newName).then(res => {
-    dispatch(profileActions.updateName({ newName: res.data.updatedUser.name }))
-    dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
-  })
-}
-
-export const updateAvatar = (newAvatar: string) => (dispatch: Dispatch) => {
-  dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-  authAPI.updateAvatar(newAvatar).then(res => {
-    dispatch(profileActions.updateUserAvatar({ avatar: res.data.updatedUser.avatar! }))
-    dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
-  })
-}
-
 export const profileReducer = slice.reducer
 export const profileActions = slice.actions
+export const profileThunks = { updateUserName, updateAvatar }
