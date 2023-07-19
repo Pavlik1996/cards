@@ -9,7 +9,7 @@ import s from './SuperEditableSpan.module.css'
 
 type EditableSpanType = {
   value: string
-  callback?: (newValue: string) => void
+  callback: (newValue: string) => void
 }
 
 export const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', callback }) => {
@@ -18,7 +18,7 @@ export const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', call
   const onChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     setUserName(e.currentTarget.value)
   }
-  const { errorName, register, isValid, handleSubmit } = formHandler('name')
+  const { errorName, register, handleSubmit } = formHandler('name')
 
   const changeEditModeHandler = () => {
     setEditMode(true)

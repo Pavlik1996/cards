@@ -1,7 +1,7 @@
 import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit'
 
+import { appActions } from '../../app/app-slice'
 import { authAPI } from '../auth/auth-api'
-import { authActions } from '../auth/auth-slice'
 
 export type UserType = {
   _id: string
@@ -23,8 +23,6 @@ const initialState = {
   user: {} as UserType,
 }
 
-// type initialStateType = typeof initialState
-
 const slice = createSlice({
   name: 'profile',
   initialState,
@@ -35,24 +33,25 @@ const slice = createSlice({
     updateName: (state, action: PayloadAction<{ newName: string }>) => {
       state.user.name = action.payload.newName
     },
-    updateUserAvatar: (state, action: PayloadAction<string | undefined>) => {
-      state.user.avatar = action.payload
+    updateUserAvatar: (state, action: PayloadAction<{ avatar: string }>) => {
+      state.user.avatar = action.payload.avatar
     },
   },
 })
 
 export const updateUserName = (newName: string) => (dispatch: Dispatch) => {
-  dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
+  dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
   authAPI.updateName(newName).then(res => {
     dispatch(profileActions.updateName({ newName: res.data.updatedUser.name }))
-    dispatch(authActions.setAuthStatus({ authStatus: 'succeeded' }))
+    dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
   })
 }
 
 export const updateAvatar = (newAvatar: string) => (dispatch: Dispatch) => {
-  dispatch(authActions.setAuthStatus({ authStatus: 'loading' }))
+  dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
   authAPI.updateAvatar(newAvatar).then(res => {
-    dispatch(profileActions.updateUserAvatar(res.data.updatedUser.avatar))
+    dispatch(profileActions.updateUserAvatar({ avatar: res.data.updatedUser.avatar! }))
+    dispatch(appActions.setAppStatus({ appStatus: 'succeeded' }))
   })
 }
 

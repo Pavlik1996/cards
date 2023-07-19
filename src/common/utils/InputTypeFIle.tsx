@@ -23,7 +23,7 @@ export const InputTypeFile: React.FC<PropsType> = ({ setImage }) => {
           console.log('file64: ', file64)
         })
       } else {
-        dispatch(appActions.setError({ error: 'Image is too big' }))
+        dispatch(appActions.setError({ error: 'Size of image is too big' }))
       }
     }
   }
@@ -41,7 +41,7 @@ export const InputTypeFile: React.FC<PropsType> = ({ setImage }) => {
 
   return (
     <label>
-      <input type="file" onChange={uploadHandler} style={{ display: 'none' }} />
+      <input type="file" onChange={uploadHandler} style={{ display: 'none' }} accept={'image/*'} />
     </label>
   )
 }

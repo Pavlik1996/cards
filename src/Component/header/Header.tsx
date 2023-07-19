@@ -45,7 +45,7 @@ export const Header = () => {
               className={s.avatar}
               onClick={showModalChangeHandler}
             />
-            <div className={s.modal}>{showModal && <HeaderModal />}</div>
+            {showModal && <HeaderModal />}
           </div>
         ) : (
           <Button variant={'contained'} className={s.btn} onClick={redirectLoginHandler}>
