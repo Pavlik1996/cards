@@ -37,7 +37,7 @@ export const Header = () => {
       <img src={logo} alt={'logo it-incubator'} onClick={redirectHomeHandler} className={s.logo} />
       <div className={s.headerInfo}>
         {signIn ? (
-          <>
+          <div className={s.userBlock}>
             <span>{userName}</span>
             <img
               src={userAvatar}
@@ -46,7 +46,7 @@ export const Header = () => {
               onClick={showModalChangeHandler}
             />
             <div className={s.modal}>{showModal && <HeaderModal />}</div>
-          </>
+          </div>
         ) : (
           <Button variant={'contained'} className={s.btn} onClick={redirectLoginHandler}>
             Sign In

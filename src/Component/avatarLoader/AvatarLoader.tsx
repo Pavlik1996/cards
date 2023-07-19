@@ -1,13 +1,13 @@
 import React, { ChangeEvent } from 'react'
 
 import { useAppDispatch } from '../../app/store'
-import camera from '../../assets/imgs/cameraIcon.svg'
+import camera from '../../assets/imgs/cameraLogo.svg'
 import { convertPictureFileTo64 } from '../../utils/ConvertPictureFileTo64'
 import { updateAvatar } from '../Profile/profile-slice'
 
 import s from './AvatarLoader.module.css'
 
-const AvatarLoader = () => {
+export const AvatarLoader = () => {
   const dispatch = useAppDispatch()
   const uploadHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length) {
@@ -35,5 +35,3 @@ const AvatarLoader = () => {
     </label>
   )
 }
-
-export default AvatarLoader

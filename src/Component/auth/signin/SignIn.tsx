@@ -68,7 +68,7 @@ export const SignIn = () => {
   return (
     <Box sx={style.wrapper}>
       <Paper elevation={3} sx={style.container}>
-        <h1>Sign in</h1>
+        <h1 style={{ textAlign: 'center' }}>Sign in</h1>
         <form onSubmit={handleSubmit(onSubmit)} className={s.formWrapper}>
           <Controller
             name="email"

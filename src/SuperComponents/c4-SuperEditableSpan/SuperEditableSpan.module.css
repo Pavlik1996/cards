@@ -3,7 +3,7 @@
   gap: 8px;
   align-items: center;
 
-  margin-bottom: 14px;
+  margin-bottom: 15px;
 }
 
 .userName {
@@ -26,14 +26,6 @@
   transition: all 0.2s ease-in-out;
 }
 
-.iconPen :hover {
-  transform: translateY(-1px);
-}
-
-.iconPen :active {
-  transform: translateY(1px);
-}
-
 .inputWrapper {
   position: relative;
 
@@ -41,8 +33,6 @@
   flex-direction: column;
   align-self: center;
   justify-content: center;
-
-  margin-bottom: 14px;
 }
 
 .labelInput {
@@ -68,36 +58,16 @@
   border-bottom: 1.5px solid #8d8d8d;;
 }
 
+.btnSave {
+  position: absolute;
+  top: 12px;
+  right: 5px;
+
+  width: 52px;
+  height: 24px;
+}
+
 .errorName {
   color: #b31232;
 }
 
-.confirmName {
-  cursor: pointer;
-
-  position: absolute;
-  top: 70%;
-  right: 2%;
-  transform: translateY(-50%);
-
-  width: 24px;
-  height: 24px;
-
-  background-color: #fff;
-  border: none;
-  border-radius: 50%;
-
-  transition: all 0.2s ease-in-out;
-}
-
-.confirmName :disabled {
-  opacity: 0.5;
-}
-
-.updateIcon {
-  position: relative;
-  bottom: 5px;
-
-  width: 25px;
-  height: 25px;
-}

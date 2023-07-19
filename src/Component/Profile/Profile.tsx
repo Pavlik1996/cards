@@ -1,24 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
+import IconButton from '@mui/material/IconButton'
 import Paper from '@mui/material/Paper'
-import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router-dom'
 
-import { selectAuthIsSignin } from '../../app/app-selectors'
-import { RootStateType, useAppDispatch, useAppSelector } from '../../app/store'
+import { selectAuthIsSignIn } from '../../app/app-selectors'
+import { useAppDispatch, useAppSelector } from '../../app/store'
 import avatar from '../../assets/imgs/avatarBig.png'
+import cameraLogo from '../../assets/imgs/cameraLogo.svg'
 import logOutSvg from '../../assets/imgs/logout.svg'
+import { InputTypeFile } from '../../common/utils/InputTypeFIle'
 import { SuperEditableSpan } from '../../SuperComponents/c4-SuperEditableSpan/SuperEditableSpan'
 import { makeLogout } from '../auth/auth-slice'
-import AvatarLoader from '../avatarLoader/AvatarLoader'
 import { BackButton } from '../cards/BackButton/BackButton'
 
 import { selectUser, selectUserAvatar } from './profile-selector'
-import { updateUserName } from './profile-slice'
+import { updateAvatar, updateUserName } from './profile-slice'
 import s from './Profile.module.css'
 
 export const Profile = () => {
-  const authIsSignIn = useSelector(selectAuthIsSignin)
+  const [baseImg, setBaseImg] = useState('')
+  const authIsSignIn = useAppSelector(selectAuthIsSignIn)
   const dispatch = useAppDispatch()
   const user = useAppSelector(selectUser)
   const userAvatar = useAppSelector(selectUserAvatar) || avatar
@@ -30,12 +32,18 @@ export const Profile = () => {
   }
 
   const handlerUpdateName = (newName: string) => {
-    dispatch(updateUserName(newName))
+    if (user.name !== newName) {
+      dispatch(updateUserName(newName))
+    }
   }
 
   if (!authIsSignIn) {
     return <Navigate to={'/signin'} />
   }
+
+  useEffect(() => {
+    dispatch(updateAvatar(baseImg))
+  }, [baseImg])
 
   return (
     <div className={s.wrapper}>
@@ -46,11 +54,17 @@ export const Profile = () => {
         <div className={s.profileBlock}>
           <Paper className={s.profile}>
             <h2>Personal Information</h2>
+            <label className={s.blockChangeAvatar}>
+              <InputTypeFile setImage={setBaseImg} />
+              <IconButton component="span" className={s.addAvatarIcon}>
+                <img src={cameraLogo} alt="camera-logo" />
+              </IconButton>
+            </label>
             <img src={userAvatar} alt="avatar for user" className={s.avatar} />
             <SuperEditableSpan value={userName} callback={handlerUpdateName} />
             <div className={s.email}>{user.email}</div>
             <button onClick={logoutHandler} className={s.logOutBtn}>
-              <img src={logOutSvg} />
+              <img src={logOutSvg} alt={'logo logout'} />
               Log out
             </button>
           </Paper>

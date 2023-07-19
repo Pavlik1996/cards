@@ -29,9 +29,14 @@
     justify-content: center;
 }
 
+.userBlock {
+    position: absolute;
+}
+
 .avatar {
     cursor: pointer;
 
+    width: 36px;
     height: 36px;
     margin-left: 30px;
 
@@ -49,9 +54,3 @@
     cursor: pointer;
 }
 
-.modal {
-    /*position: absolute;*/
-    /*top: 70px;*/
-    /*right: 240px;*/
-
-}

@@ -40,6 +40,19 @@
   width: 96px;
   height: 96px;
   margin-bottom: 17px;
+
+  border-radius: 50%;
+  
+}
+
+.blockChangeAvatar {
+  position: absolute;
+}
+
+.addAvatarIcon {
+  position: relative;
+  top: 125px;
+  left: 33px;
 }
 
 .email {
@@ -75,3 +88,4 @@
   box-shadow: 0px 2px 10px 0px rgba(109, 109, 109, 0.25),
     0px 1px 0px 0px rgba(255, 255, 255, 0.3) inset;
 }
+

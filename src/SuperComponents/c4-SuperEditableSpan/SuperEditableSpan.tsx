@@ -1,9 +1,8 @@
 import React, { ChangeEvent, useState } from 'react'
 
-import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
 
 import pen from '../../assets/imgs/pen.svg'
-import submit from '../../assets/imgs/submit.svg'
 import { formHandler } from '../../utils/formHandler'
 
 import s from './SuperEditableSpan.module.css'
@@ -20,6 +19,11 @@ export const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', call
     setUserName(e.currentTarget.value)
   }
   const { errorName, register, isValid, handleSubmit } = formHandler('name')
+
+  const changeEditModeHandler = () => {
+    setEditMode(true)
+  }
+
   const onSubmit = () => {
     if (callback) {
       callback(userName)
@@ -38,9 +42,9 @@ export const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', call
             onChange={onChangeName}
             className={errorName ? `${s.input} ${s.errorInput}` : s.input}
           />
-          <button disabled={!isValid} type={'submit'} className={s.confirmName}>
-            <img className={s.updateIcon} src={submit} alt="submit icon" />
-          </button>
+          <Button type={'submit'} variant={'contained'} className={s.btnSave}>
+            SAVE
+          </Button>
         </label>
       </form>
       {errorName && <div className={s.errorName}>{errorName}</div>}
@@ -49,7 +53,7 @@ export const SuperEditableSpan: React.FC<EditableSpanType> = ({ value = '', call
     <div className={s.userNameContainer}>
       <h3 className={s.userName}>{value}</h3>
       <img
-        onClick={() => setEditMode(true)}
+        onClick={changeEditModeHandler}
         className={s.iconPen}
         src={pen}
         alt="icon pen for redaction name"

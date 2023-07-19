@@ -1,5 +1,12 @@
 .wrapper {
-    z-index: 10;
+    position: absolute;
+    z-index: 5;
+    top: 55px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
     width: 122px;
     height: 104px;
