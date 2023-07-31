@@ -57,7 +57,7 @@ type FormData = yup.InferType<typeof schema>
 
 export const Signup = () => {
   const authIsSignup = useSelector(selectAuthIsSignUp)
-  const { signup } = useActions(authThunks)
+  const { signUp } = useActions(authThunks)
 
   const [firstPasswordShown, setFirstPasswordShown] = useState(false)
   const [secondPasswordShown, setSecondPasswordShown] = useState(false)
@@ -73,7 +73,7 @@ export const Signup = () => {
     resolver: yupResolver(schema),
   })
   const onSubmit = (data: any) => {
-    signup(data)
+    signUp(data)
   }
 
   if (authIsSignup) {

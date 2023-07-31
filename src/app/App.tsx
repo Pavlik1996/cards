@@ -22,46 +22,47 @@ import { Test } from '../Component/test/test'
 
 import { selectAppStatus, selectAuthIsInitialized } from './app-selectors'
 import { useAppDispatch } from './store'
+import { useActions } from '../common/utils/hooks/useActions'
 
 export function App() {
-  const appStatus = useSelector(selectAppStatus)
-  const authIsInitialized = useSelector(selectAuthIsInitialized)
-  const dispatch = useAppDispatch()
+	const appStatus = useSelector(selectAppStatus)
+	const authIsInitialized = useSelector(selectAuthIsInitialized)
+	const { initialized } = useActions(authThunks)
 
-  useEffect(() => {
-    dispatch(authThunks.initialized())
-  }, [])
+	useEffect(() => {
+		initialized()
+	}, [])
 
-  if (!authIsInitialized) {
-    return (
-      <div style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
-        <CircularProgress />
-      </div>
-    )
-  }
+	if (!authIsInitialized) {
+		return (
+			<div style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
+				<CircularProgress />
+			</div>
+		)
+	}
 
-  return (
-    <div className="App">
-      <Header />
-      <div className={'App-status'}>{appStatus === 'loading' && <LinearProgress />}</div>
-      <ErrorSnackbar />
-      <Routes>
-        <Route path={'/'} element={<Profile />} />
-        <Route path={'/profile'} element={<Profile />} />
-        <Route path={'/set-new-password/:id'} element={<CreateNewPassword />} />
-        <Route path={'/forgotpassword'} element={<ForgotPassword />} />
-        <Route path={'/checkemail'} element={<CheckEmail />} />
-        <Route path={'/signin'} element={<SignIn />} />
-        <Route path={'/signup'} element={<Signup />} />
-        <Route path={'/packs'} element={<Packs />} />
-        <Route path={'/tablecards/:id'} element={<CardsList />} />
-        <Route path={'/test'} element={<Test />} />
-        <Route path={'/404'} element={<Error />} />
-        <Route path={'/learn/:id'} element={<LearnList />} />
-        <Route path={'*'} element={<Navigate to={'/404'} />} />
-      </Routes>
-    </div>
-  )
+	return (
+		<div className='App'>
+			<Header />
+			<div className={'App-status'}>{appStatus === 'loading' && <LinearProgress />}</div>
+			<ErrorSnackbar />
+			<Routes>
+				<Route path={'/'} element={<Profile />} />
+				<Route path={'/profile'} element={<Profile />} />
+				<Route path={'/set-new-password/:id'} element={<CreateNewPassword />} />
+				<Route path={'/forgotpassword'} element={<ForgotPassword />} />
+				<Route path={'/checkemail'} element={<CheckEmail />} />
+				<Route path={'/signin'} element={<SignIn />} />
+				<Route path={'/signup'} element={<Signup />} />
+				<Route path={'/packs'} element={<Packs />} />
+				<Route path={'/tablecards/:id'} element={<CardsList />} />
+				<Route path={'/test'} element={<Test />} />
+				<Route path={'/404'} element={<Error />} />
+				<Route path={'/learn/:id'} element={<LearnList />} />
+				<Route path={'*'} element={<Navigate to={'/404'} />} />
+			</Routes>
+		</div>
+	)
 }
 
 export default App

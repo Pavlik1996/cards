@@ -5,6 +5,7 @@ import { handleAxiosError } from '../../common/utils/handle-axios-error'
 import { authAPI, UserType } from '../auth/auth-api'
 
 import { createAppAsyncThunk } from './../../common/utils/create-app-async-thunk'
+import { thunkTryCatch } from '../../common/utils/thunkTryCatch'
 
 const initialState = {
   user: {} as UserType,
@@ -12,20 +13,12 @@ const initialState = {
 
 const updateUserName = createAppAsyncThunk<UserType, { newName: string }>(
   'profile/updateUserName',
-  async (arg, thunkAPI) => {
-    const { dispatch, rejectWithValue } = thunkAPI
-
-    try {
-      dispatch(appActions.setAppStatus({ appStatus: 'loading' }))
-
+  (arg, thunkAPI) => {
+    const logic = async () => {
       const user = await authAPI.updateName(arg.newName)
-
       return user.data.updatedUser
-    } catch (e) {
-      handleAxiosError(dispatch, e)
-
-      return rejectWithValue(null)
     }
+    return thunkTryCatch(thunkAPI, logic)
   }
 )
 

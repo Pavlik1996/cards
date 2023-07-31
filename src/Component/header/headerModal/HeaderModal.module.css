@@ -1,15 +1,42 @@
 .wrapper {
-    position: absolute;
-    z-index: 5;
-    top: 55px;
+  position: absolute;
+  z-index: 5;
+  top: 55px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
 
-    width: 122px;
-    height: 104px;
+  width: 122px;
+  height: 85px;
 
-    border: 1px solid black;
+  border: 1px solid black;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+
+  color: #000;
+  text-decoration: none;
+}
+
+.link > img {
+  margin-right: 7px;
+}
+
+.btn {
+  all: unset;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: end;
+
+  margin-left: 6px;
+}
+
+.btn > img {
+  margin-right: 7px;
 }
